@@ -1,0 +1,5 @@
+# ignore all logs
+*.log
+target/
+.idea/
+Software Testing v0.3_STAMPA.docx
