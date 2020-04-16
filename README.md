@@ -1,2 +1,0 @@
-# RedTestFramework
-RED vs Samsara
