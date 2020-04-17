@@ -15,7 +15,6 @@ public class BrowserDriver {
     public static WebDriver getCurrentDriver(){
         if(driver == null){
             try {
-            	
                 driver = WebDriverFactory.initDriver(new TestConfiguration());
             } catch (Exception e) {
                 log.error("Driver failed to initialize" , e);
