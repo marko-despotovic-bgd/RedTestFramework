@@ -1,9 +1,9 @@
 package com.red.testframework.pageobjects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import com.red.testframework.utils.XPathUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -33,29 +33,12 @@ public class BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void quitWebDriver() {
-        log.debug("quitWebDriver");
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
-    public void pressEnterKeyOnElement(WebElement element) {
+    private void pressEnterKeyOnElement(WebElement element) {
         waitUntilElementIsVisible(element);
         element.sendKeys(Keys.RETURN);
     }
 
-    public void fillInInputFieldAndPressEnter(WebElement element, String value) {
-        fillInInputField(element, value);
-        pressEnterKeyOnElement(element);
-    }
-
-    public void dragAndDropItem(WebElement from, WebElement to) {
-        Actions action = new Actions(driver);
-        action.dragAndDrop(from, to).build().perform();
-    }
-
-    public void fillInInputField(WebElement element, String value, int timeout) {
+    private void fillInInputField(WebElement element, String value, int timeout) {
         waitUntilElementIsVisible(element, timeout);
         element.clear();
         element.sendKeys(value);
@@ -88,37 +71,19 @@ public class BasePage {
         clickOnElement(element, TimeUtil.ELEMENT_VISIBLE_TIME);
     }
 
-    public void waitUntilElementIsClickable(WebElement element, int timeout) {
+    private void waitUntilElementIsClickable(WebElement element, int timeout) {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    public void waitUntilElementIsClickable(WebElement element) {
-        waitUntilElementIsClickable(element, TimeUtil.ELEMENT_VISIBLE_TIME);
-    }
-
-    public void waitUntilElementIsVisible(WebElement element, int timeout) {
+    private void waitUntilElementIsVisible(WebElement element, int timeout) {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         wait.until(ExpectedConditions.visibilityOf(element));
     }
 
-    public void waitUntilElementIsVisible(WebElement element) {
+    private void waitUntilElementIsVisible(WebElement element) {
         waitUntilElementIsVisible(element, TimeUtil.ELEMENT_VISIBLE_TIME);
     }
-
-    public boolean isElementPresent(By by) {
-        return driver.findElements(by).size() > 0;
-    }
-
-    public boolean isDisplayed(WebElement element, int timeout) {
-        waitUntilElementIsVisible(element, timeout);
-        return element.isDisplayed();
-    }
-
-    public boolean isDisplayed(String elementXpath) {
-            List<WebElement> elements = driver.findElements(By.xpath(elementXpath));
-            return elements.size()!=0;
-        }
 
     public String getElementText(WebElement element) {
         try {
@@ -128,6 +93,98 @@ public class BasePage {
             Log.error("Failed to locate element.");
             return null;
         }
+    }
+
+    public void wait(int timeoutInSeconds) {
+        try {
+            Thread.sleep(timeoutInSeconds * 1000);
+            Log.debug("Waiting for " + timeoutInSeconds + " seconds");
+        } catch (InterruptedException e) {
+            Log.error("Error" + e.getMessage() + ";\nStack trace: " + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
+    public List<WebElement> findDisplayedElements(By locator) {
+        List<WebElement> allElements = driver.findElements(locator);
+        List<WebElement> displayedElements = new ArrayList<>();
+        for (WebElement element : allElements) {
+            if (element.isDisplayed()) {
+                displayedElements.add(element);
+            }
+        }
+        return displayedElements;
+    }
+
+    private List<WebElement> findDisplayedElements(WebElement rootElement, By locator) {
+        List<WebElement> allElements = rootElement.findElements(locator);
+        List<WebElement> displayedElements = new ArrayList<>();
+        for (WebElement element : allElements) {
+            if (element.isDisplayed()) {
+                displayedElements.add(element);
+            }
+        }
+        return displayedElements;
+    }
+
+    private List<WebElement> findElementsWithMatchingText(String text) {
+        String xpathExpression = "//*[contains(text(), '" + text + "')]";
+        List<WebElement> allElements = findDisplayedElements(By.xpath(xpathExpression));
+        List<WebElement> matchingElements = new ArrayList<>();
+        for (WebElement element : allElements) {
+            String elementText = getElementText(element);
+            if (text.equalsIgnoreCase(elementText)) {
+                matchingElements.add(element);
+            }
+        }
+        return matchingElements;
+    }
+
+    private List<WebElement> findElementsWithMatchingText(WebElement rootElement, String text) {
+        String xpathExpression = "//*[contains(text(), '" + text + "')]";
+        List<WebElement> allElements = findDisplayedElements(rootElement, By.xpath(xpathExpression));
+        List<WebElement> matchingElements = new ArrayList<>();
+        for (WebElement element : allElements) {
+            String elementText = getElementText(element);
+            if (text.equalsIgnoreCase(elementText)) {
+                matchingElements.add(element);
+            }
+        }
+        return matchingElements;
+    }
+
+    public boolean verifyPageIsDisplayed(WebElement pageIdentifyingElement, String identifyingElementText) {
+        System.out.println(getElementText(pageIdentifyingElement) + " - " + identifyingElementText);
+        return getElementText(pageIdentifyingElement).equals(identifyingElementText);
+    }
+
+    public void fillInInputFieldAndPressEnter(WebElement element, String value) {
+        fillInInputField(element, value);
+        pressEnterKeyOnElement(element);
+    }
+
+    public void quitWebDriver() {
+        log.debug("quitWebDriver");
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    public WebElement findFirstElementsWithMatchingText(String text) {
+        List<WebElement> matchingElements = findElementsWithMatchingText(text);
+        if (!matchingElements.isEmpty()) {
+            return matchingElements.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public void dragAndDropItem(WebElement from, WebElement to) {
+        Actions action = new Actions(driver);
+        action.dragAndDrop(from, to).build().perform();
+    }
+
+    public void waitUntilElementIsClickable(WebElement element) {
+        waitUntilElementIsClickable(element, TimeUtil.ELEMENT_VISIBLE_TIME);
     }
 
     public boolean isChecked(WebElement element) {
@@ -151,10 +208,6 @@ public class BasePage {
         return element.getAttribute("class").contains(cssClass);
     }
 
-    public WebDriver getCurrentDriver() {
-        return this.driver;
-    }
-
     public void refreshPage() {
         driver.navigate().refresh();
     }
@@ -173,14 +226,18 @@ public class BasePage {
         js.executeScript("window.scrollBy(0," + pixels + ")");
     }
 
+    public boolean isElementPresent(By by) {
+        return driver.findElements(by).size() > 0;
+    }
 
-    public void wait(int timeoutInSeconds) {
-        try {
-            Thread.sleep(timeoutInSeconds * 1000);
-            Log.debug("Waiting for " + timeoutInSeconds + " seconds");
-        } catch (InterruptedException e) {
-            Log.error("Error" + e.getMessage() + ";\nStack trace: " + e.getStackTrace());
-        }
+    public boolean isDisplayed(WebElement element, int timeout) {
+        waitUntilElementIsVisible(element, timeout);
+        return element.isDisplayed();
+    }
+
+    public boolean isDisplayed(String elementXpath) {
+        List<WebElement> elements = driver.findElements(By.xpath(elementXpath));
+        return elements.size() != 0;
     }
 
     public void switchTab(int tabNumber) {
@@ -197,63 +254,6 @@ public class BasePage {
         driver.switchTo().window(tabs.get(tabNumber - 1));
     }
 
-    public List<WebElement> findDisplayedElements(By locator) {
-        List<WebElement> allElements = driver.findElements(locator);
-        List<WebElement> displayedElements = new ArrayList<WebElement>();
-        for (WebElement element : allElements) {
-            if (element.isDisplayed()) {
-                displayedElements.add(element);
-            }
-        }
-        return displayedElements;
-    }
-
-    public List<WebElement> findDisplayedElements(WebElement rootElement, By locator) {
-        List<WebElement> allElements = rootElement.findElements(locator);
-        List<WebElement> displayedElements = new ArrayList<WebElement>();
-        for (WebElement element : allElements) {
-            if (element.isDisplayed()) {
-                displayedElements.add(element);
-            }
-        }
-        return displayedElements;
-    }
-
-    public List<WebElement> findElementsWithMatchingText(String text) {
-        String xpathExpression = "//*[contains(text(), '" + text + "')]";
-        List<WebElement> allElements = findDisplayedElements(By.xpath(xpathExpression));
-        List<WebElement> matchingElements = new ArrayList<WebElement>();
-        for (WebElement element : allElements) {
-            String elementText = getElementText(element);
-            if (text.equalsIgnoreCase(elementText)) {
-                matchingElements.add(element);
-            }
-        }
-        return matchingElements;
-    }
-
-    public WebElement findFirstElementsWithMatchingText(String text) {
-        List<WebElement> matchingElements = findElementsWithMatchingText(text);
-        if (!matchingElements.isEmpty()) {
-            return matchingElements.get(0);
-        } else {
-            return null;
-        }
-    }
-
-    public List<WebElement> findElementsWithMatchingText(WebElement rootElement, String text) {
-        String xpathExpression = "//*[contains(text(), '" + text + "')]";
-        List<WebElement> allElements = findDisplayedElements(rootElement, By.xpath(xpathExpression));
-        List<WebElement> matchingElements = new ArrayList<WebElement>();
-        for (WebElement element : allElements) {
-            String elementText = getElementText(element);
-            if (text.equalsIgnoreCase(elementText)) {
-                matchingElements.add(element);
-            }
-        }
-        return matchingElements;
-    }
-
     public WebElement findFirstElementsWithMatchingText(WebElement rootElement, String text) {
         List<WebElement> matchingElements = findElementsWithMatchingText(rootElement, text);
         if (!matchingElements.isEmpty()) {
@@ -261,10 +261,5 @@ public class BasePage {
         } else {
             return null;
         }
-    }
-
-    public boolean verifyPageIsDisplayed(WebElement pageIdentifyingElement, String identifyingElementText) {
-        System.out.println(getElementText(pageIdentifyingElement) + " - " + identifyingElementText);
-        return getElementText(pageIdentifyingElement).equals(identifyingElementText);
     }
 }
