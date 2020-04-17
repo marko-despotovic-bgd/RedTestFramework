@@ -14,7 +14,7 @@ import java.util.List;
 
 public class HeroesPage extends BasePage {
 
-    private static Logger log = LoggerFactory.getLogger(HeroesPage.class);
+    public final String PANEL_TITLE ="Heroes";
 
     // Page locators
     @FindBy(xpath = "//span[contains(@class,'-plus')]")
@@ -26,7 +26,6 @@ public class HeroesPage extends BasePage {
     private WebElement nextPageSearchArrow;
     @FindBy(xpath = "//div[@class='panel-title text-center']")
     private WebElement panelTitle;
-
 
     //Popup locators
     @FindBy(id = "name")
@@ -42,6 +41,8 @@ public class HeroesPage extends BasePage {
     @FindBy(xpath = "//div[@class='modal-footer']//button[@type='submit']")
     private WebElement editHeroSaveButton, deleteButton;
 
+    private static Logger log = LoggerFactory.getLogger(HeroesPage.class);
+
     public HeroesPage(WebDriver driver) {
         super(driver);
         testConfiguration = new TestConfiguration();
@@ -50,12 +51,11 @@ public class HeroesPage extends BasePage {
     }
 
 
-    private HeroesPage clickOnNewHeroButton() {
+    private void clickOnNewHeroButton() {
         clickOnElement(addNewHeroButton);
-        return new HeroesPage(driver);
     }
 
-    public HeroesPage addHero(String heroName, String level, String heroClass) {
+    public void addHero(String heroName, String level, String heroClass) {
 
         Log.debug("Creating hero:\nName: " + heroName + "\nLevel: " + levelInput + "\nClass: " + heroClass);
         clickOnNewHeroButton();
@@ -64,8 +64,6 @@ public class HeroesPage extends BasePage {
         selectHeroClass(heroClass);
         clickOnElement(addHeroSaveButton);
         Log.debug("Created hero:\nName: " + heroName + "\nLevel: " + levelInput + "\nClass: " + heroClass);
-        return new HeroesPage(driver);
-
     }
 
     private void selectHeroClass(String heroClass) {
@@ -134,6 +132,6 @@ public class HeroesPage extends BasePage {
 
 
     public boolean verifyHeroesPageDisplayed() {
-        return getElementText(panelTitle).equals("Heroes");
+        return getElementText(panelTitle).equals(PANEL_TITLE);
     }
 }
