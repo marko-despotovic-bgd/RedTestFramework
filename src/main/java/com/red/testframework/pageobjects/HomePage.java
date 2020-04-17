@@ -1,16 +1,16 @@
 package com.red.testframework.pageobjects;
 
+import com.red.testframework.utils.XPathUtil;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 public class HomePage extends BasePage {
 
-    @FindBy(xpath = "//span[contains(@class,'log-out')]")
-    private WebElement logoutButton;
-
-
     public HomePage(WebDriver driver) {
         super(driver);
+    }
+
+    public boolean verifyHomePageIsDisplayed() {
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(XPathUtil.PANEL_XPATH)), XPathUtil.HOME_PAGE_PANEL_TITLE);
     }
 }

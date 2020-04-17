@@ -3,6 +3,7 @@ package com.red.testframework.pageobjects;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.red.testframework.utils.XPathUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -268,5 +269,10 @@ public class BasePage {
         } else {
             return null;
         }
+    }
+
+    public boolean verifyPageIsDisplayed(WebElement pageIdentifyingElement, String identifyingElementText) {
+        System.out.println(getElementText(pageIdentifyingElement) + " - " + identifyingElementText);
+        return getElementText(pageIdentifyingElement).equals(identifyingElementText);
     }
 }
