@@ -13,9 +13,4 @@ public class HomePage extends BasePage {
     public HomePage(WebDriver driver) {
         super(driver);
     }
-
-    public LoginPage logOut() {
-        clickOnElement(logoutButton);
-        return new LoginPage(driver);
-    }
 }
