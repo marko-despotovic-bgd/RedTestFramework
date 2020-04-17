@@ -42,7 +42,7 @@ public class DemoSteps extends BaseSteps {
     @When ("^I complete action$")
     public void completeAction(){
         Log.info(" When I complete action");
-        loginPage.login();
+        //loginPage.login();
     }
     
     @Then ("^I validate the outcomes$")
@@ -54,7 +54,7 @@ public class DemoSteps extends BaseSteps {
     public void checkMoreOutcomes(){
         Log.info("And check more outcomes");
         
-       loginPage.verificationExample();
+       //loginPage.verificationExample();
        
     }
 	

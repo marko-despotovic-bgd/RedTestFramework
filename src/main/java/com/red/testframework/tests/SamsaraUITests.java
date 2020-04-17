@@ -34,10 +34,15 @@ import java.util.Date;
 
 public class SamsaraUITests {
 
+    BasePage basePage;
     LoginPage loginPage;
     SamsaraPage samsaraPage;
-    HeroesPage heroesPage;
+    HomePage homePage;
     UsersPage usersPage;
+    HeroesPage heroesPage;
+    GalleryPage galleryPage;
+    ApiPage apiPage;
+    BrokenLinkPage brokenLinkPage;
     TestConfiguration testConfiguration;
     WebDriver driver = BrowserDriver.getCurrentDriver();
 
@@ -53,9 +58,15 @@ public class SamsaraUITests {
 
     @BeforeClass(alwaysRun = true)
     public void beforeTests() {
+        basePage = new BasePage(driver);
         loginPage = new LoginPage(driver);
-        heroesPage = new HeroesPage(driver);
+        samsaraPage = new SamsaraPage(driver);
+        homePage = new HomePage(driver);
         usersPage = new UsersPage(driver);
+        heroesPage = new HeroesPage(driver);
+        galleryPage = new GalleryPage(driver);
+        apiPage = new ApiPage(driver);
+        brokenLinkPage = new BrokenLinkPage(driver);
         testConfiguration = new TestConfiguration();
         driver.manage().window().maximize();
     }
@@ -74,7 +85,7 @@ public class SamsaraUITests {
         loginSuccessful = true;
     }
 
-    @Test(description = "L2. Login module - Login to the web app using invalid credentials",  groups = {"P2"})
+    @Test(description = "L2. Login module - Login to the web app using invalid credentials", groups = {"P2"})
     public void userLoginWithIncorrectCredentialsTest() {
         /* Test steps:
          1. Navigate to Login page (in browsers address bar enter http://www.samsara.com or http://localhost:8080/)
@@ -84,8 +95,44 @@ public class SamsaraUITests {
 
         Log.info("Entered userLoginWithCorrectCredentials test!");
         loginSuccessful = false;
-        samsaraPage = loginPage.loginWithInvalidCredentials(testConfiguration.getUsername2() + "fail", testConfiguration.getPassword());
+        loginPage = loginPage.loginWithInvalidCredentials(testConfiguration.getUsername2() + "fail", testConfiguration.getPassword());
         // Validation on error message implemented in method loginWithInvalidCredentials() itself
+    }
+
+    @Test(groups = {"P0"})
+    public void homePageCheck() {
+        loginSuccessful = false;
+        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+        loginSuccessful = true;
+        homePage = samsaraPage.navigateToHomePage();
+        Assert.assertTrue(homePage.verifyHomePageIsDisplayed(),"Home page is not displayed!");
+    }
+
+    @Test(groups = {"P0"})
+    public void GalleryPageCheck() {
+        loginSuccessful = false;
+        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+        loginSuccessful = true;
+        galleryPage = samsaraPage.navigateToGalleryPage();
+        Assert.assertTrue(galleryPage.verifyGalleryPageIsDisplayed(),"Gallery page is not displayed!");
+    }
+
+    @Test(groups = {"P0"})
+    public void ApiPageCheck() {
+        loginSuccessful = false;
+        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+        loginSuccessful = true;
+        apiPage = samsaraPage.navigateToApiPage();
+        Assert.assertTrue(apiPage.verifyApiPageIsDisplayed(),"Api page is not displayed!");
+    }
+
+    @Test(groups = {"P0"})
+    public void BrokenLinkPageCheck() {
+        loginSuccessful = false;
+        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+        loginSuccessful = true;
+        brokenLinkPage = samsaraPage.navigateToBrokenLinkPage();
+        Assert.assertTrue(brokenLinkPage.verifyBrokenLinkPageIsDisplayed(),"Broken Link page is not displayed!");
     }
 
     @Test(description = "H1. Hero module - Verify user can create new hero", groups = {"P1"})
@@ -105,7 +152,6 @@ public class SamsaraUITests {
         Log.info("Entered editExistingOwnHero test!");
         loginSuccessful = false;
         samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        Assert.assertTrue(samsaraPage.verifySamsaraPageDisplayed());
         loginPage.wait(3);
         loginSuccessful = true;
         heroesPage = samsaraPage.navigateToHeroesPage();
@@ -251,7 +297,7 @@ public class SamsaraUITests {
         }
         driver.navigate().to("localhost:8080");
         if (loginSuccessful)
-            samsaraPage.logOut();
+            loginPage.logOut();
     }
 
     @AfterClass(alwaysRun = true)
@@ -276,7 +322,7 @@ public class SamsaraUITests {
                 heroesPage.deleteHero(hero3Name);
                 Log.debug("Hero " + hero3Name + " has been deleted!");
             }
-            samsaraPage.logOut();
+            loginPage.logOut();
         }
 
         if (user1Created || user2Created) {
@@ -293,7 +339,7 @@ public class SamsaraUITests {
                 usersPage.deleteUser(username2);
                 Log.debug("User " + username2 + " has been deleted!");
             }
-            samsaraPage.logOut();
+            loginPage.logOut();
         }
     }
 }
