@@ -107,11 +107,7 @@ public class BasePage {
     }
 
     public boolean isElementPresent(By by) {
-        if (driver.findElements(by).size() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return driver.findElements(by).size() > 0;
     }
 
     public boolean isDisplayed(WebElement element, int timeout) {
@@ -141,10 +137,6 @@ public class BasePage {
 
     public String getDivElementContainingTextXpath(String text) {
         return "//div[contains(text(),'" + text + "')]";
-    }
-
-    public String getElementContainingTextXpath(String text) {
-        return "//*[contains(text(),'" + text + "')]";
     }
 
     public boolean isAttributePresent(By by, String attribute) {

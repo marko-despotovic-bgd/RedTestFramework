@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
-import java.util.List;
-
 public class SamsaraPage extends BasePage {
 
     //Page locators
@@ -58,14 +56,14 @@ public class SamsaraPage extends BasePage {
 
     public UsersPage navigateToUsersPage() {
         clickOnElement(usersPageNavigator);
-        Assert.assertTrue(new BasePage(driver).verifyPageIsDisplayed(usersPageNavigator, XPathUtil.USERS_PAGE_PANEL_TITLE), "Users page is not displayed!");
+        Assert.assertTrue(new UsersPage(driver).verifyUsersPageDisplayed(), "Users page is not displayed!");
         Log.info("Users page is displayed");
         return new UsersPage(driver);
     }
 
     public HeroesPage navigateToHeroesPage() {
         clickOnElement(heroesPageNavigator);
-        Assert.assertTrue(new BasePage(driver).verifyPageIsDisplayed(heroesPageNavigator, XPathUtil.HEROES_PAGE_PANEL_TITLE), "Heroes page is not displayed!");
+        Assert.assertTrue(new HeroesPage(driver).verifyHeroesPageDisplayed(), "Heroes page is not displayed!");
         Log.info("Heroes page is displayed");
         return new HeroesPage(driver);
     }
@@ -73,21 +71,21 @@ public class SamsaraPage extends BasePage {
 
     public GalleryPage navigateToGalleryPage() {
             clickOnElement(galleryPageNavigator);
-            Assert.assertTrue(new BasePage(driver).verifyPageIsDisplayed(galleryPageNavigator, XPathUtil.GALLERY_PAGE_PANEL_TITLE), "Gallery page is not displayed!");
+            Assert.assertTrue(new GalleryPage(driver).verifyGalleryPageIsDisplayed(), "Gallery page is not displayed!");
             Log.info("Gallery page is displayed");
             return new GalleryPage(driver);
         }
 
     public ApiPage navigateToApiPage() {
         clickOnElement(apiPageNavigator);
-        Assert.assertTrue(new BasePage(driver).verifyPageIsDisplayed(apiPageNavigator, XPathUtil.API_PAGE_PANEL_TITLE), "Api page is not displayed!");
+        Assert.assertTrue(new ApiPage(driver).verifyApiPageIsDisplayed(), "Api page is not displayed!");
         Log.info("Api page is displayed");
         return new ApiPage(driver);
     }
 
     public BrokenLinkPage navigateToBrokenLinkPage() {
         clickOnElement(brokenPageNavigator);
-        Assert.assertTrue(new BasePage(driver).verifyPageIsDisplayed(brokenPageNavigator, XPathUtil.BROKEN_LINK_PAGE_PANEL_TITLE), "Broken Link page is not displayed!");
+        Assert.assertTrue(new BrokenLinkPage(driver).verifyBrokenLinkPageIsDisplayed(), "Broken Link page is not displayed!");
         Log.info("Broken Link page is displayed");
         return new BrokenLinkPage(driver);
     }
