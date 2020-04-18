@@ -21,7 +21,6 @@ public class WebDriverFactory {
 			switch (configuration.getBrowserType()) {
 			case CHROME:
 				System.setProperty("webdriver.chrome.driver", configuration.getChromeDriverPath());
-
 				return new ChromeDriver();
 			case FIREFOX:
 				System.setProperty("webdriver.gecko.driver", configuration.getFirefoxDriverPath());
