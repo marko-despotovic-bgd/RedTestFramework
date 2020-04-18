@@ -52,7 +52,7 @@ public class SamsaraUITests {
     String username1 = "adespot" + timestamp, username2 = "z" + username1 + "2", username3 = username1 + "3", firstName = "Marko", lastName = "Despotovic", about = "despot",
             secretQuestion = "marko", secretAnswer = "despotovic", password = "Password1", conirfmPassword = "Password1";
     String hero1Name = "aMarko_" + timestamp, hero2Name = "A" + hero1Name + timestamp, hero3Name = "Z" + hero1Name + timestamp,
-            level = "80", heroClass = "Guardian";
+            level = (int)(Math.random()*((1-81)+1))+min, heroClass = "Guardian";
     // All input data follow restriction of the original app
     // Names intentionally having letters "a" and "z" at the beginning, enforcing search through page lists
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
@@ -144,6 +144,7 @@ public class SamsaraUITests {
         samsaraPage = loginPage.login(testConfiguration.getUsername2(), testConfiguration.getPassword());
         loginSuccessful = true;
         heroesPage = samsaraPage.navigateToHeroesPage();
+        System.out.println(level);
         heroesPage.addHero(hero1Name, level, heroClass); // Creating hero
         hero1Created = heroesPage.isHeroDisplayed(hero1Name); // If hero is found in the list(s), this will set flag to true
         Assert.assertTrue(hero1Created); // This is the goal of the test
