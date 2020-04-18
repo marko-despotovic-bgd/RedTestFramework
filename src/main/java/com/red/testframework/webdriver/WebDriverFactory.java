@@ -38,6 +38,8 @@ public class WebDriverFactory {
 				options.addArguments("--no-sandbox");
 				options.addArguments("--whitelisted-ips=''");
 				options.addArguments("--headless");
+				final File file = new File(configuration.getChromeDriverPath());
+				file.setExecutable(true,false);
 				return new ChromeDriver(options);
 			default:
 				System.setProperty("webdriver.chrome.driver", configuration.getChromeDriverPath());
