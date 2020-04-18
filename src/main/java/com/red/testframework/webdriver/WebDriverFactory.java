@@ -7,7 +7,10 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 
-import com.red.testframework.testconfiguration.TestConfiguration;
+import java.io.File;
+
+import com.red.testframework.testconfiguration.TestConfiguration;
+
 
 public class WebDriverFactory {
 	public static WebDriver initDriver(TestConfiguration configuration) throws Exception {
@@ -16,6 +19,8 @@ public class WebDriverFactory {
 			switch (configuration.getBrowserType()) {
 			case CHROME:
 				System.setProperty("webdriver.chrome.driver", configuration.getChromeDriverPath());
+				final File file = new File(configuration.getChromeDriverPath());
+				file.setExecutable(true,false);
 				return new ChromeDriver();
 			case FIREFOX:
 				System.setProperty("webdriver.gecko.driver", configuration.getFirefoxDriverPath());
