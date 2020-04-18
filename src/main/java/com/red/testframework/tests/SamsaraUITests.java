@@ -23,6 +23,7 @@ import com.red.testframework.testconfiguration.TestConfiguration;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.webdriver.BrowserDriver;
+import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestResult;
@@ -58,6 +59,7 @@ public class SamsaraUITests {
 
     @BeforeClass(alwaysRun = true)
     public void beforeTests() {
+        ChromeDriverManager.chromedriver().setup();
         basePage = new BasePage(driver);
         loginPage = new LoginPage(driver);
         samsaraPage = new SamsaraPage(driver);
