@@ -14,13 +14,14 @@ import com.red.testframework.testconfiguration.TestConfiguration;
 
 public class WebDriverFactory {
 	public static WebDriver initDriver(TestConfiguration configuration) throws Exception {
+		final File file = new File(configuration.getChromeDriverPath());
+		file.setExecutable(true,false);
 		switch (configuration.getTestExecutionEnvironment()) {
 		case LOCAL:
 			switch (configuration.getBrowserType()) {
 			case CHROME:
 				System.setProperty("webdriver.chrome.driver", configuration.getChromeDriverPath());
-				final File file = new File(configuration.getChromeDriverPath());
-				file.setExecutable(true,false);
+
 				return new ChromeDriver();
 			case FIREFOX:
 				System.setProperty("webdriver.gecko.driver", configuration.getFirefoxDriverPath());
@@ -38,8 +39,6 @@ public class WebDriverFactory {
 				options.addArguments("--no-sandbox");
 				options.addArguments("--whitelisted-ips=''");
 				options.addArguments("--headless");
-				final File file = new File(configuration.getChromeDriverPath());
-				file.setExecutable(true,false);
 				return new ChromeDriver(options);
 			default:
 				System.setProperty("webdriver.chrome.driver", configuration.getChromeDriverPath());
