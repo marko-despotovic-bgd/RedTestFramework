@@ -5,7 +5,7 @@ name: Build Java
 on: [push, pull_request]
 jobs:
   compile:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     name: Java 8 compile
     steps:
       - uses: actions/checkout@master
@@ -15,7 +15,7 @@ jobs:
           java-version: 1.8
       - run: mvn -f pom.xml clean compile
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: compile
     name: Build Java 8 projects
     steps:
