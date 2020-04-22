@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
-<suite name="P1 Suite" verbose="1" >
+<suite name="Suites" verbose="1" >
 <suite-files>
   <suite-file path="suites/p0-tests.xml" />
   <suite-file path="suites/p1-tests.xml" />

@@ -48,6 +48,8 @@ public class BasePage {
         fillInInputField(element, value, TimeUtil.ELEMENT_VISIBLE_TIME);
     }
 
+
+
     public void clickOnElement(WebElement element, int timeout) {
         try {
             // this should work most of the time
