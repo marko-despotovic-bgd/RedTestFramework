@@ -1,4 +1,4 @@
-package com.red.testframework.pageobjects;
+package com.red.testframework.pages;
 
 import com.red.testframework.testconfiguration.TestConfiguration;
 import com.red.testframework.utils.Log;

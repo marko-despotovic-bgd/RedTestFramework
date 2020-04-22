@@ -17,12 +17,12 @@
  A3. Admin module - Verify admin can recreate registration key                              *
  ********************************************************************************************/
 
-import com.red.testframework.pageobjects.*;
+import com.red.testframework.pages.*;
 import com.red.testframework.testconfiguration.TestConfiguration;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
+import com.red.testframework.utils.Utils;
 import com.red.testframework.webdriver.BrowserDriver;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestResult;
@@ -54,25 +54,16 @@ public class SamsaraUITests {
             secretQuestion = "marko", secretAnswer = "despotovic", password = "Password1", conirfmPassword = "Password1";
     String hero1Name = "aMarko_" + timestamp, hero2Name = "A" + hero1Name + timestamp, hero3Name = "Z" + hero1Name + timestamp, heroClass = "Guardian";
     // All input data follow restriction of the original app
-    // Names intentionally having letters "a" and "z" at the beginning, enforcing search through page lists
+    // Names intentionally start with letters "a" and "z", enforcing search through page lists
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
 
-    @BeforeClass(alwaysRun = true)
-    public void beforeTests() {
-        ChromeDriverManager.chromedriver().setup();
-        basePage = new BasePage(driver);
-        loginPage = new LoginPage(driver);
-        samsaraPage = new SamsaraPage(driver);
-        homePage = new HomePage(driver);
-        usersPage = new UsersPage(driver);
-        heroesPage = new HeroesPage(driver);
-        galleryPage = new GalleryPage(driver);
-        apiPage = new ApiPage(driver);
-        brokenLinkPage = new BrokenLinkPage(driver);
-        adminPage = new AdminPage(driver);
-        testConfiguration = new TestConfiguration();
-        driver.manage().window().maximize();
+
+    @BeforeMethod
+    @Parameters({"browser"})
+    public void setUp(String browser) {
+        loginPage = Utils.setUpWebBrowser(browser);
     }
+       // driver.manage().window().maximize();
 
     @Test(description = "L1. Login module - Login to the web app using valid credentials", groups = {"P1"})
     public void userLoginWithCorrectCredentialsTest() {
@@ -255,78 +246,71 @@ public class SamsaraUITests {
 ////        user1Created = true;
 ////    }
 
-/**
-    @Test(groups = {"P0"})
-    public void samsaraPageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        Assert.assertTrue(samsaraPage.verifySamsaraPageIsDisplayed(),"Samsara page is not displayed!");
-    }
-
-    @Test(groups = {"P0"})
-    public void homePageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        homePage = samsaraPage.navigateToHomePage();
-        Assert.assertTrue(homePage.verifyHomePageIsDisplayed(),"Home page is not displayed!");
-    }
-
-    @Test(groups = {"P0"})
-    public void UsersPageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        usersPage = samsaraPage.navigateToUsersPage();
-        Assert.assertTrue(usersPage.verifyUsersPageIsDisplayed(),"Users page is not displayed!");
-    }
-
-    @Test(groups = {"P0"})
-    public void HeroesPageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        heroesPage = samsaraPage.navigateToHeroesPage();
-        Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed(),"Heroes page is not displayed!");
-    }
-
-    @Test(groups = {"P0"})
-    public void GalleryPageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        galleryPage = samsaraPage.navigateToGalleryPage();
-        Assert.assertTrue(galleryPage.verifyGalleryPageIsDisplayed(),"Gallery page is not displayed!");
-    }
-
-    @Test(groups = {"P0"})
-    public void ApiPageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        apiPage = samsaraPage.navigateToApiPage();
-        Assert.assertTrue(apiPage.verifyApiPageIsDisplayed(),"Api page is not displayed!");
-    }
-
-    @Test(groups = {"P0"})
-    public void BrokenLinkPageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        brokenLinkPage = samsaraPage.navigateToBrokenLinkPage();
-        Assert.assertTrue(brokenLinkPage.verifyBrokenLinkPageIsDisplayed(),"Broken Link page is not displayed!");
-    }
-
-    @Test(groups = {"P0"})
-    public void AdminPageCheck() {
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        adminPage = samsaraPage.navigateToAdminPage();
-        Assert.assertTrue(adminPage.verifyAdminPageIsDisplayed(),"Admin page is not displayed!");
-    }
-**/
+    /**
+     * @Test(groups = {"P0"})
+     * public void samsaraPageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * Assert.assertTrue(samsaraPage.verifySamsaraPageIsDisplayed(),"Samsara page is not displayed!");
+     * }
+     * @Test(groups = {"P0"})
+     * public void homePageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * homePage = samsaraPage.navigateToHomePage();
+     * Assert.assertTrue(homePage.verifyHomePageIsDisplayed(),"Home page is not displayed!");
+     * }
+     * @Test(groups = {"P0"})
+     * public void UsersPageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * usersPage = samsaraPage.navigateToUsersPage();
+     * Assert.assertTrue(usersPage.verifyUsersPageIsDisplayed(),"Users page is not displayed!");
+     * }
+     * @Test(groups = {"P0"})
+     * public void HeroesPageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * heroesPage = samsaraPage.navigateToHeroesPage();
+     * Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed(),"Heroes page is not displayed!");
+     * }
+     * @Test(groups = {"P0"})
+     * public void GalleryPageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * galleryPage = samsaraPage.navigateToGalleryPage();
+     * Assert.assertTrue(galleryPage.verifyGalleryPageIsDisplayed(),"Gallery page is not displayed!");
+     * }
+     * @Test(groups = {"P0"})
+     * public void ApiPageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * apiPage = samsaraPage.navigateToApiPage();
+     * Assert.assertTrue(apiPage.verifyApiPageIsDisplayed(),"Api page is not displayed!");
+     * }
+     * @Test(groups = {"P0"})
+     * public void BrokenLinkPageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * brokenLinkPage = samsaraPage.navigateToBrokenLinkPage();
+     * Assert.assertTrue(brokenLinkPage.verifyBrokenLinkPageIsDisplayed(),"Broken Link page is not displayed!");
+     * }
+     * @Test(groups = {"P0"})
+     * public void AdminPageCheck() {
+     * loginSuccessful = false;
+     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+     * loginSuccessful = true;
+     * adminPage = samsaraPage.navigateToAdminPage();
+     * Assert.assertTrue(adminPage.verifyAdminPageIsDisplayed(),"Admin page is not displayed!");
+     * }
+     **/
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
         Log.debug("tearDown() in @AfterMethod");
@@ -336,6 +320,8 @@ public class SamsaraUITests {
         driver.navigate().to("localhost:8080");
         if (loginSuccessful)
             loginPage.logOut();
+        if (loginPage != null)
+            loginPage.quitWebDriver();
     }
 
     @AfterClass(alwaysRun = true)

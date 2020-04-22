@@ -1,4 +1,4 @@
-package com.red.testframework.pageobjects;
+package com.red.testframework.pages;
 
 import com.red.testframework.utils.XPathUtil;
 import org.openqa.selenium.By;

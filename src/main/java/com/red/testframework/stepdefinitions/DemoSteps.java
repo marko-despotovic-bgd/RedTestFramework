@@ -1,6 +1,6 @@
 package com.red.testframework.stepdefinitions;
 
-import com.red.testframework.pageobjects.LoginPage;
+import com.red.testframework.pages.LoginPage;
 import com.red.testframework.utils.Log;
 
 import io.cucumber.java.en.And;
