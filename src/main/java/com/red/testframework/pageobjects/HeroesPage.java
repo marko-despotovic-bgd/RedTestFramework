@@ -60,6 +60,7 @@ public class HeroesPage extends BasePage {
         Log.debug("Creating hero:\nName: " + heroName + "\nLevel: " + levelInput + "\nClass: " + heroClass);
         clickOnNewHeroButton();
         fillInInputField(nameInput, heroName);
+        System.out.println(level);
         fillInInputField(levelInput, level);
         selectHeroClass(heroClass);
         clickOnElement(addHeroSaveButton);
@@ -131,7 +132,7 @@ public class HeroesPage extends BasePage {
     }
 
 
-    public boolean verifyHeroesPageDisplayed() {
+    public boolean verifyHeroesPageIsDisplayed() {
         return getElementText(panelTitle).equals(PANEL_TITLE);
     }
 }

@@ -12,7 +12,6 @@
  H2. GET /api/heroes/{id} - Get list of a hero with specific id.
  H3. GET /api/heroes/{type} - Get list of all user with specific type (class).
  ***********************************************************************/
-package com.red.testframework.tests;
 
 import com.red.testframework.testconfiguration.TestConfiguration;
 import com.red.testframework.utils.BaseApi;

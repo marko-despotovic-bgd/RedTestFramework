@@ -27,6 +27,8 @@ public class SamsaraPage extends BasePage {
     private WebElement apiPageNavigator;
     @FindBy(xpath = "//a[@href='/broken']")
     private WebElement brokenPageNavigator;
+    @FindBy(xpath = "//a[@href='/admin']")
+    private WebElement adminPageNavigator;
     @FindBy(xpath = "//span[contains(@class,'log-out')]")
     private WebElement logoutButton;
     @FindBy(xpath = "//div[@class='panel-title text-center']")
@@ -41,8 +43,8 @@ public class SamsaraPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public boolean  verifySamsaraPageDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(XPathUtil.PANEL_XPATH)), XPathUtil.SAMSARA_PAGE_PANEL_TITLE);
+    public boolean verifySamsaraPageIsDisplayed() {
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(XPathUtil.PANEL_TITLE_XPATH)), XPathUtil.SAMSARA_PAGE_PANEL_TITLE);
     }
 
     // Since this is landing page, where not really much of stuff related to app functionality is placed,
@@ -56,14 +58,14 @@ public class SamsaraPage extends BasePage {
 
     public UsersPage navigateToUsersPage() {
         clickOnElement(usersPageNavigator);
-        Assert.assertTrue(new UsersPage(driver).verifyUsersPageDisplayed(), "Users page is not displayed!");
+        Assert.assertTrue(new UsersPage(driver).verifyUsersPageIsDisplayed(), "Users page is not displayed!");
         Log.info("Users page is displayed");
         return new UsersPage(driver);
     }
 
     public HeroesPage navigateToHeroesPage() {
         clickOnElement(heroesPageNavigator);
-        Assert.assertTrue(new HeroesPage(driver).verifyHeroesPageDisplayed(), "Heroes page is not displayed!");
+        Assert.assertTrue(new HeroesPage(driver).verifyHeroesPageIsDisplayed(), "Heroes page is not displayed!");
         Log.info("Heroes page is displayed");
         return new HeroesPage(driver);
     }
@@ -88,5 +90,12 @@ public class SamsaraPage extends BasePage {
         Assert.assertTrue(new BrokenLinkPage(driver).verifyBrokenLinkPageIsDisplayed(), "Broken Link page is not displayed!");
         Log.info("Broken Link page is displayed");
         return new BrokenLinkPage(driver);
+    }
+
+    public AdminPage navigateToAdminPage() {
+        clickOnElement(adminPageNavigator);
+        Assert.assertTrue(new AdminPage(driver).verifyAdminPageIsDisplayed(), "Users page is not displayed!");
+        Log.info("Users page is displayed");
+        return new AdminPage(driver);
     }
 }

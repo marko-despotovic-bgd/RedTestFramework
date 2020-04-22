@@ -135,7 +135,7 @@ public class UsersPage extends BasePage {
             Log.debug("User not found!");
     }
 
-    public boolean verifyUsersPageDisplayed() {
+    public boolean verifyUsersPageIsDisplayed() {
         return getElementText(panelTitle).equals("Users");
     }
 

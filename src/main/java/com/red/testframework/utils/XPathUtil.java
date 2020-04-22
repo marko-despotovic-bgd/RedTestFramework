@@ -13,6 +13,7 @@ public class XPathUtil {
     public static final String GALLERY_PAGE_PANEL_TITLE ="Gallery";
     public static final String API_PAGE_PANEL_TITLE ="API Documentation";
     public static final String BROKEN_LINK_PAGE_PANEL_TITLE ="Alice in Wonderland";
+    public static final String ADMIN_PAGE_PANEL_TITLE ="Hey there admin!";
     public static final String PANEL_TITLE_XPATH ="//div[@class='panel-title text-center']";
     public static final String PANEL_XPATH ="//div[@class='my-jumbotron']//h1";
 }
