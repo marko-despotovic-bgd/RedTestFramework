@@ -1,4 +1,4 @@
-package com.red.testframework.pageobjects;
+package com.red.testframework.pages;
 
 import java.util.ArrayList;
 import java.util.Arrays;

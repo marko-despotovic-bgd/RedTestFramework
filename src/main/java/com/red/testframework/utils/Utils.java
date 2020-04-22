@@ -1,7 +1,6 @@
 package com.red.testframework.utils;
 
-import com.red.testframework.pageobjects.HeroesPage;
-import com.red.testframework.pageobjects.LoginPage;
+import com.red.testframework.pages.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
