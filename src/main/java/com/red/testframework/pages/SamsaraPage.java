@@ -2,7 +2,7 @@ package com.red.testframework.pages;
 
 import com.red.testframework.testconfiguration.TestConfiguration;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.XPathUtil;
+import com.red.testframework.utils.PageConstants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -44,7 +44,7 @@ public class SamsaraPage extends BasePage {
     }
 
     public boolean verifySamsaraPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(XPathUtil.PANEL_TITLE_XPATH)), XPathUtil.SAMSARA_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(PageConstants.PANEL_TITLE_XPATH)), PageConstants.SAMSARA_PAGE_PANEL_TITLE);
     }
 
     // Since this is landing page, where not really much of stuff related to app functionality is placed,
@@ -52,50 +52,50 @@ public class SamsaraPage extends BasePage {
     public HomePage navigateToHomePage() {
         clickOnElement(homePageNavigator);
         Assert.assertTrue(new HomePage(driver).verifyHomePageIsDisplayed(), "Home page is not displayed!");
-        Log.info("Home page is displayed");
+        log.info("Home page is displayed");
         return new HomePage(driver);
     }
 
     public UsersPage navigateToUsersPage() {
         clickOnElement(usersPageNavigator);
         Assert.assertTrue(new UsersPage(driver).verifyUsersPageIsDisplayed(), "Users page is not displayed!");
-        Log.info("Users page is displayed");
+        log.info("Users page is displayed");
         return new UsersPage(driver);
     }
 
     public HeroesPage navigateToHeroesPage() {
         clickOnElement(heroesPageNavigator);
         Assert.assertTrue(new HeroesPage(driver).verifyHeroesPageIsDisplayed(), "Heroes page is not displayed!");
-        Log.info("Heroes page is displayed");
+        log.info("Heroes page is displayed");
         return new HeroesPage(driver);
     }
 
 
     public GalleryPage navigateToGalleryPage() {
-            clickOnElement(galleryPageNavigator);
-            Assert.assertTrue(new GalleryPage(driver).verifyGalleryPageIsDisplayed(), "Gallery page is not displayed!");
-            Log.info("Gallery page is displayed");
-            return new GalleryPage(driver);
-        }
+        clickOnElement(galleryPageNavigator);
+        Assert.assertTrue(new GalleryPage(driver).verifyGalleryPageIsDisplayed(), "Gallery page is not displayed!");
+        log.info("Gallery page is displayed");
+        return new GalleryPage(driver);
+    }
 
     public ApiPage navigateToApiPage() {
         clickOnElement(apiPageNavigator);
         Assert.assertTrue(new ApiPage(driver).verifyApiPageIsDisplayed(), "Api page is not displayed!");
-        Log.info("Api page is displayed");
+        log.info("Api page is displayed");
         return new ApiPage(driver);
     }
 
     public BrokenLinkPage navigateToBrokenLinkPage() {
         clickOnElement(brokenPageNavigator);
         Assert.assertTrue(new BrokenLinkPage(driver).verifyBrokenLinkPageIsDisplayed(), "Broken Link page is not displayed!");
-        Log.info("Broken Link page is displayed");
+        log.info("Broken Link page is displayed");
         return new BrokenLinkPage(driver);
     }
 
     public AdminPage navigateToAdminPage() {
         clickOnElement(adminPageNavigator);
         Assert.assertTrue(new AdminPage(driver).verifyAdminPageIsDisplayed(), "Users page is not displayed!");
-        Log.info("Users page is displayed");
+        log.info("Users page is displayed");
         return new AdminPage(driver);
     }
 }

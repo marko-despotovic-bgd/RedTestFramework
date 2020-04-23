@@ -26,7 +26,7 @@ public class TestConfiguration {
 		
 		private String url;
 		private String username, username2;
-		private String password, password2;
+		private String password;
 		
 		private String screenshotFileLocation;
 		private String saveScreenshots;

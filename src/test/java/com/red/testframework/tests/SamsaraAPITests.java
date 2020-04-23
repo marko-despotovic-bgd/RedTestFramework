@@ -1,4 +1,4 @@
-/*******************************************************************
+package com.red.testframework.tests; /*******************************************************************
  Users API
  U1. GET /api/users - Get list of all users.
  U2. GET /api/users/{id} - Get list of a user with specific id.
@@ -14,26 +14,11 @@
  ***********************************************************************/
 
 import com.red.testframework.testconfiguration.TestConfiguration;
-import com.red.testframework.utils.BaseApi;
-import com.red.testframework.utils.Log;
-import com.red.testframework.utils.ScreenshotUtil;
-import com.red.testframework.webdriver.BrowserDriver;
-import io.restassured.RestAssured;
-import io.restassured.RestAssured.*;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
-import org.testng.Assert;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 //import org.json.simple.JSONValue;
 
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,7 +39,7 @@ public class SamsaraAPITests {
 
     boolean hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
 
-//    public SamsaraAPITests() throws IOException {
+//    public com.red.testframework.tests.SamsaraAPITests() throws IOException {
 //        baseUri = super.baseUri + "/api";
 //    }
 

@@ -22,7 +22,6 @@ public class Utils {
      */
     public static LoginPage setUpWebBrowser(String browser) {
         LoginPage loginPage;
-
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             loginPage = new LoginPage(new ChromeDriver());
@@ -31,7 +30,6 @@ public class Utils {
             loginPage = new LoginPage(new FirefoxDriver());
         } else
             throw new RuntimeException();
-
         return loginPage;
     }
 
