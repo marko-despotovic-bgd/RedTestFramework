@@ -2,7 +2,7 @@ package com.red.testframework.pages;
 
 import com.red.testframework.testconfiguration.TestConfiguration;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.XPathUtil;
+import com.red.testframework.utils.PageConstants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -22,6 +22,6 @@ public class ApiPage extends BasePage {
     }
 
     public boolean verifyApiPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(XPathUtil.PANEL_TITLE_XPATH)), XPathUtil.API_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(PageConstants.PANEL_TITLE_XPATH)), PageConstants.API_PAGE_PANEL_TITLE);
     }
 }

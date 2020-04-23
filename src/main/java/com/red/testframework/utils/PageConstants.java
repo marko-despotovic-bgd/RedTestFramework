@@ -1,6 +1,6 @@
 package com.red.testframework.utils;
 
-public class XPathUtil {
+public class PageConstants {
 
     public static final String SUCCESSFUL_LOGOUT_MESSAGE = "You have been logged out.";
     public static final String INVALID_CREDENTIALS_MESSAGE = "Invalid username and password.";

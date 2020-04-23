@@ -1,4 +1,4 @@
-/********************************************************************************************
+ /********************************************************************************************
  Test suite:                                                                                *
  L1. Login module - Login to the web app using valid credentials                            *
  L2. Login module - Login to the web app using invalid credentials                          *
@@ -16,6 +16,7 @@
  A2. Admin module - Verify admin has access to admin section                                *
  A3. Admin module - Verify admin can recreate registration key                              *
  ********************************************************************************************/
+package com.red.testframework.tests;
 
 import com.red.testframework.pages.*;
 import com.red.testframework.testconfiguration.TestConfiguration;
@@ -23,7 +24,10 @@ import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.utils.Utils;
 import com.red.testframework.webdriver.BrowserDriver;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -46,7 +50,10 @@ public class SamsaraUITests {
     BrokenLinkPage brokenLinkPage;
     AdminPage adminPage;
     TestConfiguration testConfiguration;
+    private static Logger log = LoggerFactory.getLogger(SamsaraUITests.class);
     WebDriver driver = BrowserDriver.getCurrentDriver();
+
+
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
     String timestamp = sdf.format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
@@ -58,12 +65,15 @@ public class SamsaraUITests {
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
 
 
-    @BeforeMethod
+    @BeforeClass(alwaysRun = true)
     @Parameters({"browser"})
     public void setUp(String browser) {
+        log.debug("setUp() in @BeforeMethod");
         loginPage = Utils.setUpWebBrowser(browser);
+        loginPage = new LoginPage(driver);
+        samsaraPage = new SamsaraPage(driver);
+
     }
-       // driver.manage().window().maximize();
 
     @Test(description = "L1. Login module - Login to the web app using valid credentials", groups = {"P1"})
     public void userLoginWithCorrectCredentialsTest() {
@@ -73,51 +83,52 @@ public class SamsaraUITests {
          3. On Login page, click Log in button
          Expected result: Samsara greeting page (http://www.samsara.com or http://localhost:8080/) is displayed  */
 
-        Log.info("Entered userLoginWithCorrectCredentials test!");
+        log.info("Entered userLoginWithCorrectCredentials test!");
         loginSuccessful = false;
         samsaraPage = loginPage.login(testConfiguration.getUsername2(), testConfiguration.getPassword());
+        // Validation on Samsara page implemented within method login() itself
         loginSuccessful = true;
     }
 
-    @Test(description = "L2. Login module - Login to the web app using invalid credentials", groups = {"P2"})
-    public void userLoginWithIncorrectCredentialsTest() {
-        /* Test steps:
-         1. Navigate to Login page (in browsers address bar enter http://www.samsara.com or http://localhost:8080/)
-         2. On Login Page enter invalid credentials in username field
-         3. On Login page, click Log in button
-         Expected: Login denied. Error message "Invalid username and password." displayed   */
-
-        Log.info("Entered userLoginWithCorrectCredentials test!");
-        loginSuccessful = false;
-        loginPage = loginPage.loginWithInvalidCredentials(testConfiguration.getUsername2() + "fail", testConfiguration.getPassword());
-        // Validation on error message implemented in method loginWithInvalidCredentials() itself
-    }
-
-    @Test(description = "H1. Hero module - Verify user can create new hero", groups = {"P1"})
-    public void userCreateNewHeroTest() {
-        Log.info("Entered userCreateNewHero test!");
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername2(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        heroesPage = samsaraPage.navigateToHeroesPage();
-        heroesPage.addHero(hero1Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
-        hero1Created = heroesPage.isHeroDisplayed(hero1Name); // If hero is found in the list(s), this will set flag to true
-        Assert.assertTrue(hero1Created); // This is the goal of the test
-    }
-
-    @Test(description = "2. Verify user can edit existing own hero")
-    public void editExistingOwnHeroTest() {
-        Log.info("Entered editExistingOwnHero test!");
-        loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-        loginSuccessful = true;
-        heroesPage = samsaraPage.navigateToHeroesPage();
-        Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed());
-        heroesPage.addHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
-        heroesPage.editHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Revenant");
-        Assert.assertTrue(heroesPage.isHeroDisplayed(hero2Name)); // This is the goal of the test
-        hero2Created = heroesPage.isHeroDisplayed(hero2Name); // If hero is found in the list(s), this will set flag to true
-    }
+//    @Test(description = "L2. Login module - Login to the web app using invalid credentials", groups = {"P2"})
+//    public void userLoginWithIncorrectCredentialsTest() {
+//        /* Test steps:
+//         1. Navigate to Login page (in browsers address bar enter http://www.samsara.com or http://localhost:8080/)
+//         2. On Login Page enter invalid credentials in username field
+//         3. On Login page, click Log in button
+//         Expected: Login denied. Error message "Invalid username and password." displayed   */
+//
+//        Log.info("Entered userLoginWithCorrectCredentials test!");
+//        loginSuccessful = false;
+//        loginPage = loginPage.loginWithInvalidCredentials(testConfiguration.getUsername2() + "fail", testConfiguration.getPassword());
+//        // Validation on error message implemented in method loginWithInvalidCredentials() itself
+//    }
+//
+//    @Test(description = "H1. Hero module - Verify user can create new hero", groups = {"P1"})
+//    public void userCreateNewHeroTest() {
+//        Log.info("Entered userCreateNewHero test!");
+//        loginSuccessful = false;
+//        samsaraPage = loginPage.login(testConfiguration.getUsername2(), testConfiguration.getPassword());
+//        loginSuccessful = true;
+//        heroesPage = samsaraPage.navigateToHeroesPage();
+//        heroesPage.addHero(hero1Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
+//        hero1Created = heroesPage.isHeroDisplayed(hero1Name); // If hero is found in the list(s), this will set flag to true
+//        Assert.assertTrue(hero1Created); // This is the goal of the test
+//    }
+//
+//    @Test(description = "2. Verify user can edit existing own hero")
+//    public void editExistingOwnHeroTest() {
+//        Log.info("Entered editExistingOwnHero test!");
+//        loginSuccessful = false;
+//        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+//        loginSuccessful = true;
+//        heroesPage = samsaraPage.navigateToHeroesPage();
+//        Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed());
+//        heroesPage.addHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
+//        heroesPage.editHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Revenant");
+//        Assert.assertTrue(heroesPage.isHeroDisplayed(hero2Name)); // This is the goal of the test
+//        hero2Created = heroesPage.isHeroDisplayed(hero2Name); // If hero is found in the list(s), this will set flag to true
+//    }
 
 //    @Test(description = "3. Verify user can delete own hero")
 //    public void deleteOwnHeroTest() {
@@ -317,11 +328,10 @@ public class SamsaraUITests {
         if (result.getStatus() == ITestResult.FAILURE) {
             ScreenshotUtil.makeScreenshot(result);
         }
-        driver.navigate().to("localhost:8080");
+
         if (loginSuccessful)
             loginPage.logOut();
-        if (loginPage != null)
-            loginPage.quitWebDriver();
+
     }
 
     @AfterClass(alwaysRun = true)
@@ -364,6 +374,9 @@ public class SamsaraUITests {
                 Log.debug("User " + username2 + " has been deleted!");
             }
             loginPage.logOut();
+            if (loginPage != null)
+                loginPage.quitWebDriver();
+
         }
     }
 }
