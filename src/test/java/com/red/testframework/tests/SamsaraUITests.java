@@ -51,8 +51,6 @@ public class SamsaraUITests {
     AdminPage adminPage;
     TestConfiguration testConfiguration;
     private static Logger log = LoggerFactory.getLogger(SamsaraUITests.class);
-    WebDriver driver = BrowserDriver.getCurrentDriver();
-
 
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
@@ -70,8 +68,6 @@ public class SamsaraUITests {
     public void setUp(String browser) {
         log.debug("setUp() in @BeforeMethod");
         loginPage = Utils.setUpWebBrowser(browser);
-        loginPage = new LoginPage(driver);
-        samsaraPage = new SamsaraPage(driver);
 
     }
 

@@ -22,6 +22,7 @@ public class Utils {
      */
     public static LoginPage setUpWebBrowser(String browser) {
         LoginPage loginPage;
+        log.info("Chosen browser is " + browser);
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             loginPage = new LoginPage(new ChromeDriver());
