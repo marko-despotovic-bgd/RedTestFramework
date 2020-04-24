@@ -65,7 +65,7 @@ public class SamsaraUITests {
 
     @BeforeClass(alwaysRun = true)
     @Parameters({"browser"})
-    public void setUp(String browser) {
+    public void setUp(@Optional("optional") String browser) {
         log.debug("setUp() in @BeforeMethod");
         loginPage = Utils.setUpWebBrowser(browser);
 
