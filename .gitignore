@@ -4,5 +4,5 @@ target/
 .idea/
 RedTestFramework.iml
 Software Testing v0.3_STAMPA.docx
-src/main/resources/config.properties
+resources/config/config.properties
 ./github

@@ -4,7 +4,7 @@ package com.red.testframework.api;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import com.red.testframework.testconfiguration.TestConfiguration;
+import com.red.testframework.utils.TestConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;

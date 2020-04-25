@@ -1,8 +1,8 @@
 package com.red.testframework.pages;
 
-import com.red.testframework.testconfiguration.TestConfiguration;
+import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.PageConstants;
+import com.red.testframework.utils.Constants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -16,12 +16,11 @@ public class GalleryPage extends BasePage {
     // Constructor
     public GalleryPage(WebDriver driver) {
         super(driver);
-        testConfiguration = new TestConfiguration();
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
 
     public boolean verifyGalleryPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(PageConstants.PANEL_TITLE_XPATH)), PageConstants.GALLERY_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.GALLERY_PAGE_PANEL_TITLE);
     }
 }

@@ -20,9 +20,9 @@ public class Utils {
      * @param browser
      * @return LoginPage
      */
-    public static LoginPage setUpWebBrowser(String browser) {
+    public static LoginPage setUpWebBrowser(@org.jetbrains.annotations.NotNull String browser) {
         LoginPage loginPage;
-        log.info("Chosen browser is " + browser);
+
         if (browser.equalsIgnoreCase("chrome")) {
             WebDriverManager.chromedriver().setup();
             loginPage = new LoginPage(new ChromeDriver());
@@ -31,6 +31,7 @@ public class Utils {
             loginPage = new LoginPage(new FirefoxDriver());
         } else
             throw new RuntimeException();
+
         return loginPage;
     }
 
