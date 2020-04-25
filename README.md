@@ -1,11 +1,11 @@
 # RedTestFramework
 RED vs Samsara
 
-This test framework contains tests written for [Samsara](http://localhost:8080)  website. In “pages” package there are classes for all ofSamsara website pages and their superclass BasePage and methods which describe the functionalities of pages are written in them.
+This test framework contains tests written for [Samsara](http://localhost:8080)  website. In “pages” package there are classes for all of Samsara website pages and their superclass BasePage and methods which describe the functionalities of pages are written in them.
 
 “utils” package consists of Utils class and more utils classes. Utils class sets up web browser options and enables capturing screenshots of test failures.
 
-Suites can be ran through sutes-runner.xml, while testng.xml enables cross-browser execution (configurable to be executed against suites from suites-runner.xml).
+Suites can be ran through sutes-runner.xml on suites level, while testng.xml enables cross-browser execution (configurable to be executed against suites from suites-runner.xml).
 
 
 ### Pre-requisites
