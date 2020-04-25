@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Parametrized Test Suit" verbose="2"> <!-- Using verbose 2 for more info in logs -->
+    <!-- Suite-level parameters, always passed to test (unless overridden) -->
+    <parameter name="browser" value="chrome"/>
+    <test name="Chrome tests">
+        <groups>
+            <run>
+                <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
+                <include name="P0"/>
+                <!--include name="P1"/-->
+                <include name="P2"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.red.testframework.tests"/>
+        </packages>
+    </test>
+    <test name="Firefox tests">
+        <!-- Overriding suites' parameter -->
+        <parameter name="browser" value="firefox"/>
+        <groups>
+            <run>
+                <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
+                <include name="P0"/>
+                <include name="P1"/>
+                <!--include name="P2"/-->
+            </run>
+        </groups>
+        <packages>
+            <package name="com.red.testframework.tests"/>
+        </packages>
+    </test>
+</suite>

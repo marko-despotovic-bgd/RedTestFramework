@@ -1,6 +1,7 @@
 package com.red.testframework.pages;
 
-import com.red.testframework.testconfiguration.TestConfiguration;
+import com.red.testframework.utils.Constants;
+import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class HeroesPage extends BasePage {
-
-    public final String PANEL_TITLE ="Heroes";
 
     // Page locators
     @FindBy(xpath = "//span[contains(@class,'-plus')]")
@@ -45,7 +44,6 @@ public class HeroesPage extends BasePage {
 
     public HeroesPage(WebDriver driver) {
         super(driver);
-        testConfiguration = new TestConfiguration();
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
@@ -130,9 +128,7 @@ public class HeroesPage extends BasePage {
             return false;
         return isNextPageButtonClickable;
     }
-
-
     public boolean verifyHeroesPageIsDisplayed() {
-        return getElementText(panelTitle).equals(PANEL_TITLE);
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.HEROES_PAGE_PANEL_TITLE);
     }
 }

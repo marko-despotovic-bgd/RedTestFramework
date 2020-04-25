@@ -1,8 +1,8 @@
 package com.red.testframework.pages;
 
-import com.red.testframework.testconfiguration.TestConfiguration;
+import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.PageConstants;
+import com.red.testframework.utils.Constants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -38,13 +38,12 @@ public class SamsaraPage extends BasePage {
 
     public SamsaraPage(WebDriver driver) {
         super(driver);
-        testConfiguration = new TestConfiguration();
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
 
     public boolean verifySamsaraPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(PageConstants.PANEL_TITLE_XPATH)), PageConstants.SAMSARA_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.SAMSARA_PAGE_PANEL_TITLE);
     }
 
     // Since this is landing page, where not really much of stuff related to app functionality is placed,

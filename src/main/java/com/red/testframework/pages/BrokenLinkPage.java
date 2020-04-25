@@ -1,8 +1,8 @@
 package com.red.testframework.pages;
 
-import com.red.testframework.testconfiguration.TestConfiguration;
+import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.PageConstants;
+import com.red.testframework.utils.Constants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -16,13 +16,12 @@ public class BrokenLinkPage extends BasePage {
     // Constructor
     public BrokenLinkPage(WebDriver driver) {
         super(driver);
-        testConfiguration = new TestConfiguration();
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
 
     public boolean verifyBrokenLinkPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(PageConstants.PANEL_TITLE_XPATH)), PageConstants.BROKEN_LINK_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.BROKEN_LINK_PAGE_PANEL_TITLE);
     }
 
 }

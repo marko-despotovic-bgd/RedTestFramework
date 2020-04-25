@@ -3,6 +3,7 @@ package com.red.testframework.pages;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -17,14 +18,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.red.testframework.testconfiguration.TestConfiguration;
+import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.TimeUtil;
 
 public class BasePage {
-    protected WebDriver driver;
-    protected TestConfiguration testConfiguration;
-    private static Logger log = LoggerFactory.getLogger(BasePage.class);
+    public WebDriver driver;
+    public TestConfiguration testConfiguration;
+    public static Logger log = LoggerFactory.getLogger(BasePage.class);
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
@@ -171,12 +172,14 @@ public class BasePage {
         }
     }
 
-    public WebElement findFirstElementsWithMatchingText(String text) {
-        List<WebElement> matchingElements = findElementsWithMatchingText(text);
-        if (!matchingElements.isEmpty()) {
-            return matchingElements.get(0);
-        } else {
-            return null;
+    public boolean isLoggedIn(int timeout){
+        driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+        try{
+            return driver.findElement(By.className("navbar-container")).isDisplayed();
+        } catch(Exception e) {
+            return false;
+        } finally {
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         }
     }
 
@@ -194,9 +197,6 @@ public class BasePage {
         return element.isSelected();
     }
 
-    public String getDivElementContainingTextXpath(String text) {
-        return "//div[contains(text(),'" + text + "')]";
-    }
 
     public boolean isAttributePresent(By by, String attribute) {
         return "true".equals(driver.findElement(by).getAttribute(attribute));
@@ -205,27 +205,12 @@ public class BasePage {
     public boolean isAttributePresent(WebElement element, String attribute) {
         return "true".equals(element.getAttribute(attribute));
     }
-
-    public boolean hasCssClass(WebElement element, String cssClass) {
-        return element.getAttribute("class").contains(cssClass);
-    }
-
     public void refreshPage() {
         driver.navigate().refresh();
     }
 
     public String getUrl() {
         return driver.getCurrentUrl();
-    }
-
-    public void verticalPageScroll() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollBy(0,40)");
-    }
-
-    public void verticalPageScroll(int pixels) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.scrollBy(0," + pixels + ")");
     }
 
     public boolean isElementPresent(By by) {
@@ -245,23 +230,6 @@ public class BasePage {
     public void switchTab(int tabNumber) {
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(tabNumber));
-    }
 
-    public void closeLastTab() {
-        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
-        int tabNumber = tabs.size() - 1;
-        driver.switchTo().window(tabs.get(tabNumber));
-        driver.close();
-
-        driver.switchTo().window(tabs.get(tabNumber - 1));
-    }
-
-    public WebElement findFirstElementsWithMatchingText(WebElement rootElement, String text) {
-        List<WebElement> matchingElements = findElementsWithMatchingText(rootElement, text);
-        if (!matchingElements.isEmpty()) {
-            return matchingElements.get(0);
-        } else {
-            return null;
-        }
     }
 }

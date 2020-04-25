@@ -1,4 +1,4 @@
- /********************************************************************************************
+/********************************************************************************************
  Test suite:                                                                                *
  L1. Login module - Login to the web app using valid credentials                            *
  L2. Login module - Login to the web app using invalid credentials                          *
@@ -19,69 +19,74 @@
 package com.red.testframework.tests;
 
 import com.red.testframework.pages.*;
-import com.red.testframework.testconfiguration.TestConfiguration;
+import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.utils.Utils;
-import com.red.testframework.webdriver.BrowserDriver;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class SamsaraUITests {
 
-    BasePage basePage;
-    LoginPage loginPage;
-    SamsaraPage samsaraPage;
-    HomePage homePage;
-    UsersPage usersPage;
-    HeroesPage heroesPage;
-    GalleryPage galleryPage;
-    ApiPage apiPage;
-    BrokenLinkPage brokenLinkPage;
-    AdminPage adminPage;
-    TestConfiguration testConfiguration;
+    private BasePage basePage;
+    private LoginPage loginPage;
+    private SamsaraPage samsaraPage;
+    private HomePage homePage;
+    private UsersPage usersPage;
+    private HeroesPage heroesPage;
+    private GalleryPage galleryPage;
+    private ApiPage apiPage;
+    private BrokenLinkPage brokenLinkPage;
+    private AdminPage adminPage;
+    private TestConfiguration testConfiguration;
     private static Logger log = LoggerFactory.getLogger(SamsaraUITests.class);
 
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
     String timestamp = sdf.format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
-    String username1 = "adespot" + timestamp, username2 = "z" + username1 + "2", username3 = username1 + "3", firstName = "Marko", lastName = "Despotovic", about = "despot",
-            secretQuestion = "marko", secretAnswer = "despotovic", password = "Password1", conirfmPassword = "Password1";
-    String hero1Name = "aMarko_" + timestamp, hero2Name = "A" + hero1Name + timestamp, hero3Name = "Z" + hero1Name + timestamp, heroClass = "Guardian";
+    String username1 = "despot" + timestamp,
+            username2 = "a" + username1 + "2",
+            username3 = "z" + username2 + "3",
+            firstName = "Marko",
+            lastName = "Despotovic",
+            about = "despot",
+            secretQuestion = "marko",
+            secretAnswer = "despotovic",
+            password = "Password1",
+            conirfmPassword = "Password1";
+    String hero1Name = "aMarko_" + timestamp,
+            hero2Name = "A" + hero1Name,
+            hero3Name = "Z" + hero2Name,
+            heroClass = "Guardian";
     // All input data follow restriction of the original app
     // Names intentionally start with letters "a" and "z", enforcing search through page lists
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
 
 
-    @BeforeClass(alwaysRun = true)
+    @BeforeClass()
     @Parameters({"browser"})
-    public void setUp(@Optional("optional") String browser) {
-        log.debug("setUp() in @BeforeMethod");
+    public void setUp(@Optional("chrome") String browser) {
+        log.info("setUp() in @BeforeMethod");
         loginPage = Utils.setUpWebBrowser(browser);
-
     }
 
-    @Test(description = "L1. Login module - Login to the web app using valid credentials", groups = {"P1"})
+    @Test//(description = "L1. Login module - Login to the web app using valid credentials", groups = {"P1"})
     public void userLoginWithCorrectCredentialsTest() {
         /* Test steps:
-         1. Navigate to Login page (in browsers address bar enter http://www.samsara.com or http://localhost:8080/)
+         1. Navigate to Login page (in browsers address bar enter http://samsara.com or http://localhost:8080/)
          2. On Login Page enter valid credentials in username and password text fields
          3. On Login page, click Log in button
-         Expected result: Samsara greeting page (http://www.samsara.com or http://localhost:8080/) is displayed  */
+         Expected result: Samsara greeting page (http://samsara.com/ or http://localhost:8080/) is displayed  */
 
         log.info("Entered userLoginWithCorrectCredentials test!");
         loginSuccessful = false;
-        samsaraPage = loginPage.login(testConfiguration.getUsername2(), testConfiguration.getPassword());
+        samsaraPage = loginPage.logIn(testConfiguration.getUserUsername(), testConfiguration.getPassword());
         // Validation on Samsara page implemented within method login() itself
         loginSuccessful = true;
     }
@@ -96,7 +101,6 @@ public class SamsaraUITests {
 //
 //        Log.info("Entered userLoginWithCorrectCredentials test!");
 //        loginSuccessful = false;
-//        loginPage = loginPage.loginWithInvalidCredentials(testConfiguration.getUsername2() + "fail", testConfiguration.getPassword());
 //        // Validation on error message implemented in method loginWithInvalidCredentials() itself
 //    }
 //
@@ -335,7 +339,7 @@ public class SamsaraUITests {
         // Cleaning after all test have been executed, regardless of outcome
         Log.debug("Reverting changes... (afterTest() in @AfterClass)");
         if (hero1Created || hero2Created || hero3Created) {
-            samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+            samsaraPage = loginPage.logIn(testConfiguration.getAdminName(), testConfiguration.getPassword());
             heroesPage = samsaraPage.navigateToHeroesPage();
             if (hero1Created) {
                 Log.debug("Deleting " + hero1Name + "...");
@@ -356,7 +360,7 @@ public class SamsaraUITests {
         }
 
         if (user1Created || user2Created) {
-            samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
+            samsaraPage = loginPage.logIn(testConfiguration.getAdminName(), testConfiguration.getPassword());
 
             usersPage = samsaraPage.navigateToUsersPage();
             if (user1Created) {

@@ -13,16 +13,15 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 
-import com.red.testframework.testconfiguration.TestConfiguration;
 import com.red.testframework.webdriver.BrowserDriver;
 
 public class ScreenshotUtil {
-	
+
 	private static void makeScreenshot(WebDriver driver, String imageNamePrefix, String folderName) {
 		try {
 			TestConfiguration testConfiguration = new TestConfiguration();
 			String screenshotFileLocation = testConfiguration.getScreenshotFileLocation();
-			
+
 			Calendar calendar = Calendar.getInstance();
 			SimpleDateFormat formater = new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss");
 			File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -33,9 +32,9 @@ public class ScreenshotUtil {
 			} else {
 				destFile = new File((String) reportDirectory + folderName + "/" + imageNamePrefix + "_" + formater.format(calendar.getTime()) + ".png");
 			}
-			
+
 			Log.info("Screenshot is saved as " + destFile.getAbsolutePath());
-			
+
 			FileUtils.copyFile(scrFile, destFile);
 			Reporter.log("<a href='" + destFile.getAbsolutePath() + "'> <img src='" + destFile.getAbsolutePath() + "' height='100' width='100'/> </a>");
 		} catch (IOException e) {
@@ -45,9 +44,9 @@ public class ScreenshotUtil {
 	}
 
 	public static void makeScreenshot(WebDriver driver, ITestResult result, String imageNamePrefix) {
-		
+
 		imageNamePrefix = verifyImageNamePrefix(imageNamePrefix);
-		
+
 		TestConfiguration testConfiguration = new TestConfiguration();
 		boolean saveScreenshot = testConfiguration.getSaveScreenshots();
 		if (saveScreenshot) {
@@ -62,21 +61,21 @@ public class ScreenshotUtil {
 			}
 		}
 	}
-	
+
 	public static void makeScreenshot(ITestResult result) {
 		ScreenshotUtil.makeScreenshot(result, "");
 	}
-	
+
 	public static void makeScreenshot(String imageNamePrefix) {
 		ITestResult result = null;
-		ScreenshotUtil.makeScreenshot(result, imageNamePrefix);	
+		ScreenshotUtil.makeScreenshot(result, imageNamePrefix);
 	}
-	
+
 	public static void makeScreenshot(ITestResult result, String imageNamePrefix) {
 		WebDriver driver = BrowserDriver.getCurrentDriver();
 		ScreenshotUtil.makeScreenshot(driver, result, imageNamePrefix);
 	}
-	
+
 	private static String verifyImageNamePrefix(String imageNamePrefix) {
 		if(StringUtils.isNotBlank(imageNamePrefix) && !imageNamePrefix.matches("[a-zA-Z0-9-_]+")) {
 			Log.error("Image name must contain only aplhanumers, - or _");
