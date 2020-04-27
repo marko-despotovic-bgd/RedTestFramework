@@ -1,6 +1,5 @@
 package com.red.testframework.pages;
 
-import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.Constants;
 import org.openqa.selenium.By;

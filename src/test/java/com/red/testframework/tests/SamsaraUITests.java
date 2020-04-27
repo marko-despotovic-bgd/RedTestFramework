@@ -19,7 +19,6 @@
 package com.red.testframework.tests;
 
 import com.red.testframework.pages.*;
-import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.utils.Utils;
@@ -31,6 +30,7 @@ import org.testng.annotations.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 
 public class SamsaraUITests {
 
@@ -44,12 +44,14 @@ public class SamsaraUITests {
     private ApiPage apiPage;
     private BrokenLinkPage brokenLinkPage;
     private AdminPage adminPage;
-    private TestConfiguration testConfiguration;
-    private static Logger log = LoggerFactory.getLogger(SamsaraUITests.class);
 
+    public Properties properties = new Properties();
+    private static Logger log = LoggerFactory.getLogger(TestLoginPage.class);
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
+
     String timestamp = sdf.format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
+
     String username1 = "despot" + timestamp,
             username2 = "a" + username1 + "2",
             username3 = "z" + username2 + "3",
@@ -60,12 +62,14 @@ public class SamsaraUITests {
             secretAnswer = "despotovic",
             password = "Password1",
             conirfmPassword = "Password1";
+
     String hero1Name = "aMarko_" + timestamp,
             hero2Name = "A" + hero1Name,
             hero3Name = "Z" + hero2Name,
             heroClass = "Guardian";
     // All input data follow restriction of the original app
     // Names intentionally start with letters "a" and "z", enforcing search through page lists
+
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
 
 
@@ -79,14 +83,14 @@ public class SamsaraUITests {
     @Test//(description = "L1. Login module - Login to the web app using valid credentials", groups = {"P1"})
     public void userLoginWithCorrectCredentialsTest() {
         /* Test steps:
-         1. Navigate to Login page (in browsers address bar enter http://samsara.com or http://localhost:8080/)
+         1. Navigate to Login page (in browsers address bar enter http://samsara.com/ or http://localhost:8080/)
          2. On Login Page enter valid credentials in username and password text fields
          3. On Login page, click Log in button
          Expected result: Samsara greeting page (http://samsara.com/ or http://localhost:8080/) is displayed  */
 
         log.info("Entered userLoginWithCorrectCredentials test!");
         loginSuccessful = false;
-        samsaraPage = loginPage.logIn(testConfiguration.getUserUsername(), testConfiguration.getPassword());
+        samsaraPage = loginPage.logIn("admin","password");
         // Validation on Samsara page implemented within method login() itself
         loginSuccessful = true;
     }
@@ -339,7 +343,7 @@ public class SamsaraUITests {
         // Cleaning after all test have been executed, regardless of outcome
         Log.debug("Reverting changes... (afterTest() in @AfterClass)");
         if (hero1Created || hero2Created || hero3Created) {
-            samsaraPage = loginPage.logIn(testConfiguration.getAdminName(), testConfiguration.getPassword());
+            samsaraPage = loginPage.logIn(properties.getProperty("admin"), properties.getProperty("password"));
             heroesPage = samsaraPage.navigateToHeroesPage();
             if (hero1Created) {
                 Log.debug("Deleting " + hero1Name + "...");
@@ -360,7 +364,7 @@ public class SamsaraUITests {
         }
 
         if (user1Created || user2Created) {
-            samsaraPage = loginPage.logIn(testConfiguration.getAdminName(), testConfiguration.getPassword());
+            samsaraPage = loginPage.logIn(properties.getProperty("admin"), properties.getProperty("password"));
 
             usersPage = samsaraPage.navigateToUsersPage();
             if (user1Created) {

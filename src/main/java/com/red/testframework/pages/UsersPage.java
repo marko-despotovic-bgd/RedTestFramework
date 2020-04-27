@@ -1,7 +1,6 @@
 package com.red.testframework.pages;
 
 import com.red.testframework.utils.Constants;
-import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +18,6 @@ public class UsersPage extends BasePage {
 
     public UsersPage(WebDriver driver) {
         super(driver);
-        testConfiguration = new TestConfiguration();
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }

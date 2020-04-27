@@ -22,4 +22,6 @@ public class Constants {
     public static final String HIGH = "HIGH";
     public static final String MEDIUM = "MEDIUM";
     public static final String LOW = "LOW";
+    // Time utils
+    public static final int ELEMENT_VISIBLE_TIME = 15;
 }

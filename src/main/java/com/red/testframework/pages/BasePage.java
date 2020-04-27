@@ -1,16 +1,17 @@
 package com.red.testframework.pages;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.red.testframework.utils.Constants;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -18,37 +19,42 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.TimeUtil;
 
 public class BasePage {
     public WebDriver driver;
-    public TestConfiguration testConfiguration;
     public static Logger log = LoggerFactory.getLogger(BasePage.class);
+    public Properties properties = new Properties();
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
-        testConfiguration = new TestConfiguration();
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
+
+
+
+    public void loadProperties() throws FileNotFoundException, IOException {
+        File configProperties = new File("resources/config/test.properties");
+        if(!configProperties.exists() || !configProperties.isFile()) {
+            log.error("config-file does not exist or is not a file!");
+            System.exit(-1);
+        }
+        // load properties
+        properties.load(new FileInputStream("resources/config/test.properties"));
+    }
+
 
     private void pressEnterKeyOnElement(WebElement element) {
         waitUntilElementIsVisible(element);
         element.sendKeys(Keys.RETURN);
     }
 
-    private void fillInInputField(WebElement element, String value, int timeout) {
-        waitUntilElementIsVisible(element, timeout);
+    public void fillInInputField(WebElement element, String value) {
+        waitUntilElementIsVisible(element);
         element.clear();
         element.sendKeys(value);
     }
-
-    public void fillInInputField(WebElement element, String value) {
-        fillInInputField(element, value, TimeUtil.ELEMENT_VISIBLE_TIME);
-    }
-
 
 
     public void clickOnElement(WebElement element, int timeout) {
@@ -71,21 +77,17 @@ public class BasePage {
     }
 
     public void clickOnElement(WebElement element) {
-        clickOnElement(element, TimeUtil.ELEMENT_VISIBLE_TIME);
+        clickOnElement(element, Constants.ELEMENT_VISIBLE_TIME);
     }
 
     private void waitUntilElementIsClickable(WebElement element, int timeout) {
-        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        WebDriverWait wait = new WebDriverWait(driver, Constants.ELEMENT_VISIBLE_TIME);
         wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    private void waitUntilElementIsVisible(WebElement element, int timeout) {
-        WebDriverWait wait = new WebDriverWait(driver, timeout);
-        wait.until(ExpectedConditions.visibilityOf(element));
-    }
-
     private void waitUntilElementIsVisible(WebElement element) {
-        waitUntilElementIsVisible(element, TimeUtil.ELEMENT_VISIBLE_TIME);
+        WebDriverWait wait = new WebDriverWait(driver, Constants.ELEMENT_VISIBLE_TIME); // Use Time util in class if longer wait is needed
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
 
     public String getElementText(WebElement element) {
@@ -156,7 +158,7 @@ public class BasePage {
     }
 
     public boolean verifyPageIsDisplayed(WebElement pageIdentifyingElement, String identifyingElementText) {
-        System.out.println(getElementText(pageIdentifyingElement) + " - " + identifyingElementText);
+        log.info(getElementText(pageIdentifyingElement) + " - " + identifyingElementText);
         return getElementText(pageIdentifyingElement).equals(identifyingElementText);
     }
 
@@ -172,11 +174,11 @@ public class BasePage {
         }
     }
 
-    public boolean isLoggedIn(int timeout){
+    public boolean isLoggedIn(int timeout) {
         driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
-        try{
+        try {
             return driver.findElement(By.className("navbar-container")).isDisplayed();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         } finally {
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -189,7 +191,7 @@ public class BasePage {
     }
 
     public void waitUntilElementIsClickable(WebElement element) {
-        waitUntilElementIsClickable(element, TimeUtil.ELEMENT_VISIBLE_TIME);
+        waitUntilElementIsClickable(element, Constants.ELEMENT_VISIBLE_TIME);
     }
 
     public boolean isChecked(WebElement element) {
@@ -205,6 +207,7 @@ public class BasePage {
     public boolean isAttributePresent(WebElement element, String attribute) {
         return "true".equals(element.getAttribute(attribute));
     }
+
     public void refreshPage() {
         driver.navigate().refresh();
     }
@@ -217,8 +220,8 @@ public class BasePage {
         return driver.findElements(by).size() > 0;
     }
 
-    public boolean isDisplayed(WebElement element, int timeout) {
-        waitUntilElementIsVisible(element, timeout);
+    public boolean isDisplayed(WebElement element) {
+        waitUntilElementIsVisible(element);
         return element.isDisplayed();
     }
 

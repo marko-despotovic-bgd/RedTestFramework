@@ -13,7 +13,6 @@ package com.red.testframework.tests; /******************************************
  H3. GET /api/heroes/{type} - Get list of all user with specific type (class).
  ***********************************************************************/
 
-import com.red.testframework.utils.TestConfiguration;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 //import org.json.simple.JSONValue;
@@ -26,7 +25,6 @@ import java.util.Date;
 
 public class SamsaraAPITests {
 
-    TestConfiguration testConfiguration;
     //BaseApi baseApi = new BaseApi();
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
