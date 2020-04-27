@@ -4,7 +4,8 @@ package com.red.testframework.api;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import com.red.testframework.utils.TestConfiguration;
+import java.util.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
@@ -14,14 +15,14 @@ import io.restassured.RestAssured;
 
 public class BaseApi {
 
-    private TestConfiguration testConfiguration;
     protected String baseUri = "";
     private static Logger logger = LoggerFactory.getLogger(BaseApi.class);
-    private final String defaultConfigPropertiesFile = TestConfiguration.getConfigurationFilename();
+    private final String defaultConfigPropertiesFile = "resources/config/config.properties";
+    private Properties properties = new Properties();
 
     public BaseApi() throws IOException {
         loadProperties(defaultConfigPropertiesFile);
-        baseUri = testConfiguration.getUrl();
+        baseUri = properties.getProperty("app.url");
     }
 
     private void loadProperties(String path) throws IOException {

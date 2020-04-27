@@ -1,6 +1,5 @@
 package com.red.testframework.pages;
 
-import com.red.testframework.utils.TestConfiguration;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.Constants;
 import org.openqa.selenium.By;
@@ -29,8 +28,6 @@ public class SamsaraPage extends BasePage {
     private WebElement brokenPageNavigator;
     @FindBy(xpath = "//a[@href='/admin']")
     private WebElement adminPageNavigator;
-    @FindBy(xpath = "//span[contains(@class,'log-out')]")
-    private WebElement logoutButton;
     @FindBy(xpath = "//div[@class='panel-title text-center']")
     private WebElement panelTitle;
 

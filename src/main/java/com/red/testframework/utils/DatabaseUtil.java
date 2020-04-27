@@ -1,14 +1,11 @@
 package com.red.testframework.utils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.util.Properties;
 
-public class DatabaseUtil extends TestConfiguration {
+public class DatabaseUtil  {
 
-    private Properties properties = super.getProperties();
-
+    private Properties properties = new Properties();
     private String dbIP;
     private String dbPort;
     private String dbName;

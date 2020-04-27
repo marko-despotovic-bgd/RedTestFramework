@@ -8,15 +8,15 @@ public class OSUtils {
     private static final String osName = System.getProperty("os.name").toLowerCase();
 
     private static boolean isWindows() {
-        return (osName.indexOf("win") >= 0);
+        return (osName.contains("win"));
     }
 
     private static boolean isMac() {
-        return (osName.indexOf("mac") >= 0);
+        return (osName.contains("mac"));
     }
 
     private static boolean isUnix() {
-        return (osName.indexOf("nux") >= 0);
+        return (osName.contains("nux"));
     }
 
     public static OsType getOsType() {

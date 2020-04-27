@@ -1,22 +1,24 @@
 package com.red.testframework;
 
-import com.google.common.base.Strings;
 import com.red.testframework.db.DBConnection;
 import com.red.testframework.db.DBQueries;
+import com.red.testframework.enums.BrowserType;
 import com.red.testframework.pages.LoginPage;
 import com.red.testframework.utils.OSUtils;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.slf4j.Logger;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,62 +27,67 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 
 public class BaseTest {
 
-    private static Logger logger = LoggerFactory.getLogger(BaseTest.class);
+    private static Logger log = LoggerFactory.getLogger(BaseTest.class);
 
     private static Properties properties = new Properties();
+    private final String defaultConfigPropertiesFile = "/resources/config/config.properties";
 
     protected static WebDriver driver;
     //   protected static DBConnection dbConn;
-    private boolean visibleBrowser;
-    private String browserToUse;
     protected static DBConnection dbConn;
     protected static String baseURL;
     protected static String adminUsername, adminPassword;
+    private LoginPage loginPage;
 
 
-    private void loadProperties() throws FileNotFoundException, IOException {
-        String defaultConfigPropertiesFile = "resources/config/config.properties";
+    private void loadProperties(String path) throws FileNotFoundException, IOException {
         File configProperties = new File(defaultConfigPropertiesFile);
-        if (!configProperties.exists() || !configProperties.isFile()) {
-            logger.error("Config file does not exist or is not a file!");
+        if(!configProperties.exists() || !configProperties.isFile()) {
+            log.error("config-file does not exist or is not a file!");
             System.exit(-1);
         }
         // load properties
         properties.load(new FileInputStream(defaultConfigPropertiesFile));
     }
 
-    public WebDriver initWebDriver() {
-        if (driver == null) {
+    /**
+     * @param browser
+     * @return LoginPage
+     */
+    public static LoginPage setUpWebBrowser(@org.jetbrains.annotations.NotNull String browser) {
+        LoginPage loginPage;
+        log.debug("Initializing " + browser);
+        if (browser.equalsIgnoreCase(BrowserType.CHROME.toString())) {
+            WebDriverManager.chromedriver().setup();
+            loginPage = new LoginPage(new ChromeDriver());
+        } else if (browser.equalsIgnoreCase(BrowserType.FIREFOX.toString())) {
+            WebDriverManager.firefoxdriver().setup();
+            loginPage = new LoginPage(new FirefoxDriver());
+        } else if (browser.equalsIgnoreCase(BrowserType.EDGE.toString())) {
+            WebDriverManager.edgedriver().setup();
+            EdgeOptions options = new EdgeOptions();
+            options.setCapability("InPrivate", true);
+            loginPage = new LoginPage(new EdgeDriver(options));
+        } // Extremely slow execution in 64-bit mode, so calling 32-bit driver instead
+        else if (browser.equalsIgnoreCase(BrowserType.IE.toString())) {
+            WebDriverManager.iedriver().arch32().setup();
+            InternetExplorerOptions options = new InternetExplorerOptions();
+            options.ignoreZoomSettings();
+            options.setCapability(InternetExplorerDriver.NATIVE_EVENTS,false);
+            loginPage = new LoginPage(new InternetExplorerDriver(options));
+        } else if (browser.equalsIgnoreCase(BrowserType.CHROME_HEADLESS.toString())) {
+            WebDriverManager.chromedriver().setup();
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--headless");
+            loginPage = new LoginPage(new ChromeDriver(chromeOptions));
+        }else
+            throw new RuntimeException();
 
-            switch (this.browserToUse.toLowerCase()) {
-                case "firefox":
-                    ; //TODO: add support for firefox driver
-                case "ie":
-                    ; //TODO: add support for ie driver
-                case "chrome":
-                    ; // same as default
-                default: {
-
-                    // set system property if not set
-                    if (Strings.isNullOrEmpty(System.getProperty("webdriver.chrome.driver"))) {
-                        System.setProperty("webdriver.chrome.driver", getChromeBinaryLocation());
-                    }
-                    ChromeOptions chromeOptions = new ChromeOptions();
-                    if (!this.visibleBrowser) {
-                        chromeOptions.addArguments("--headless"); // not visible == headless
-                    }
-                    driver = new ChromeDriver(chromeOptions);
-                    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-                }
-                break;
-            }
-        }
-        return driver;
+        return loginPage;
     }
 
     protected void closeWebDriver() {
@@ -93,72 +100,41 @@ public class BaseTest {
     /*
      * TestNG test prepare and tear-down
      */
-    @BeforeSuite(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true)
     @Parameters({"browser"})
-    public void beforeBaseSuite() throws IOException, SQLException, ClassNotFoundException {
+    public void beforeBaseSuite(@Optional("firefox") String browser)  throws IOException, SQLException, ClassNotFoundException {
+        loginPage = setUpWebBrowser(browser);
 
-        loadProperties();
-
+        loadProperties(defaultConfigPropertiesFile);
         baseURL = properties.getProperty("app.url");
         adminUsername = properties.getProperty("admin.username");
         adminPassword = properties.getProperty("password");
 
-        browserToUse = properties.getProperty("browser");
-        visibleBrowser = Boolean.parseBoolean(properties.getProperty("visible.browser"));
+//        // create db connection
+//        String pwd = (properties.getProperty("database.password") != null ? properties.getProperty("database.password") : "");
+//
+//        dbConn = new DBConnection("jdbc:mysql://"
+//                + properties.getProperty("database.ip")
+//                + ":" + properties.getProperty("database.port")
+//                + "/" + properties.getProperty("database.name"),
+//                properties.getProperty("database.user"), pwd);
+//        // Verify connection is working
+//        dbConn.executeQuery("SELECT 1");
+//        DBQueries.setDBConnection(dbConn);
 
-        // create db connection
-        String pwd = (properties.getProperty("database.password") != null ? properties.getProperty("database.password") : "");
-
-        dbConn = new DBConnection("jdbc:mysql://"
-                + properties.getProperty("database.ip")
-                + ":" + properties.getProperty("database.port")
-                + "/" + properties.getProperty("database.name"),
-                properties.getProperty("database.user"), pwd);
-        // Verify connection is working
-        dbConn.executeQuery("SELECT 1");
-        DBQueries.setDBConnection(dbConn);
-
-        driver = initWebDriver();
         driver.manage().window().maximize();
         driver.get(baseURL);
 
-        // cleanup mails from mailcatcher
     }
 
     @AfterSuite(alwaysRun = true)
     public void afterBaseSuite() throws SQLException {
         this.closeWebDriver();
-        this.dbConn.close();
+        //this.dbConn.close();
     }
 
     @AfterMethod(alwaysRun = true)
     public void baseAfterMethod() {
-        // this will logout session
-        JavascriptExecutor jsexec = (JavascriptExecutor) driver;
-        jsexec.executeScript("$.ajax({" +
-                "    type: \"DELETE\"," +
-                "    url: \"/users/sign_out\"," +
-                "    success: function(msg){" +
-                "        location.reload();" +
-                "    }" +
-                "});");
-
-        // give max 2sec for ajax to finish
-        for (int i = 0; i < 10; i++) {
-            if (0 != (Long) jsexec.executeScript("return jQuery.active")) {
-                logger.debug("Ajax is active #" + i);
-                try {
-                    Thread.sleep(200);
-                } catch (Exception ignored) {
-                }
-                continue;
-            } else {
-                break;
-            }
-        }
-
-        // TODO: add some verification that user is logged out
-
         driver.get(baseURL);
     }
 
