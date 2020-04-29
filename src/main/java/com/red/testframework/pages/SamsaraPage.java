@@ -40,7 +40,7 @@ public class SamsaraPage extends BasePage {
     }
 
     public boolean verifySamsaraPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.SAMSARA_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.SAMSARA_PAGE_PANEL_TITLE);
     }
 
     // Since this is landing page, where not really much of stuff related to app functionality is placed,

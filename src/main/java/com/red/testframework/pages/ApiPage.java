@@ -20,6 +20,6 @@ public class ApiPage extends BasePage {
     }
 
     public boolean verifyApiPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.API_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.API_PAGE_PANEL_TITLE);
     }
 }

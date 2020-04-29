@@ -179,12 +179,12 @@ public class BaseTest {
     private String getChromeBinaryLocation() {
         return getDriverBinaryLocation("chrome");
     }
-
-    // This should be called before each test method
-    protected void prepareBaseState(String username, String password) {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.logIn(username, password);
-        Assert.assertTrue(loginPage.isLoggedIn(3), username + " is logged in");
-        driver.get(baseURL);
-    }
+//
+//    // This should be called before each test method
+//    protected void prepareBaseState(String username, String password) {
+//        LoginPage loginPage = new LoginPage(driver);
+//        loginPage.logIn(username, password);
+//        Assert.assertTrue(loginPage.isLoggedIn(3), username + " is logged in");
+//        driver.get(baseURL);
+//    }
 }

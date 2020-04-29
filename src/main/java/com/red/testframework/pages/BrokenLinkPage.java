@@ -20,7 +20,7 @@ public class BrokenLinkPage extends BasePage {
     }
 
     public boolean verifyBrokenLinkPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.BROKEN_LINK_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.BROKEN_LINK_PAGE_PANEL_TITLE);
     }
 
 }

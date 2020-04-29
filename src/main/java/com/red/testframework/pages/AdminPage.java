@@ -20,7 +20,7 @@ public class AdminPage extends BasePage {
     }
 
     public boolean verifyAdminPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.ADMIN_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.ADMIN_PAGE_PANEL_TITLE);
     }
 
 }

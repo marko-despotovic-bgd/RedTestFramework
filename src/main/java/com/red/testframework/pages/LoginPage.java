@@ -37,71 +37,76 @@ public class LoginPage extends BasePage {
 
     private Utils utils;
 
-    private static Logger log = LoggerFactory.getLogger(LoginPage.class);
 
     // Constructor
     public LoginPage(WebDriver driver) {
         super(driver);
         utils = new Utils();
-        log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
         driver.manage().window().maximize();
     }
 
-    public String getLoginButton() {
+    public String getLogInButton() {
         // Intentionally added retrieving xpath from already known element, avoiding XPath redefining
         return "//" + loginButton.getTagName() + "[@value='" + loginButton.getAttribute("value") + "']";
     }
 
     public SamsaraPage logIn(String username, String password) {
-        log.info("Opening Samsara training web site");
+        Log.info("Opening Samsara training web site");
         driver.get(utils.getProperty("app.url"));
-        verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.LOGIN_PAGE_PANEL_TITLE);
+        verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE);
         Assert.assertTrue(isDisplayed(loginButton), "Log In button is not displayed");
-        log.debug("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
+        Log.debug("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
         fillInInputField(usernameInput, username);
         fillInInputField(passwordInput, password);
         clickOnElement(loginButton);
-        Assert.assertTrue(verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.SAMSARA_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
-        log.info("Samsara page is displayed");
+        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.SAMSARA_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
+        Log.info("Samsara page is displayed");
         return new SamsaraPage(driver);
     }
 
     public LoginPage logInWithInvalidCredentials(String username, String password) {
-        log.info("Opening Samsara training web site");
+        Log.info("Opening Samsara training web site");
         driver.get(utils.getProperty("app.url"));
-        Assert.assertTrue(verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
+        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
         Assert.assertTrue(isDisplayed(loginButton), "Log In button is not displayed");
-        log.debug("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
+        Log.debug("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
         fillInInputField(usernameInput, username);
         fillInInputField(passwordInput, password);
         clickOnElement(loginButton);
         new WebDriverWait(driver, 15)
                 .until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH))));
-        Assert.assertTrue(verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.LOGIN_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
-        Assert.assertEquals(getElementText(alertFailMessage), Constants.INVALID_CREDENTIALS_MESSAGE, "Unsuccessful login message is not displayed!");
-        log.info("Unsuccessful login message is displayed");
+        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
+        Assert.assertEquals(getElementText(alertFailMessage), Constants.INVALID_CREDENTIALS_MESSAGE, "Unsuccessful Login message is not displayed!");
+        Log.info("Unsuccessful Login message is displayed");
         return new LoginPage(driver);
     }
 
     public SamsaraPage adminLogIn() {
-        log.info("Opening Samsara training web site");
+        Log.info("Opening Samsara training web site");
         driver.get(utils.getProperty("app.url"));
-        verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.LOGIN_PAGE_PANEL_TITLE);
+        verifyLoginPageIsDisplayed();
         Assert.assertTrue(isDisplayed(loginButton), "Log In button is not displayed");
-        log.debug("\nLogin with credentials:\nUsername: " + properties.getProperty("admin") + "\nPassword: " + properties.getProperty("admin"));
+        Log.debug("\nLogin with credentials:\nUsername: " + properties.getProperty("admin") + "\nPassword: " + properties.getProperty("admin"));
         fillInInputField(usernameInput, utils.getProperty("admin.username"));
         fillInInputField(passwordInput, utils.getProperty("password"));
         clickOnElement(loginButton);
-        Assert.assertTrue(verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.SAMSARA_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
-        log.info("Samsara page is displayed");
+        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.SAMSARA_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
+        Log.info("Samsara page is displayed");
         return new SamsaraPage(driver);
     }
 
     public void logOut() {
+        Assert.assertTrue(isDisplayed(logoutButton), "Log Out button is not displayed");
         clickOnElement(logoutButton);
-        Assert.assertTrue(verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.LOGIN_PAGE_PANEL_TITLE));
-        Assert.assertEquals(getElementText(alertSuccessMessage), Constants.SUCCESSFUL_LOGOUT_MESSAGE, "Successful logout message is not displayed!");
-        log.debug("Successful logout message is displayed");
+        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
+        Assert.assertEquals(getElementText(alertSuccessMessage), Constants.SUCCESSFUL_LOGOUT_MESSAGE, "Successful Logout message is not displayed!");
+        Log.debug("Successful Logout message is displayed");
+    }
+
+    public void verifyLoginPageIsDisplayed() {
+        log.info("Opening Samsara training web site");
+        driver.get(utils.getProperty("app.url"));
+        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
     }
 }

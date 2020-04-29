@@ -135,7 +135,7 @@ public class UsersPage extends BasePage {
     }
 
     public boolean verifyUsersPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_XPATH)), Constants.USERS_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.USERS_PAGE_PANEL_TITLE);
     }
 
     public void wait(int timeout) {
