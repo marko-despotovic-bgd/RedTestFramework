@@ -4,6 +4,7 @@ import com.red.testframework.db.DBConnection;
 import com.red.testframework.db.DBQueries;
 import com.red.testframework.enums.BrowserType;
 import com.red.testframework.pages.LoginPage;
+import com.red.testframework.utils.Log;
 import com.red.testframework.utils.OSUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -31,8 +32,6 @@ import java.util.Properties;
 
 public class BaseTest {
 
-    private static Logger log = LoggerFactory.getLogger(BaseTest.class);
-
     private static Properties properties = new Properties();
     private final String defaultConfigPropertiesFile = "/resources/config/config.properties";
 
@@ -47,7 +46,7 @@ public class BaseTest {
     private void loadProperties(String path) throws FileNotFoundException, IOException {
         File configProperties = new File(defaultConfigPropertiesFile);
         if(!configProperties.exists() || !configProperties.isFile()) {
-            log.error("config-file does not exist or is not a file!");
+            Log.error("config-file does not exist or is not a file!");
             System.exit(-1);
         }
         // load properties
@@ -60,7 +59,7 @@ public class BaseTest {
      */
     public static LoginPage setUpWebBrowser(@org.jetbrains.annotations.NotNull String browser) {
         LoginPage loginPage;
-        log.debug("Initializing " + browser);
+        Log.debug("Initializing " + browser);
         if (browser.equalsIgnoreCase(BrowserType.CHROME.toString())) {
             WebDriverManager.chromedriver().setup();
             loginPage = new LoginPage(new ChromeDriver());
@@ -97,18 +96,18 @@ public class BaseTest {
         }
     }
 
-    /*
-     * TestNG test prepare and tear-down
-     */
-    @BeforeMethod(alwaysRun = true)
-    @Parameters({"browser"})
-    public void beforeBaseSuite(@Optional("firefox") String browser)  throws IOException, SQLException, ClassNotFoundException {
-        loginPage = setUpWebBrowser(browser);
-
-        loadProperties(defaultConfigPropertiesFile);
-        baseURL = properties.getProperty("app.url");
-        adminUsername = properties.getProperty("admin.username");
-        adminPassword = properties.getProperty("password");
+//    /*
+//     * TestNG test prepare and tear-down
+//     */
+//    @BeforeMethod(alwaysRun = true)
+//    @Parameters({"browser"})
+//    public void beforeBaseSuite(@Optional("firefox") String browser)  throws IOException, SQLException, ClassNotFoundException {
+//        loginPage = setUpWebBrowser(browser);
+//
+//        loadProperties(defaultConfigPropertiesFile);
+//        baseURL = properties.getProperty("app.url");
+//        adminUsername = properties.getProperty("admin.username");
+//        adminPassword = properties.getProperty("password");
 
 //        // create db connection
 //        String pwd = (properties.getProperty("database.password") != null ? properties.getProperty("database.password") : "");
@@ -121,11 +120,11 @@ public class BaseTest {
 //        // Verify connection is working
 //        dbConn.executeQuery("SELECT 1");
 //        DBQueries.setDBConnection(dbConn);
-
-        driver.manage().window().maximize();
-        driver.get(baseURL);
-
-    }
+//
+//        driver.manage().window().maximize();
+//        driver.get(baseURL);
+//
+//    }
 
     @AfterSuite(alwaysRun = true)
     public void afterBaseSuite() throws SQLException {
@@ -180,11 +179,11 @@ public class BaseTest {
         return getDriverBinaryLocation("chrome");
     }
 
-    // This should be called before each test method
-    protected void prepareBaseState(String username, String password) {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.logIn(username, password);
-        Assert.assertTrue(loginPage.isLoggedIn(3), username + " is logged in");
-        driver.get(baseURL);
-    }
+//    // This should be called before each test method
+//    protected void prepareBaseState(String username, String password) {
+//        LoginPage loginPage = new LoginPage(driver);
+//        loginPage.logIn(username, password);
+//        Assert.assertTrue(loginPage.isLoggedIn(3), username + " is logged in");
+//        driver.get(baseURL);
+//    }
 }

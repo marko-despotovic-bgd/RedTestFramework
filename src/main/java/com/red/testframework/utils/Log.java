@@ -14,41 +14,41 @@ import org.slf4j.LoggerFactory;
 public class Log {
 
     private static Logger log;
-    
-//    public static void loadLog4j(String file) {
-//        DOMConfigurator.configure(file);
-//    }
+
 
     @SuppressWarnings("rawtypes")
 	public static Logger getLog(Class className) {
         return log = LoggerFactory.getLogger(className);
     }
 
-    public static void startTest(String sTestName) {
+    public static void startTest(String testName) {
 
-        log.info("****************************************************************************************");
-        log.info("-------------------------- " + sTestName + "---------------------------");
-        log.info("****************************************************************************************" + "\n");
+        log.info("********************************************************");
+        log.info("\t-----S-T-A-R-T-----\t\t" + testName);
+        log.info("********************************************************" + "\n");
     }
 
-    public static void endTest(String sTestName) {
-        log.info("XXXXXXXXXXXXXXXXXXXXXXX             " + "-E---N---D-" + "             XXXXXXXXXXXXXXXXXXXXXX" + "\n");
+    public static void endTest(String testName) {
+
+        log.info("********************************************************");
+        log.info("\t-----E-N-D--------\t\t" + testName);
+        log.info("********************************************************" + "\n");
     }
 
     public static void info(String message) {
-        log.info(message+ "\n");
+        log.info(message + "\n");
     }
 
     public static void warn(String message) {
-        log.warn(message);
+        log.warn(message + "\n");
     }
 
     public static void error(String message) {
-        log.error(message);
+        log.error(message + "\n");
     }
 
     public static void debug(String message) {
-        log.debug(message);
+        log.debug(message + "\n");
     }
 
     public static void browserConsoleLog(WebDriver driver) {
@@ -57,6 +57,7 @@ public class Log {
             System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
         }
     }
+
     public static LoggingPreferences getLogPreference(){
         LoggingPreferences loggingPreferences = new LoggingPreferences();
         loggingPreferences.enable(LogType.BROWSER, Level.ALL);

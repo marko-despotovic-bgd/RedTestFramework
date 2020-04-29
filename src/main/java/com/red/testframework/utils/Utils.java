@@ -1,9 +1,7 @@
 package com.red.testframework.utils;
 
-import java.net.URL;
 import java.util.*;
 import java.io.*;
-
 import com.red.testframework.enums.BrowserType;
 import com.red.testframework.pages.LoginPage;
 import org.apache.commons.lang3.StringUtils;
@@ -20,55 +18,20 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 public class Utils {
 
-
-    private static Logger log = LoggerFactory.getLogger(Utils.class);
     private static Properties properties = new Properties();
-
     private String screenshotFileLocation;
     private String saveScreenshots;
 
-    private void loadProperties() {
-        String defaultConfigPropertiesFile = "resources/config/config.properties";
-        File configProperties = new File(defaultConfigPropertiesFile);
-        if (!configProperties.exists() || !configProperties.isFile()) {
-            log.error("config-file does not exist or is not a file!");
-            System.exit(-1);
-        }
-        // load properties
-        try {
-            properties.load(new FileInputStream(defaultConfigPropertiesFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String getProperty (String key){
-        loadProperties();
-        return properties.getProperty(key);
-    }
-
-    public String getScreenshotFileLocation() {
-        return this.screenshotFileLocation;
-    }
-
-    public boolean getSaveScreenshots() {
-        if (StringUtils.isBlank(this.saveScreenshots)) {
-            return false;
-        } else return this.saveScreenshots.equalsIgnoreCase("true");
-    }
-
     /**
-     * @param browser
+     * @param browser is read from testng.xml
      * @return LoginPage
      */
     public static LoginPage setUpWebBrowser(@org.jetbrains.annotations.NotNull String browser) {
         LoginPage loginPage;
-        log.debug("Initializing " + browser);
         if (browser.equalsIgnoreCase(BrowserType.CHROME.toString())) {
             WebDriverManager.chromedriver().setup();
             loginPage = new LoginPage(new ChromeDriver());
@@ -105,5 +68,37 @@ public class Utils {
     public static void webDriverWait(WebDriver driver, By locator) {
         new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
+
+
+    private void loadProperties() {
+        String defaultConfigPropertiesFile = "resources/config/config.properties";
+        File configProperties = new File(defaultConfigPropertiesFile);
+        if (!configProperties.exists() || !configProperties.isFile()) {
+            Log.error("config-file does not exist or is not a file!");
+            System.exit(-1);
+        }
+        // load properties
+        try {
+            properties.load(new FileInputStream(defaultConfigPropertiesFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getProperty (String key){
+        loadProperties();
+        return properties.getProperty(key);
+    }
+
+    public String getScreenshotFileLocation() {
+        return this.screenshotFileLocation;
+    }
+
+    public boolean getSaveScreenshots() {
+        if (StringUtils.isBlank(this.saveScreenshots)) {
+            return false;
+        } else return this.saveScreenshots.equalsIgnoreCase("true");
+    }
+
 
 }

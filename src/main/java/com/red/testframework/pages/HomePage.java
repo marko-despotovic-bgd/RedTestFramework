@@ -19,6 +19,6 @@ public class HomePage extends BasePage {
     }
 
     public boolean verifyHomePageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_XPATH)), Constants.HOME_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.HOME_PAGE_PANEL_TITLE);
     }
 }

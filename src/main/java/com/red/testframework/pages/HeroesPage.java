@@ -128,6 +128,6 @@ public class HeroesPage extends BasePage {
         return isNextPageButtonClickable;
     }
     public boolean verifyHeroesPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.HEROES_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.HEROES_PAGE_PANEL_TITLE);
     }
 }

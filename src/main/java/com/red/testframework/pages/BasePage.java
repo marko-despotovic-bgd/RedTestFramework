@@ -1,15 +1,11 @@
 package com.red.testframework.pages;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
+import com.red.testframework.utils.Log;
 import com.red.testframework.utils.Constants;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -19,35 +15,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.red.testframework.utils.Log;
-
 public class BasePage {
     public WebDriver driver;
-    public static Logger log = LoggerFactory.getLogger(BasePage.class);
     public Properties properties = new Properties();
+    private static Logger log = LoggerFactory.getLogger(BasePage.class);
 
-    public BasePage(WebDriver driver) {
+    protected BasePage(WebDriver driver) {
         this.driver = driver;
-        log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
-    }
-
-
-
-    public void loadProperties() throws FileNotFoundException, IOException {
-        File configProperties = new File("resources/config/test.properties");
-        if(!configProperties.exists() || !configProperties.isFile()) {
-            log.error("config-file does not exist or is not a file!");
-            System.exit(-1);
-        }
-        // load properties
-        properties.load(new FileInputStream("resources/config/test.properties"));
-    }
-
-
-    private void pressEnterKeyOnElement(WebElement element) {
-        waitUntilElementIsVisible(element);
-        element.sendKeys(Keys.RETURN);
     }
 
     public void fillInInputField(WebElement element, String value) {
@@ -92,7 +67,7 @@ public class BasePage {
 
     public String getElementText(WebElement element) {
         try {
-            waitUntilElementIsVisible(element);
+            element.isDisplayed();
             return element.getText();
         } catch (NoSuchElementException e) {
             Log.error("Failed to locate element.");
@@ -157,32 +132,23 @@ public class BasePage {
         return matchingElements;
     }
 
-    public boolean verifyPageIsDisplayed(WebElement pageIdentifyingElement, String identifyingElementText) {
-        log.info(getElementText(pageIdentifyingElement) + " - " + identifyingElementText);
-        return getElementText(pageIdentifyingElement).equals(identifyingElementText);
+    public boolean verifyPageIsDisplayed(By by, String identifyingElementText) {
+        List<WebElement> elements = driver.findElements(by);
+        if (elements.size() != 0)
+            return getElementText(elements.get(0)).equals(identifyingElementText);
+        else
+             Log.error("Page element not found!");
+        return false;
     }
 
-    public void fillInInputFieldAndPressEnter(WebElement element, String value) {
-        fillInInputField(element, value);
-        pressEnterKeyOnElement(element);
+    public void closeWebDriver() {
+        Log.debug("closeWebDriver");
+        driver.close();
     }
 
     public void quitWebDriver() {
-        log.debug("quitWebDriver");
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
-    public boolean isLoggedIn(int timeout) {
-        driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
-        try {
-            return driver.findElement(By.className("navbar-container")).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        } finally {
-            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        }
+        Log.debug("quitWebDriver");
+        driver.quit();
     }
 
     public void dragAndDropItem(WebElement from, WebElement to) {

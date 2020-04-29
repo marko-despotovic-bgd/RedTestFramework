@@ -20,6 +20,6 @@ public class GalleryPage extends BasePage {
     }
 
     public boolean verifyGalleryPageIsDisplayed() {
-        return verifyPageIsDisplayed(driver.findElement(By.xpath(Constants.PANEL_TITLE_XPATH)), Constants.GALLERY_PAGE_PANEL_TITLE);
+        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.GALLERY_PAGE_PANEL_TITLE);
     }
 }
