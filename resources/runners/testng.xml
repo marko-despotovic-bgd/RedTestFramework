@@ -65,11 +65,11 @@
 <!--            <package name="com.red.testframework.tests"/>-->
 <!--        </packages>-->
 <!--    </test>-->
-    <test name="Chrome headless tests">
-        <!-- Overriding suites' parameter -->
-        <parameter name="browser" value="CHROME_HEADLESS"/>
-        <packages>
-            <package name="com.red.testframework.tests"/>
-        </packages>
-    </test>
+<!--    <test name="Chrome headless tests">-->
+<!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
+<!--        <parameter name="browser" value="CHROME_HEADLESS"/>-->
+<!--        <packages>-->
+<!--            <package name="com.red.testframework.tests"/>-->
+<!--        </packages>-->
+<!--    </test>-->
 </suite>

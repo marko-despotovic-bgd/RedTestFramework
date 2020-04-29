@@ -36,6 +36,7 @@ public class LoginPage extends BasePage {
     private WebElement panelTitle;
 
     private Utils utils;
+    private static Logger log = LoggerFactory.getLogger(BasePage.class);
 
 
     // Constructor
