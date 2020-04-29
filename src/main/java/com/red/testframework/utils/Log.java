@@ -15,7 +15,6 @@ public class Log {
 
     private static Logger log;
 
-
     @SuppressWarnings("rawtypes")
 	public static Logger getLog(Class className) {
         return log = LoggerFactory.getLogger(className);
@@ -24,7 +23,7 @@ public class Log {
     public static void startTest(String testName) {
 
         log.info("********************************************************");
-        log.info("\t-----S-T-A-R-T-----\t\t" + testName);
+        log.info("\t-----S-T-A-R-T-----\t\t" +testName);
         log.info("********************************************************" + "\n");
     }
 

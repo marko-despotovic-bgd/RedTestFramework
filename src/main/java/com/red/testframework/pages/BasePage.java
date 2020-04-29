@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import com.red.testframework.utils.Log;
+
 import com.red.testframework.utils.Constants;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -15,13 +15,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.red.testframework.utils.Log;
+
 public class BasePage {
     public WebDriver driver;
+    public static Logger log = LoggerFactory.getLogger(BasePage.class);
     public Properties properties = new Properties();
-    private static Logger log = LoggerFactory.getLogger(BasePage.class);
 
-    protected BasePage(WebDriver driver) {
+    public BasePage(WebDriver driver) {
         this.driver = driver;
+        log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
 
@@ -67,7 +70,7 @@ public class BasePage {
 
     public String getElementText(WebElement element) {
         try {
-            element.isDisplayed();
+            waitUntilElementIsVisible(element);
             return element.getText();
         } catch (NoSuchElementException e) {
             Log.error("Failed to locate element.");
@@ -147,9 +150,12 @@ public class BasePage {
     }
 
     public void quitWebDriver() {
-        Log.debug("quitWebDriver");
-        driver.quit();
+        log.debug("quitWebDriver");
+        if (driver != null) {
+            driver.quit();
+        }
     }
+
 
     public void dragAndDropItem(WebElement from, WebElement to) {
         Actions action = new Actions(driver);

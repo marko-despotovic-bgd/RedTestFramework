@@ -4,8 +4,6 @@ import com.red.testframework.pages.*;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.utils.TestGroups;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import com.red.testframework.utils.Utils;
@@ -14,7 +12,6 @@ public class TestLoginPage {
 
     private LoginPage loginPage;
     private Utils utils;
-    private static Logger log = LoggerFactory.getLogger(BasePage.class);
 
     boolean loginSuccessful = false;
 
@@ -23,7 +20,8 @@ public class TestLoginPage {
     public void setUp(@Optional("CHROME") String browser) {
         loginPage = Utils.setUpWebBrowser(browser); // Running this class only will default to chrome. When called via testng.xml, CHROME will be ignored and
         // all tests will be treated respecting xml's config.
-        //Log.startTest(new Object() {}.getClass().getEnclosingMethod().getName()); // Reading enclosing method name
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName()); // Reading enclosing method name
         utils = new Utils();
     }
 
@@ -33,19 +31,18 @@ public class TestLoginPage {
      */
     @Test(groups = {TestGroups.CRITICAL})
     public void testLoginPageIsOpened() {
-        log.info(new Object() {}.getClass().getEnclosingMethod().getName());
+        Log.startTest(new Object() {}.getClass().getEnclosingMethod().getName());
         loginPage.verifyLoginPageIsDisplayed();
     }
 
     @Test(groups = {TestGroups.CRITICAL})
     public void testSuccessfulLogIn() {
-        Log.info(new Object() {
+        Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.verifyLoginPageIsDisplayed();
-        loginPage.adminLogIn();
+        loginPage.adminLogIn(); // This method itself is checking if Samsara page is opened
         loginSuccessful = true;
     }
-
 
     /*
      * Test validates that proper error message is displayed upon unsuccessful login
@@ -83,7 +80,7 @@ public class TestLoginPage {
 
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
-        Log. endTest(new Object() {
+        Log.endTest(new Object() {
         }.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
         if (result.getStatus() == ITestResult.FAILURE) {
             ScreenshotUtil.makeScreenshot(result);
@@ -96,6 +93,9 @@ public class TestLoginPage {
 
     @AfterClass(alwaysRun = true)
     public void tearDown() {
-        Log.endTest("That's all, folks! ");
+        // Cleaning after all test have been executed, regardless of outcome
+        Log.endTest(new Object() {
+        }.getClass().getEnclosingMethod().getName() + " in @AfterClass");
+        loginPage.closeWebDriver();
     }
 }
