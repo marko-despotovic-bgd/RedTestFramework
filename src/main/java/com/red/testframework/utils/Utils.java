@@ -35,14 +35,17 @@ public class Utils {
         if (browser.equalsIgnoreCase(BrowserType.CHROME.toString())) {
             WebDriverManager.chromedriver().setup();
             loginPage = new LoginPage(new ChromeDriver());
+            Log.info("Initialized " + BrowserType.CHROME.toString().toLowerCase() + " browser!");
         } else if (browser.equalsIgnoreCase(BrowserType.FIREFOX.toString())) {
             WebDriverManager.firefoxdriver().setup();
             loginPage = new LoginPage(new FirefoxDriver());
+            Log.info("Initialized " + BrowserType.FIREFOX.toString().toLowerCase() + " browser!");
         } else if (browser.equalsIgnoreCase(BrowserType.EDGE.toString())) {
             WebDriverManager.edgedriver().setup();
             EdgeOptions options = new EdgeOptions();
             options.setCapability("InPrivate", true);
             loginPage = new LoginPage(new EdgeDriver(options));
+            Log.info("Initialized " + BrowserType.EDGE.toString().toLowerCase() + " browser!");
         } // Extremely slow execution in 64-bit mode, so calling 32-bit driver instead
         else if (browser.equalsIgnoreCase(BrowserType.IE.toString())) {
             WebDriverManager.iedriver().arch32().setup();
@@ -50,11 +53,13 @@ public class Utils {
             options.ignoreZoomSettings();
             options.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
             loginPage = new LoginPage(new InternetExplorerDriver(options));
+            Log.info("Initialized " + BrowserType.IE.toString().toLowerCase() + " browser!");
         } else if (browser.equalsIgnoreCase(BrowserType.CHROME_HEADLESS.toString())) {
             WebDriverManager.chromedriver().setup();
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.addArguments("--headless");
             loginPage = new LoginPage(new ChromeDriver(chromeOptions));
+            Log.info("Initialized " + BrowserType.CHROME_HEADLESS.toString().toLowerCase() + " browser!");
         } else
             throw new RuntimeException();
 

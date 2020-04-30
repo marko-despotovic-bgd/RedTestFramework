@@ -63,14 +63,14 @@ public class TestSamsaraPage {
     public void testLoginPageIsOpened() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.loginPageIsDisplayed();
     }
 
     @Test(groups = {TestGroups.CRITICAL})
     public void testSuccessfulLogIn() {
         Log.info(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.loginPageIsDisplayed();
         samsaraPage = loginPage.adminLogIn();
         loginSuccessful = true;
     }
@@ -83,7 +83,7 @@ public class TestSamsaraPage {
     public void testUnsuccessfulLogin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials("hacker", utils.getProperty("app.url"));
     }
 
@@ -94,7 +94,7 @@ public class TestSamsaraPage {
     public void testUnsuccessfulLoginMedium() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.loginPageIsDisplayed();
         loginPage.logInWithInvalidCredentials("Mr Robot", password);
 
     }

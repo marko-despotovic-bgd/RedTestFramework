@@ -1,18 +1,18 @@
 package com.red.testframework.db;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class DBQueries {
 
-    private static DBConnection dbConn;
+    private static DBConnection dbConnection;
 
-    public static void setDBConnection(DBConnection conn) {
-        dbConn = conn;
+    public static void setDBConnection(DBConnection connection) {
+        dbConnection = connection;
     }
 
 
@@ -22,7 +22,7 @@ public class DBQueries {
         String query = "SELECT * "
                 + EMPLOYEE_PROFILES_JOIN_QUERY
                 + " WHERE p.email = '" + email + "';";
-        return dbConn.executeQuery(query);
+        return dbConnection.executeQuery(query);
     }
 
     public static long getEmployeeProfilesCount(String email) throws SQLException {
@@ -30,7 +30,7 @@ public class DBQueries {
                 + EMPLOYEE_PROFILES_JOIN_QUERY
                 + " WHERE p.email = '" + email + "';";
 
-        ResultSet rs = dbConn.executeQuery(query);
+        ResultSet rs = dbConnection.executeQuery(query);
         rs.next();
         return rs.getLong(1);
     }
@@ -41,16 +41,50 @@ public class DBQueries {
         String query = "SELECT * "
                 + USER_PROFILES_JOIN_QUERY
                 + " WHERE p.email = '" + email + "';";
-        return dbConn.executeQuery(query);
+        return dbConnection.executeQuery(query);
     }
 
     public static long getUserProfilesCount(String email) throws SQLException {
         String query = "SELECT count(*) "
                 + USER_PROFILES_JOIN_QUERY
                 + " WHERE p.email = '" + email + "';";
-        ResultSet rs = dbConn.executeQuery(query);
+        ResultSet rs = dbConnection.executeQuery(query);
 
         rs.next();
         return rs.getLong(1);
+    }
+    public static ArrayList<String> getColumnData(String query, String column) throws SQLException {
+        ArrayList<String> arr = new ArrayList<>();
+        dbConnection = new DBConnection();
+        PreparedStatement ps = dbConnection.getConnection().prepareStatement(query);
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            arr.add(resultSet.getString(column));
+            System.out.println("-----\n"+resultSet.getString(column)+"\n");
+        }
+        return arr;
+    }
+
+    public static ArrayList<ArrayList<String>> extract(ResultSet resultSet)
+            throws SQLException {
+        ArrayList<ArrayList<String>> table;
+        int columnCount = resultSet.getMetaData().getColumnCount();
+
+        if (resultSet.getType() == ResultSet.TYPE_FORWARD_ONLY)
+            table = new ArrayList<>();
+        else {
+            resultSet.last();
+            table = new ArrayList<>(resultSet.getRow());
+            resultSet.beforeFirst();
+        }
+
+        for (ArrayList<String> row; resultSet.next(); table.add(row)) {
+            row = new ArrayList<>(columnCount);
+
+            for (int c = 1; c <= columnCount; ++c)
+                row.add(resultSet.getString(c).intern());
+        }
+        System.out.println(table);
+        return table;
     }
 }
