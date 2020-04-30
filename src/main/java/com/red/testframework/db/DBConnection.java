@@ -1,33 +1,39 @@
 package com.red.testframework.db;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.red.testframework.utils.Log;
+import com.red.testframework.utils.Utils;
+import java.sql.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static Logger logger = LoggerFactory.getLogger(DBConnection.class);
 
-    private static Connection conn;
+    private static Connection connection;
 
-    public DBConnection(String connectionString, String username, String pwd) throws SQLException, ClassNotFoundException {
-        if (conn == null) {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager
-                    .getConnection(connectionString, username, pwd);
+    public Connection getConnection() {
+        Utils utils = new Utils();
+        try {
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+
+            connection = DriverManager.getConnection("jdbc:mysql://"
+                            + utils.getProperty("database.ip")
+                            + ":" + utils.getProperty("database.port")
+                            + "/" + utils.getProperty("database.name")
+                            + "?useSSL=false&",  // Do not use ssl
+                    utils.getProperty("database.user"), utils.getProperty("database.password"));
+
+            return connection;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public ResultSet executeQuery(String query) throws SQLException {
-        logger.debug("executing query: '" + query + "'");
-        return conn.createStatement().executeQuery(query);
+        Log.debug("executing query: '" + query + "'");
+        return connection.createStatement().executeQuery(query);
+    }
+    public void close() throws SQLException {
+        if (!connection.isClosed()) connection.close();
     }
 
-    public void close() throws SQLException {
-        if (!conn.isClosed()) conn.close();
-    }
 }

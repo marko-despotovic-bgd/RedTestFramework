@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import com.red.testframework.utils.Constants;
 import org.openqa.selenium.*;
@@ -140,19 +139,28 @@ public class BasePage {
         if (elements.size() != 0)
             return getElementText(elements.get(0)).equals(identifyingElementText);
         else
-             Log.error("Page element not found!");
+            Log.error("Page element not found, page is not displayed!");
         return false;
     }
 
+
     public void closeWebDriver() {
-        Log.debug("closeWebDriver");
-        driver.close();
+        Log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        if (driver != null) {
+            driver.close();
+            Log.info("Successfully executed " + new Object() {
+            }.getClass().getEnclosingMethod().getName());
+        }
     }
 
     public void quitWebDriver() {
-        log.debug("quitWebDriver");
+        Log.info("Executing... " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
         if (driver != null) {
             driver.quit();
+            Log.info("Successfully executed " + new Object() {
+            }.getClass().getEnclosingMethod().getName());
         }
     }
 
@@ -198,8 +206,13 @@ public class BasePage {
     }
 
     public boolean isDisplayed(String elementXpath) {
-        List<WebElement> elements = driver.findElements(By.xpath(elementXpath));
-        return elements.size() != 0;
+        try {
+            List<WebElement> elements = driver.findElements(By.xpath(elementXpath));
+            return elements.size() != 0;
+        } catch (NoSuchElementException NSEex) {
+            Log.error("Error" + NSEex.getMessage() + ";\nStack trace: " + Arrays.toString(NSEex.getStackTrace()));
+            return false;
+        }
     }
 
     public void switchTab(int tabNumber) {

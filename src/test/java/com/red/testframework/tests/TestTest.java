@@ -1,6 +1,5 @@
 package com.red.testframework.tests;
 
-import com.red.testframework.BaseTest;
 import com.red.testframework.pages.LoginPage;
 import com.red.testframework.pages.SamsaraPage;
 import com.red.testframework.utils.Log;
@@ -18,7 +17,7 @@ public class TestTest {
 }
 //package com.red.testframework.tests;
 //
-//        import com.red.testframework.BaseTest;
+//        import com.red.testframework.DatabaseTest;
 //        import com.red.testframework.pages.*;
 //        import com.red.testframework.utils.Log;
 //        import com.red.testframework.utils.ScreenshotUtil;
@@ -31,7 +30,7 @@ public class TestTest {
 //        import java.text.SimpleDateFormat;
 //        import java.util.Date;
 //
-//public class TestLoginPage extends BaseTest {
+//public class TestLoginPage extends DatabaseTest {
 //
 //    private LoginPage loginPage;
 //    private Utils utils;

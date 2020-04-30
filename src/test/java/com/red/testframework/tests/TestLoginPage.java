@@ -8,7 +8,7 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 import com.red.testframework.utils.Utils;
 
-public class TestLoginPage {
+public class TestLoginPage extends DatabaseTest {
 
     private LoginPage loginPage;
     private Utils utils;
@@ -31,15 +31,17 @@ public class TestLoginPage {
      */
     @Test(groups = {TestGroups.CRITICAL})
     public void testLoginPageIsOpened() {
-        Log.startTest(new Object() {}.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage.verifyLogInButtonIsDisplayed();
     }
 
     @Test(groups = {TestGroups.CRITICAL})
     public void testSuccessfulLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.loginPageIsDisplayed();
         loginPage.adminLogIn(); // This method itself is checking if Samsara page is opened
         loginSuccessful = true;
     }
@@ -51,7 +53,7 @@ public class TestLoginPage {
     public void testUnsuccessfulLogin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials("hacker", utils.getProperty("app.url"));
     }
 
@@ -62,7 +64,7 @@ public class TestLoginPage {
     public void testUnsuccessfulLoginMedium() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.loginPageIsDisplayed();
         loginPage.logInWithInvalidCredentials("Mr Robot", "password");
 
     }
@@ -96,6 +98,7 @@ public class TestLoginPage {
         // Cleaning after all test have been executed, regardless of outcome
         Log.endTest(new Object() {
         }.getClass().getEnclosingMethod().getName() + " in @AfterClass");
-        loginPage.closeWebDriver();
+        loginPage.quitWebDriver();
+        Log.endTest("=== That's all, folks! ===");
     }
 }
