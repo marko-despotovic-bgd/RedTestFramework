@@ -1,34 +1,17 @@
 package com.red.testframework.tests;
 
-import com.red.testframework.pages.*;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
-import com.red.testframework.utils.Utils;
 
-public class TestLoginPage extends TestDatabase {
-
-    private LoginPage loginPage;
-    private Utils utils;
+public class TestLoginPage extends BaseTest {
 
     boolean loginSuccessful = false;
 
-    @BeforeClass(alwaysRun = true)
-    @Parameters({"browser"})
-    public void setUp(@Optional("CHROME") String browser) {
-        loginPage = Utils.setUpWebBrowser(browser); // Running this class only will default to chrome. When called via testng.xml,
-        // CHROME will be ignored and all tests will be treated respecting xml's config.
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName()); // Reading enclosing method name
-        utils = new Utils();
-    }
-
-    /*
-     * Test validates that login page is opened by checking if log in button is
-     * visible on the page
-     */
+    // Verify Login page is displayed, and Log In button is show
     @Test(groups = {Constants.CRITICAL})
     public void testLoginPageIsOpened() {
         Log.startTest(new Object() {
@@ -37,8 +20,9 @@ public class TestLoginPage extends TestDatabase {
         loginPage.verifyLogInButtonIsDisplayed();
     }
 
+    // Verify admin login
     @Test(groups = {Constants.CRITICAL})
-    public void testSuccessfulLogIn() {
+    public void testSuccessfulAdminLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.loginPageIsDisplayed();
@@ -46,40 +30,113 @@ public class TestLoginPage extends TestDatabase {
         loginSuccessful = true;
     }
 
-    /*
-     * Test validates that proper error message is displayed upon unsuccessful login
-     */
+    // Verify user login
     @Test(groups = {Constants.HIGH})
-    public void testUnsuccessfulLogin() {
+    public void testSuccessfulUserLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.loginPageIsDisplayed();
-        loginPage = loginPage.logInWithInvalidCredentials("hacker", utils.getProperty("app.url"));
+        loginPage.logIn(utils.getProperty("user.username"),utils.getProperty("password")); // This method itself is checking if Samsara page is opened
+        loginSuccessful = true;
     }
 
-    /*
-     * Test validates that proper error message is displayed upon unsuccessful login
-     */
-    @Test(groups = {Constants.MEDIUM})
-    public void testUnsuccessfulLoginMedium() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
-        loginPage.logInWithInvalidCredentials("Mr Robot", "password");
-
-    }
-
-    /*
-     * Test validates that proper error message is displayed upon unsuccessful login
-     */
+    // Test Invalid Credentials with empty username and empty password
     @Test(groups = {Constants.LOW})
-    public void testUnsuccessfulLoginLow() {
+    public void testUnsuccessfulLoginEmptyUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage = loginPage.logInWithInvalidCredentials("fail", "password");
-
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials("", "");
     }
 
+    // Test Invalid Credentials with empty username and correct password
+    @Test(groups = {Constants.LOW})
+    public void testUnsuccessfulLoginEmptyUsernameCorrectPassword() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials("", utils.getProperty("password"));
+    }
+
+    // Test Invalid Credentials with empty username and incorrect password
+    @Test(groups = {Constants.LOW})
+    public void testUnsuccessfulLoginEmptyUsernameIncorrectPassword() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials("", "incorrectPassword");
+    }
+
+    // Test Invalid Credentials with correct username and empty password
+    @Test(groups = {Constants.LOW})
+    public void testUnsuccessfulLoginCorrectUsernameEmptyPassword() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username"), "");
+    }
+
+    // Test Invalid Credentials with incorrect username and empty password
+    @Test(groups = {Constants.LOW})
+    public void testUnsuccessfulLoginIncorrectUsernameEmptyPassword() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials("hacker", "");
+    }
+
+    // Test Invalid Credentials with incorrect username and incorrect password
+    @Test(groups = {Constants.LOW})
+    public void testUnsuccessfulLoginIncorrectUsernameIncorrectPassword() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials("mr.robot", "letMeIn");
+    }
+
+    // Test Invalid Credentials with incorrect username and correct password
+    @Test(groups = {Constants.LOW})
+    public void testUnsuccessfulLoginIncorrectUsernameCorrectPassword() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username")+utils.getProperty("user.username"), "");
+    }
+
+    // Test Invalid Credentials with correct username and 256 characters long password
+    @Test(groups = {Constants.LOW})
+    public void testUnsuccessfulLoginCorrectUsernameLongPassword() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        String randomString = RandomStringUtils.random(256,true,true);
+        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username"), randomString);
+    }
+
+    // Test Invalid Credentials with correct username and 256 characters long password
+    @Test(groups = {Constants.MEDIUM}, dataProvider = "UnsuccessfulLoginInputMatrix")
+    public void testUnsuccessfulLoginWithDataProvider(String username, String password) {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.loginPageIsDisplayed();
+        loginPage = loginPage.logInWithInvalidCredentials(username, password);
+    }
+
+
+    @DataProvider(name="UnsuccessfulLoginInputMatrix")
+    public Object[][] getDataFromDataProvider() {
+        return new Object[][]
+                {
+                        {"", ""},
+                        {"", utils.getProperty("password")},
+                        {"", "incorrectPassword"},
+                        {utils.getProperty("user.username"), ""},
+                        {"hacker", ""},
+                        {"mr.robot", "drowssap"},
+                        {"neo", utils.getProperty("password")},
+                        {utils.getProperty("user.username"), RandomStringUtils.random(256,true,true)},
+                };
+    }
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
         Log.endTest(new Object() {
@@ -89,17 +146,6 @@ public class TestLoginPage extends TestDatabase {
         }
         if (loginSuccessful)
             loginPage.logOut();
-
         loginSuccessful = false;
-    }
-
-    @AfterClass(alwaysRun = true)
-    public void tearDown() {
-        // Cleaning after all test have been executed, regardless of outcome
-        Log.endTest(new Object() {
-        }.getClass().getEnclosingMethod().getName() + " in @AfterClass");
-        if(loginPage!=null)
-            loginPage.quitWebDriver();
-        Log.endTest("=== That's all, folks! ===");
     }
 }

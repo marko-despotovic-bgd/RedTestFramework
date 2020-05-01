@@ -60,7 +60,7 @@ public class LoginPage extends BasePage {
         openSamsaraTrainingSite();
         Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
         Assert.assertTrue(isDisplayed(loginButton), "Log In button is not displayed");
-        Log.debug("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
+        Log.info("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
         fillInInputField(usernameInput, username);
         fillInInputField(passwordInput, password);
         clickOnElement(loginButton);
