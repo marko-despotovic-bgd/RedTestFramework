@@ -11,7 +11,7 @@ Suites can be ran through sutes-runner.xml on suites level, while testng.xml ena
 ### Pre-requisites
 
     Java 8 or higher
-    Web browser (Firefox, Chrome, Internet Explorer)
+    Web browser (Firefox, Chrome, Internet Explorer, Edge)
     Maven
     Selenium Webdriver
     TestNG
