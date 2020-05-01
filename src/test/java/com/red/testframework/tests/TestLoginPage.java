@@ -1,14 +1,14 @@
 package com.red.testframework.tests;
 
 import com.red.testframework.pages.*;
+import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
-import com.red.testframework.utils.TestGroups;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import com.red.testframework.utils.Utils;
 
-public class TestLoginPage extends DatabaseTest {
+public class TestLoginPage extends TestDatabase {
 
     private LoginPage loginPage;
     private Utils utils;
@@ -18,8 +18,8 @@ public class TestLoginPage extends DatabaseTest {
     @BeforeClass(alwaysRun = true)
     @Parameters({"browser"})
     public void setUp(@Optional("CHROME") String browser) {
-        loginPage = Utils.setUpWebBrowser(browser); // Running this class only will default to chrome. When called via testng.xml, CHROME will be ignored and
-        // all tests will be treated respecting xml's config.
+        loginPage = Utils.setUpWebBrowser(browser); // Running this class only will default to chrome. When called via testng.xml,
+        // CHROME will be ignored and all tests will be treated respecting xml's config.
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName()); // Reading enclosing method name
         utils = new Utils();
@@ -29,7 +29,7 @@ public class TestLoginPage extends DatabaseTest {
      * Test validates that login page is opened by checking if log in button is
      * visible on the page
      */
-    @Test(groups = {TestGroups.CRITICAL})
+    @Test(groups = {Constants.CRITICAL})
     public void testLoginPageIsOpened() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -37,7 +37,7 @@ public class TestLoginPage extends DatabaseTest {
         loginPage.verifyLogInButtonIsDisplayed();
     }
 
-    @Test(groups = {TestGroups.CRITICAL})
+    @Test(groups = {Constants.CRITICAL})
     public void testSuccessfulLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -49,7 +49,7 @@ public class TestLoginPage extends DatabaseTest {
     /*
      * Test validates that proper error message is displayed upon unsuccessful login
      */
-    @Test(groups = {TestGroups.HIGH})
+    @Test(groups = {Constants.HIGH})
     public void testUnsuccessfulLogin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -60,7 +60,7 @@ public class TestLoginPage extends DatabaseTest {
     /*
      * Test validates that proper error message is displayed upon unsuccessful login
      */
-    @Test(groups = {TestGroups.MEDIUM})
+    @Test(groups = {Constants.MEDIUM})
     public void testUnsuccessfulLoginMedium() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -72,7 +72,7 @@ public class TestLoginPage extends DatabaseTest {
     /*
      * Test validates that proper error message is displayed upon unsuccessful login
      */
-    @Test(groups = {TestGroups.LOW})
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginLow() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -98,7 +98,8 @@ public class TestLoginPage extends DatabaseTest {
         // Cleaning after all test have been executed, regardless of outcome
         Log.endTest(new Object() {
         }.getClass().getEnclosingMethod().getName() + " in @AfterClass");
-        loginPage.quitWebDriver();
+        if(loginPage!=null)
+            loginPage.quitWebDriver();
         Log.endTest("=== That's all, folks! ===");
     }
 }

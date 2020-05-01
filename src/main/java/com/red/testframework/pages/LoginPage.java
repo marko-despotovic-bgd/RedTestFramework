@@ -12,7 +12,6 @@ import org.openqa.selenium.support.FindBy;
 import com.red.testframework.utils.Log;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-import org.testng.asserts.SoftAssert;
 
 
 public class LoginPage extends BasePage {

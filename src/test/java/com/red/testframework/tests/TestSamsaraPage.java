@@ -4,9 +4,9 @@ import com.red.testframework.pages.HeroesPage;
 import com.red.testframework.pages.LoginPage;
 import com.red.testframework.pages.SamsaraPage;
 import com.red.testframework.pages.UsersPage;
+import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
-import com.red.testframework.utils.TestGroups;
 import com.red.testframework.utils.Utils;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -59,14 +59,14 @@ public class TestSamsaraPage {
      * Test validates that login page is opened by checking if log in button is
      * visible on the page
      */
-    @Test(groups = {TestGroups.CRITICAL})
+    @Test(groups = {Constants.CRITICAL})
     public void testLoginPageIsOpened() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.loginPageIsDisplayed();
     }
 
-    @Test(groups = {TestGroups.CRITICAL})
+    @Test(groups = {Constants.CRITICAL})
     public void testSuccessfulLogIn() {
         Log.info(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -79,7 +79,7 @@ public class TestSamsaraPage {
     /*
      * Test validates that proper error message is displayed upon unsuccessful login
      */
-    @Test(groups = {TestGroups.HIGH})
+    @Test(groups = {Constants.HIGH})
     public void testUnsuccessfulLogin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -90,7 +90,7 @@ public class TestSamsaraPage {
     /*
      * Test validates that proper error message is displayed upon unsuccessful login
      */
-    @Test(groups = {TestGroups.MEDIUM})
+    @Test(groups = {Constants.MEDIUM})
     public void testUnsuccessfulLoginMedium() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -102,7 +102,7 @@ public class TestSamsaraPage {
     /*
      * Test validates that proper error message is displayed upon unsuccessful login
      */
-    @Test(groups = {TestGroups.LOW})
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginLow() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
