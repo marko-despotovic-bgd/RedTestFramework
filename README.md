@@ -28,5 +28,9 @@ The following steps should get you set up for running Selenium tests locally on 
 
     1. Chrome
     2. Firefox
+    3. IE
+    4. Edge
+    5. Chrome headless
+    
 
 Test cases with steps, expected results and some comments and enhancements' proposals are stored in Red vs Samsara.xlsx.
