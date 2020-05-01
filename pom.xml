@@ -14,13 +14,15 @@
 		<maven.compiler.version>3.7.0</maven.compiler.version>
 		<maven.surefire.version>2.20</maven.surefire.version>
 		<maven.failsafe.version>2.20</maven.failsafe.version>
+		<suiteXmlFile.path>resources/runners/testng.xml</suiteXmlFile.path>
+
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.44</version>
+			<version>8.0.20</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -112,7 +114,7 @@
 				<version>${maven.failsafe.version}</version>
 				<configuration>
 					<suiteXmlFiles>
-						<suiteXmlFile>src/test/resources/suites-runner.xml</suiteXmlFile>
+						<suiteXmlFile>${suiteXmlFile.path}</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>
 				<executions>
