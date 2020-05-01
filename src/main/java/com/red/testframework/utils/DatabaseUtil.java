@@ -11,18 +11,21 @@ import java.util.ArrayList;
 
 public class DatabaseUtil  {
 
-    private static Logger log = LoggerFactory.getLogger(LoginPage.class);
+    private static final Logger log = LoggerFactory.getLogger(LoginPage.class);
     private static Connection connection;
 
     public Connection getConnection() {
         Utils utils = new Utils();
         try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             connection = DriverManager.getConnection("jdbc:mysql://"
                             + utils.getProperty("database.ip")
                             + ":" + utils.getProperty("database.port")
                             + "/" + utils.getProperty("database.name")
-                            + "?useSSL=false&",  // Do not use ssl
+                            + "?useSSL=false&"   // Do not use ssl
+                            + "useUnicode=true&"
+                            + "useJDBCCompliantTimezoneShift=true&"
+                            + "useLegacyDatetimeCode=false&"
+                            + "serverTimezone=UTC", // Due to java.lang.RuntimeException: java.sql.SQLException: The server time zone value 'Central Europe Summer Time' is unrecognized
                     utils.getProperty("database.user"), utils.getProperty("database.password"));
 
             return connection;
