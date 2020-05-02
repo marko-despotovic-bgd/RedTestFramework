@@ -7,26 +7,26 @@
         <groups>
             <run>
                 <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
-<!--                <include name="SANITY"/>-->
                 <include name="CRITICAL"/>
                 <include name="HIGH"/>
                 <!--include name="MEDIUM"/--> <!-- Test mode, should be enabled in "production" -->
-                <include name="LOW"/>
+                <!--include name="LOW"/-->
             </run>
             <dependencies>
-                <group name="CRITICAL" depends-on="SANITY" />
-                <group name="HIGH" depends-on="SANITY" />
-                <group name="MEDIUM" depends-on="SANITY" />
-                <group name="LOW" depends-on="SANITY" />
+                <group name="CRITICAL" depends-on="SANITY"/>
+                <group name="HIGH" depends-on="SANITY"/>
+                <group name="MEDIUM" depends-on="SANITY"/>
+                <group name="LOW" depends-on="SANITY"/>
             </dependencies>
         </groups>
-        <packages>
-            <package name="com.red.testframework.tests"/>
-        </packages>
+        <!--    Execution based on test suites (classes)-->
         <classes>
-            <class name="com.red.testframework.tests.TestLoginPage" />
-            <class name="com.red.testframework.tests.SamsaraUITests" />
-            <class name="com.red.testframework.tests.TestSamsaraPage" />
+            <!--            <class name="com.red.testframework.tests.SamsaraAPITests"/>-->
+            <!--            <class name="com.red.testframework.tests.SamsaraUITests"/>-->
+            <class name="com.red.testframework.tests.TestDatabase"/>
+            <class name="com.red.testframework.tests.TestLoginPage"/>
+            <class name="com.red.testframework.tests.TestSamsaraPage"/>
+
         </classes>
     </test>
     <test name="Firefox tests">
@@ -42,49 +42,51 @@
                 <!--include name="LOW"/-->
             </run>
         </groups>
+        <!--    Execution on package level-->
+
         <packages>
             <package name="com.red.testframework.tests"/>
         </packages>
     </test>
-<!--    <test name="Edge tests">-->
-<!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
-<!--        <parameter name="browser" value="EDGE"/>-->
-<!--        <groups>-->
-<!--            <run>-->
-<!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
-<!--                <include name="SANITY"/>-->
-<!--                <include name="CRITICAL"/>-->
-<!--                <include name="HIGH"/>-->
-<!--                &lt;!&ndash;include name="MEDIUM"/>-->
-<!--                <include name="LOW"/&ndash;&gt;-->
-<!--            </run>-->
-<!--        </groups>-->
-<!--        <packages>-->
-<!--            <package name="com.red.testframework.tests"/>-->
-<!--        </packages>-->
-<!--    </test>-->
-<!--    <test name="IE tests">-->
-<!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
-<!--        <parameter name="browser" value="IE"/>-->
-<!--        <groups>-->
-<!--            <run>-->
-<!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
-<!--                <include name="SANITY"/>-->
-<!--                <include name="CRITICAL"/>-->
-<!--                &lt;!&ndash;include name="HIGH"/>-->
-<!--                <include name="MEDIUM"/>-->
-<!--                <include name="LOW"/&ndash;&gt;-->
-<!--            </run>-->
-<!--        </groups>-->
-<!--        <packages>-->
-<!--            <package name="com.red.testframework.tests"/>-->
-<!--        </packages>-->
-<!--    </test>-->
-<!--    <test name="Chrome headless tests">-->
-<!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
-<!--        <parameter name="browser" value="CHROME_HEADLESS"/>-->
-<!--        <packages>-->
-<!--            <package name="com.red.testframework.tests"/>-->
-<!--        </packages>-->
-<!--    </test>-->
+    <!--    <test name="Edge tests">-->
+    <!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
+    <!--        <parameter name="browser" value="EDGE"/>-->
+    <!--        <groups>-->
+    <!--            <run>-->
+    <!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
+    <!--                <include name="SANITY"/>-->
+    <!--                <include name="CRITICAL"/>-->
+    <!--                <include name="HIGH"/>-->
+    <!--                &lt;!&ndash;include name="MEDIUM"/>-->
+    <!--                <include name="LOW"/&ndash;&gt;-->
+    <!--            </run>-->
+    <!--        </groups>-->
+    <!--        <packages>-->
+    <!--            <package name="com.red.testframework.tests"/>-->
+    <!--        </packages>-->
+    <!--    </test>-->
+    <!--    <test name="IE tests">-->
+    <!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
+    <!--        <parameter name="browser" value="IE"/>-->
+    <!--        <groups>-->
+    <!--            <run>-->
+    <!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
+    <!--                <include name="SANITY"/>-->
+    <!--                <include name="CRITICAL"/>-->
+    <!--                &lt;!&ndash;include name="HIGH"/>-->
+    <!--                <include name="MEDIUM"/>-->
+    <!--                <include name="LOW"/&ndash;&gt;-->
+    <!--            </run>-->
+    <!--        </groups>-->
+    <!--        <packages>-->
+    <!--            <package name="com.red.testframework.tests"/>-->
+    <!--        </packages>-->
+    <!--    </test>-->
+    <!--    <test name="Chrome headless tests">-->
+    <!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
+    <!--        <parameter name="browser" value="CHROME_HEADLESS"/>-->
+    <!--        <packages>-->
+    <!--            <package name="com.red.testframework.tests"/>-->
+    <!--        </packages>-->
+    <!--    </test>-->
 </suite>

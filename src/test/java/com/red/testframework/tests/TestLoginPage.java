@@ -18,7 +18,8 @@ public class TestLoginPage extends BaseTest {
     public void testLoginPageIsOpened() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
+        loginPage.openSamsaraTrainingSite();
+        loginPage.verifyLoginPageTitleIsDisplayed();
         loginPage.verifyLogInButtonIsDisplayed();
     }
 
@@ -37,7 +38,6 @@ public class TestLoginPage extends BaseTest {
     public void testSuccessfulUserLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage.logIn(utils.getProperty("user.username"),utils.getProperty("password")); // This method itself is checking if Samsara page is opened
         loginSuccessful = true;
     }
@@ -47,7 +47,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginEmptyUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials("", "");
     }
 
@@ -56,7 +55,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginEmptyUsernameCorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials("", utils.getProperty("password"));
     }
 
@@ -65,7 +63,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginEmptyUsernameIncorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials("", "incorrectPassword");
     }
 
@@ -74,7 +71,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginCorrectUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username"), "");
     }
 
@@ -83,7 +79,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginIncorrectUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials("hacker", "");
     }
 
@@ -92,7 +87,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginIncorrectUsernameIncorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials("mr.robot", "letMeIn");
     }
 
@@ -101,7 +95,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginIncorrectUsernameCorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username")+utils.getProperty("user.username"), "");
     }
 
@@ -110,7 +103,6 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginCorrectUsernameLongPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         String randomString = RandomStringUtils.random(256,true,true);
         loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username"), randomString);
     }
@@ -120,10 +112,8 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginWithDataProvider(String username, String password) {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.loginPageIsDisplayed();
         loginPage = loginPage.logInWithInvalidCredentials(username, password);
     }
-
 
     @DataProvider(name="UnsuccessfulLoginInputMatrix")
     public Object[][] getDataFromDataProvider() {

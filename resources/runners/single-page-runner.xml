@@ -13,13 +13,10 @@
 <!--        Dependencies are useful when running all tests from beginning to end, but when debugging a specific test class
             it makes sense to skip such dependencies and only run the specific test you are trying to fix.-->
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="SPR">
-
-    <test name="SPR test" verbose="3">
+<suite name="Single Page runner">
+    <test name="SPR">
         <classes>
-            <class name="com.red.testframework.tests.TestSamsaraPage">
-            </class>
+            <class name="com.red.testframework.tests.TestSamsaraPage"/>
         </classes>
     </test>
-
 </suite>
