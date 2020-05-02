@@ -17,12 +17,13 @@ public class TestSamsaraPage extends BaseTest {
     public void loginAndSamsaraPageDisplayed() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
         samsaraPage = loginPage.adminLogIn();
-        samsaraPage.verifySamsaraPageIsDisplayed();
+        samsaraPage.verifySamsaraPageTitleIsDisplayed();
     }
 
     // Verify "Start Testing!" button is displayed
-    @Test(groups = {Constants.CRITICAL},  dependsOnMethods = "loginAndSamsaraPageDisplayed")
+    @Test(groups = {Constants.HIGH},  dependsOnMethods = "loginAndSamsaraPageDisplayed")
     public void verifyStartTestingButtonIsDisplayed() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -30,7 +31,7 @@ public class TestSamsaraPage extends BaseTest {
     }
 
     // Verify "Share with friends!" button is displayed
-    @Test(groups = {Constants.CRITICAL},  dependsOnMethods = "loginAndSamsaraPageDisplayed")
+    @Test(groups = {Constants.MEDIUM},  dependsOnMethods = "loginAndSamsaraPageDisplayed")
     public void verifyShareWithFriendsButtonIsDisplayed() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());

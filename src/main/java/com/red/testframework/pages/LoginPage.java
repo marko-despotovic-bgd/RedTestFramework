@@ -38,9 +38,10 @@ public class LoginPage extends BasePage {
     }
 
     public SamsaraPage logIn(String username, String password) {
-        openSamsaraTrainingSite();
-        verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE);
-        Assert.assertTrue(isDisplayed(loginButton), "Log In button is not displayed");
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        verifyLoginPageTitleIsDisplayed();
+        verifyLogInButtonIsDisplayed();
         log.debug("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
         fillInInputField(usernameInput, username);
         fillInInputField(passwordInput, password);
@@ -53,14 +54,15 @@ public class LoginPage extends BasePage {
     }
 
     public LoginPage logInWithInvalidCredentials(String username, String password) {
-        openSamsaraTrainingSite();
-        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
-        Assert.assertTrue(isDisplayed(loginButton), "Log In button is not displayed");
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        verifyLoginPageTitleIsDisplayed();
+        verifyLogInButtonIsDisplayed();
         log.info("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
         fillInInputField(usernameInput, username);
         fillInInputField(passwordInput, password);
         clickOnElement(loginButton);
-        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
+        verifyLoginPageTitleIsDisplayed();
         Assert.assertEquals(getElementText(alertFailMessage), Constants.INVALID_CREDENTIALS_MESSAGE, "Unsuccessful Login message is not displayed!");
         log.info("Unsuccessful Login message is displayed");
         log.info("Successfully executed " + new Object() {
@@ -69,8 +71,10 @@ public class LoginPage extends BasePage {
     }
 
     public SamsaraPage adminLogIn() {
-        loginPageIsDisplayed();
-        Assert.assertTrue(isDisplayed(loginButton), "Log In button is not displayed");
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        verifyLoginPageTitleIsDisplayed();
+        verifyLogInButtonIsDisplayed();
         log.debug("\nLogin with credentials:\nUsername: " + properties.getProperty("admin") + "\nPassword: " + properties.getProperty("admin"));
         fillInInputField(usernameInput, utils.getProperty("admin.username"));
         fillInInputField(passwordInput, utils.getProperty("password"));
@@ -83,24 +87,28 @@ public class LoginPage extends BasePage {
     }
 
     public void logOut() {
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
         Assert.assertTrue(isDisplayed(logoutButton), "Log Out button is not displayed");
         clickOnElement(logoutButton);
-        Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
+        verifyLoginPageTitleIsDisplayed();
         Assert.assertEquals(getElementText(alertSuccessMessage), Constants.SUCCESSFUL_LOGOUT_MESSAGE, "Successful Logout message is not displayed!");
         log.info("Successful Logout message is displayed");
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
     }
 
-    public void loginPageIsDisplayed() {
-        openSamsaraTrainingSite();
+    public void verifyLoginPageTitleIsDisplayed() {
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
         Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
     }
 
-    private void openSamsaraTrainingSite() { // Use loginPageIsDisplayed for opening Samsara page
-        log.info("Opening Samsara training web site");
+    public void openSamsaraTrainingSite() { // Use loginPageIsDisplayed for opening Samsara page
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
         driver.get(utils.getProperty("app.url"));
         //driver.get("http://google.com"); <-- Testing purpose
         log.info("Successfully executed " + new Object() {
@@ -108,7 +116,8 @@ public class LoginPage extends BasePage {
     }
 
     public void verifyLogInButtonIsDisplayed() {
-        openSamsaraTrainingSite();
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
         Assert.assertTrue(isDisplayed("//input[@value='Log In']"), "Log In button is not displayed!");
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
