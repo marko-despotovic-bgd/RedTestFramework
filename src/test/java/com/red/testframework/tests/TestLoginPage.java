@@ -7,8 +7,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
-import java.util.function.Consumer;
-
 public class TestLoginPage extends BaseTest {
 
     boolean loginSuccessful = false;
@@ -24,7 +22,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Verify admin login
-    @Test(groups = {Constants.CRITICAL}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.CRITICAL}, dependsOnMethods = "testLoginPageIsOpened")
     public void testSuccessfulAdminLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -34,7 +32,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Verify user login
-    @Test(groups = {Constants.HIGH}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.HIGH}, dependsOnMethods = "testLoginPageIsOpened")
     public void testSuccessfulUserLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -43,7 +41,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with empty username and empty password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginEmptyUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -51,7 +49,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with empty username and correct password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginEmptyUsernameCorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -59,7 +57,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with empty username and incorrect password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginEmptyUsernameIncorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -67,7 +65,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with correct username and empty password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginCorrectUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -75,7 +73,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with incorrect username and empty password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginIncorrectUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -83,7 +81,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with incorrect username and incorrect password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginIncorrectUsernameIncorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -91,7 +89,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with incorrect username and correct password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginIncorrectUsernameCorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -99,7 +97,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with correct username and 256 characters long password
-    @Test(groups = {Constants.LOW}, dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginCorrectUsernameLongPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -108,7 +106,7 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Test Invalid Credentials with correct username and 256 characters long password
-    @Test(groups = {Constants.MEDIUM}, dataProvider = "UnsuccessfulLoginInputMatrix", dependsOnGroups = {Constants.SANITY})
+    @Test(groups = {Constants.MEDIUM}, dataProvider = "UnsuccessfulLoginInputMatrix", dependsOnMethods = "testLoginPageIsOpened")
     public void testUnsuccessfulLoginWithDataProvider(String username, String password) {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
