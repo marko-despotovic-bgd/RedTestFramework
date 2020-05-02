@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Suito de tutti suitti" verbose="2"> <!-- Using verbose 2 for more info in logs -->
+<suite name="Suito de tutti suitti" verbose="3"> <!-- Using verbose 3 for more info in logs -->
     <!-- Suite-level parameters, always passed to test (unless overridden) -->
     <parameter name="browser" value="CHROME"/>
     <test name="Chrome tests">
         <groups>
             <run>
                 <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
+<!--                <include name="SANITY"/>-->
                 <include name="CRITICAL"/>
                 <include name="HIGH"/>
                 <!--include name="MEDIUM"/--> <!-- Test mode, should be enabled in "production" -->
                 <include name="LOW"/>
             </run>
+            <dependencies>
+                <group name="CRITICAL" depends-on="SANITY" />
+                <group name="HIGH" depends-on="SANITY" />
+                <group name="MEDIUM" depends-on="SANITY" />
+                <group name="LOW" depends-on="SANITY" />
+            </dependencies>
         </groups>
         <packages>
             <package name="com.red.testframework.tests"/>
         </packages>
+        <classes>
+            <class name="com.red.testframework.tests.TestLoginPage" />
+            <class name="com.red.testframework.tests.SamsaraUITests" />
+            <class name="com.red.testframework.tests.TestSamsaraPage" />
+        </classes>
     </test>
     <test name="Firefox tests">
         <!-- Overriding suites' parameter -->
@@ -23,6 +35,7 @@
         <groups>
             <run>
                 <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
+                <include name="SANITY"/>
                 <include name="CRITICAL"/>
                 <include name="HIGH"/>
                 <include name="MEDIUM"/>
@@ -39,6 +52,7 @@
 <!--        <groups>-->
 <!--            <run>-->
 <!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
+<!--                <include name="SANITY"/>-->
 <!--                <include name="CRITICAL"/>-->
 <!--                <include name="HIGH"/>-->
 <!--                &lt;!&ndash;include name="MEDIUM"/>-->
@@ -55,6 +69,7 @@
 <!--        <groups>-->
 <!--            <run>-->
 <!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
+<!--                <include name="SANITY"/>-->
 <!--                <include name="CRITICAL"/>-->
 <!--                &lt;!&ndash;include name="HIGH"/>-->
 <!--                <include name="MEDIUM"/>-->

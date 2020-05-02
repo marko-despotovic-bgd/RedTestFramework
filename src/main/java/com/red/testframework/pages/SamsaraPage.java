@@ -2,6 +2,7 @@ package com.red.testframework.pages;
 
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.Constants;
+import com.red.testframework.utils.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -30,12 +31,13 @@ public class SamsaraPage extends BasePage {
     private WebElement adminPageNavigator;
     @FindBy(xpath = "//div[@class='panel-title text-center']")
     private WebElement panelTitle;
-
-    private static Logger log = LoggerFactory.getLogger(SamsaraPage.class);
+    @FindBy(xpath = "//a[@class='btn btn-primary btn-lg'][text()='Start Testing!']")
+    private WebElement startTestingButton;
+    @FindBy(xpath = "//a[@class='btn btn-primary btn-lg'][text()='Share with friends!']")
+    private WebElement shareWithFriendsButton;
 
     public SamsaraPage(WebDriver driver) {
         super(driver);
-        log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
 
@@ -93,5 +95,17 @@ public class SamsaraPage extends BasePage {
         Assert.assertTrue(new AdminPage(driver).verifyAdminPageIsDisplayed(), "Users page is not displayed!");
         log.info("Users page is displayed");
         return new AdminPage(driver);
+    }
+
+    public void verifyStartTestingButtonIsDisplayed() {
+        Assert.assertTrue(isDisplayed("//a[@class='btn btn-primary btn-lg'][text()='Start Testing!']"), "Log In button is not displayed!");
+        log.info("Successfully executed " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+    }
+
+    public void verifyShareWithFriendsButtonIsDisplayed() {
+        Assert.assertTrue(isDisplayed("//a[@class='btn btn-primary btn-lg'][text()='Share with friends!']"), "Log In button is not displayed!");
+        log.info("Successfully executed " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
     }
 }

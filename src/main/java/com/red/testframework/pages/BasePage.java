@@ -40,7 +40,6 @@ public class BasePage {
             waitUntilElementIsClickable(element, timeout);
             element.click();
         } catch (Exception e1) {
-            // TODO: Maybe separate those in 3 methods and handle externally
             try {
                 // if not, try this way
                 element.sendKeys(Keys.SPACE);
@@ -108,6 +107,41 @@ public class BasePage {
         return displayedElements;
     }
 
+
+    public boolean isDisplayed(WebElement element) {
+        waitUntilElementIsVisible(element);
+        return element.isDisplayed();
+    }
+
+    public boolean isDisplayed(String elementXpath) {
+        try {
+            List<WebElement> elements = driver.findElements(By.xpath(elementXpath));
+            return elements.size() != 0;
+        } catch (NoSuchElementException NSEex) {
+            Log.error("Error" + NSEex.getMessage() + ";\nStack trace: " + Arrays.toString(NSEex.getStackTrace()));
+            return false;
+        }
+    }
+
+    public boolean verifyPageIsDisplayed(By by, String identifyingElementText) {
+        List<WebElement> elements = driver.findElements(by);
+        if (elements.size() != 0)
+            return getElementText(elements.get(0)).equals(identifyingElementText);
+        else
+            Log.error("Page element not found, page is changed or not displayed!");
+        return false;
+    }
+
+    public void quitWebDriver() {
+        Log.info("Executing... " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        if (driver != null) {
+            driver.quit();
+        }
+        Log.info("Successfully executed " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+    }
+
     private List<WebElement> findElementsWithMatchingText(String text) {
         String xpathExpression = "//*[contains(text(), '" + text + "')]";
         List<WebElement> allElements = findDisplayedElements(By.xpath(xpathExpression));
@@ -134,16 +168,6 @@ public class BasePage {
         return matchingElements;
     }
 
-    public boolean verifyPageIsDisplayed(By by, String identifyingElementText) {
-        List<WebElement> elements = driver.findElements(by);
-        if (elements.size() != 0)
-            return getElementText(elements.get(0)).equals(identifyingElementText);
-        else
-            Log.error("Page element not found, page is not displayed!");
-        return false;
-    }
-
-
     public void closeWebDriver() {
         Log.info("Executing ..." + new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -153,17 +177,6 @@ public class BasePage {
             }.getClass().getEnclosingMethod().getName());
         }
     }
-
-    public void quitWebDriver() {
-        Log.info("Executing... " + new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        if (driver != null) {
-            driver.quit();
-            Log.info("Successfully executed " + new Object() {
-            }.getClass().getEnclosingMethod().getName());
-        }
-    }
-
 
     public void dragAndDropItem(WebElement from, WebElement to) {
         Actions action = new Actions(driver);
@@ -198,21 +211,6 @@ public class BasePage {
 
     public boolean isElementPresent(By by) {
         return driver.findElements(by).size() > 0;
-    }
-
-    public boolean isDisplayed(WebElement element) {
-        waitUntilElementIsVisible(element);
-        return element.isDisplayed();
-    }
-
-    public boolean isDisplayed(String elementXpath) {
-        try {
-            List<WebElement> elements = driver.findElements(By.xpath(elementXpath));
-            return elements.size() != 0;
-        } catch (NoSuchElementException NSEex) {
-            Log.error("Error" + NSEex.getMessage() + ";\nStack trace: " + Arrays.toString(NSEex.getStackTrace()));
-            return false;
-        }
     }
 
     public void switchTab(int tabNumber) {

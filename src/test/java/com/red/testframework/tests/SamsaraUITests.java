@@ -18,39 +18,30 @@
  ********************************************************************************************/
 package com.red.testframework.tests;
 
-import com.red.testframework.pages.*;
+import com.red.testframework.pages.HeroesPage;
+import com.red.testframework.pages.LoginPage;
+import com.red.testframework.pages.SamsaraPage;
+import com.red.testframework.pages.UsersPage;
+import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.utils.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 public class SamsaraUITests {
 
-    private BasePage basePage;
     private LoginPage loginPage;
     private SamsaraPage samsaraPage;
-    private HomePage homePage;
     private UsersPage usersPage;
     private HeroesPage heroesPage;
-    private GalleryPage galleryPage;
-    private ApiPage apiPage;
-    private BrokenLinkPage brokenLinkPage;
-    private AdminPage adminPage;
+    private Utils utils;
 
-    public Properties properties = new Properties();
-    private static Logger log = LoggerFactory.getLogger(TestLoginPage.class);
-
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
-
-    String timestamp = sdf.format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
+    String timestamp = new SimpleDateFormat("HHmmss").format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
 
     String username1 = "despot" + timestamp,
             username2 = "a" + username1 + "2",
@@ -72,13 +63,16 @@ public class SamsaraUITests {
 
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
 
-
-    @BeforeClass()
+    @BeforeClass(alwaysRun = true)
     @Parameters({"browser"})
-    public void setUp(@Optional("chrome") String browser) {
-        log.info("setUp() in @BeforeMethod");
-        loginPage = Utils.setUpWebBrowser(browser);
+    public void setUp(@Optional("CHROME") String browser) {
+        loginPage = Utils.setUpWebBrowser(browser); // Running this class only will default to chrome. When called via testng.xml, CHROME will be ignored and
+        // all tests will be treated respecting xml's config.
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName()); // Reading enclosing method name
+        utils = new Utils();
     }
+
 
     @Test//(description = "L1. Login module - Login to the web app using valid credentials", groups = {"P1"})
     public void userLoginWithCorrectCredentialsTest() {
@@ -88,7 +82,7 @@ public class SamsaraUITests {
          3. On Login page, click Log in button
          Expected result: Samsara greeting page (http://samsara.com/ or http://localhost:8080/) is displayed  */
 
-        log.info("Entered userLoginWithCorrectCredentials test!");
+        Log.info("Entered userLoginWithCorrectCredentials test!");
         loginSuccessful = false;
         samsaraPage = loginPage.logIn("admin","password");
         // Validation on Samsara page implemented within method login() itself
@@ -328,7 +322,9 @@ public class SamsaraUITests {
      **/
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
-        Log.debug("tearDown() in @AfterMethod");
+        Log.endTest(new Object() {
+        }.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
+
         if (result.getStatus() == ITestResult.FAILURE) {
             ScreenshotUtil.makeScreenshot(result);
         }
@@ -336,51 +332,62 @@ public class SamsaraUITests {
         if (loginSuccessful)
             loginPage.logOut();
 
+        loginSuccessful = false;
     }
 
     @AfterClass(alwaysRun = true)
-    public void afterTest() {
+    public void tearDown() {
         // Cleaning after all test have been executed, regardless of outcome
-        Log.debug("Reverting changes... (afterTest() in @AfterClass)");
-        if (hero1Created || hero2Created || hero3Created) {
-            samsaraPage = loginPage.logIn(properties.getProperty("admin"), properties.getProperty("password"));
-            heroesPage = samsaraPage.navigateToHeroesPage();
-            if (hero1Created) {
-                Log.debug("Deleting " + hero1Name + "...");
-                heroesPage.deleteHero(hero1Name);
-                Log.debug("Hero " + hero1Name + " has been deleted!");
+        Log.endTest(new Object() {
+        }.getClass().getEnclosingMethod().getName() + " in @AfterClass");
+
+        if (hero1Created || hero2Created || hero3Created || user1Created || user2Created) {
+            Log.info("=========== Reverting changes");
+
+            if (hero1Created || hero2Created || hero3Created) {
+                Log.info("----- Deleting created hero(es)");
+                samsaraPage = loginPage.adminLogIn();
+                heroesPage = samsaraPage.navigateToHeroesPage();
+                if (hero1Created) {
+                    Log.debug("Deleting " + hero1Name + "...");
+                    heroesPage.deleteHero(hero1Name);
+                    Log.debug("Hero " + hero1Name + " has been deleted!");
+                }
+                if (hero2Created) {
+                    Log.debug("Deleting " + hero2Name + "...");
+                    heroesPage.deleteHero(hero2Name);
+                    Log.debug("Hero " + hero2Name + " has been deleted!");
+                }
+                if (hero3Created) {
+                    Log.debug("Deleting " + hero3Name + "...");
+                    heroesPage.deleteHero(hero3Name);
+                    Log.debug("Hero " + hero3Name + " has been deleted!");
+                }
+                loginPage.logOut();
             }
-            if (hero2Created) {
-                Log.debug("Deleting " + hero2Name + "...");
-                heroesPage.deleteHero(hero2Name);
-                Log.debug("Hero " + hero2Name + " has been deleted!");
+
+            if (user1Created || user2Created) {
+                Log.info("----- Deleting created user(s)");
+                samsaraPage = loginPage.adminLogIn();
+                usersPage = samsaraPage.navigateToUsersPage();
+                if (user1Created) {
+                    Log.debug("Deleting " + username1 + "...");
+                    usersPage.deleteUser(username1);
+                    Log.debug("User " + username1 + " has been deleted!");
+                }
+                if (user2Created) {
+                    Log.debug("Deleting " + username2 + "...");
+                    usersPage.deleteUser(username2);
+                    Log.debug("User " + username2 + " has been deleted!");
+                }
+                loginPage.logOut();
+                Log.info("========================");
             }
-            if (hero3Created) {
-                Log.debug("Deleting " + hero3Name + "...");
-                heroesPage.deleteHero(hero3Name);
-                Log.debug("Hero " + hero3Name + " has been deleted!");
-            }
-            loginPage.logOut();
         }
 
-        if (user1Created || user2Created) {
-            samsaraPage = loginPage.logIn(properties.getProperty("admin"), properties.getProperty("password"));
+        if (loginPage != null)
+            loginPage.quitWebDriver();
 
-            usersPage = samsaraPage.navigateToUsersPage();
-            if (user1Created) {
-                Log.debug("Deleting " + username1 + "...");
-                usersPage.deleteUser(username1);
-                Log.debug("User " + username1 + " has been deleted!");
-            }
-            if (user2Created) {
-                Log.debug("Deleting " + username2 + "...");
-                usersPage.deleteUser(username2);
-                Log.debug("User " + username2 + " has been deleted!");
-            }
-            loginPage.logOut();
-            if (loginPage != null)
-                loginPage.quitWebDriver();
-
-        }
+        Log.endTest("That's all, folks! ");
     }
 }

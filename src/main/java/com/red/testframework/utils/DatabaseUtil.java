@@ -11,10 +11,16 @@ import java.util.ArrayList;
 
 public class DatabaseUtil  {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginPage.class);
+    private static Logger log = LoggerFactory.getLogger(LoginPage.class);
     private static Connection connection;
 
+    public DatabaseUtil(){
+        log = Log.getLog(DatabaseUtil.class);
+    }
+
     public Connection getConnection() {
+        Log.info(new Object() {
+    }.getClass().getEnclosingMethod().getName());
         Utils utils = new Utils();
         try {
             connection = DriverManager.getConnection("jdbc:mysql://"
@@ -35,11 +41,13 @@ public class DatabaseUtil  {
     }
 
     public ResultSet executeQuery(String query) throws SQLException {
-        log.info("Executing query: '" + query + "'");
+        Log.info("Executing query: '" + query + "'");
         return getConnection().createStatement().executeQuery(query);
     }
 
-    public void close() throws SQLException {
+    public void closeConnection() throws SQLException {
+        Log.info("Executing " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
         if (!connection.isClosed()) connection.close();
     }
 

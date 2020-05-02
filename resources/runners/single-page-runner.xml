@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--        Introduced this xml due to issues with running class that depend on other class method.
+            https://issues.apache.org/jira/browse/SUREFIRE-1073 -->
+<!--        Given:-->
+
+<!--        Test 1 validates class A-->
+<!--        Test 2 validates class B, but invokes class A in the process.-->
+
+<!--        If Test 1 fails then Test 2 will fail as well,
+            but it is legal to run Test 2 without running Test 1 first.-->
+
+<!--        Dependencies are useful when running all tests from beginning to end, but when debugging a specific test class
+            it makes sense to skip such dependencies and only run the specific test you are trying to fix.-->
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="SPR">
+
+    <test name="SPR test" verbose="3">
+        <classes>
+            <class name="com.red.testframework.tests.TestSamsaraPage">
+            </class>
+        </classes>
+    </test>
+
+</suite>
