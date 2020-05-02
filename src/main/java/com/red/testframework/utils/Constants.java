@@ -18,6 +18,7 @@ public class Constants {
     public static final String PANEL_TITLE_XPATH = "//div[@class='panel-title text-center']";
     public static final String PANEL_XPATH = "//div[@class='my-jumbotron']//h1";
     // Test groups
+    public static final String SANITY = "SANITY";
     public static final String CRITICAL = "CRITICAL";
     public static final String HIGH = "HIGH";
     public static final String MEDIUM = "MEDIUM";
