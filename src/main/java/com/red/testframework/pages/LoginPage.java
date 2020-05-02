@@ -110,7 +110,7 @@ public class LoginPage extends BasePage {
         log.info("Executing ..." + new Object() {
         }.getClass().getEnclosingMethod().getName());
         driver.get(utils.getProperty("app.url"));
-        //driver.get("http://google.com"); <-- Testing purpose
+//        driver.get("http://google.com"); //<-- Testing purpose
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
     }

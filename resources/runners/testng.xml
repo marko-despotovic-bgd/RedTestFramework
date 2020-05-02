@@ -9,8 +9,8 @@
                 <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
                 <include name="CRITICAL"/>
                 <include name="HIGH"/>
-                <!--include name="MEDIUM"/--> <!-- Test mode, should be enabled in "production" -->
-                <!--include name="LOW"/-->
+                <include name="MEDIUM"/>
+                <!--include name="LOW"/--> <!-- Test mode, should be enabled in "production" -->
             </run>
             <dependencies>
                 <group name="CRITICAL" depends-on="SANITY"/>

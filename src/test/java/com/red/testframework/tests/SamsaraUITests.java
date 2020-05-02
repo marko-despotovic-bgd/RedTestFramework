@@ -1,7 +1,5 @@
 /********************************************************************************************
  Test suite:                                                                                *
- L1. Login module - Login to the web app using valid credentials                            *
- L2. Login module - Login to the web app using invalid credentials                          *
  H1. Hero module - Verify user can create new hero                                          *
  H2. Hero module - Verify user can edit existing own hero                                   *
  H3. Hero module - Verify user can delete own hero                                          *
@@ -16,30 +14,34 @@
  A2. Admin module - Verify admin has access to admin section                                *
  A3. Admin module - Verify admin can recreate registration key                              *
  ********************************************************************************************/
+
+//        Verify search by hero name displays correct table
+//        Verify search by user name displays correct table
+//        Verify user actions - rename hero is saved in audit table
+//        Verify admin actions - rename hero is saved in audit table
+
 package com.red.testframework.tests;
 
 import com.red.testframework.pages.HeroesPage;
-import com.red.testframework.pages.LoginPage;
 import com.red.testframework.pages.SamsaraPage;
 import com.red.testframework.pages.UsersPage;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
-import com.red.testframework.utils.Utils;
+import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class SamsaraUITests {
+public class SamsaraUITests extends BaseTest {
 
-    private LoginPage loginPage;
     private SamsaraPage samsaraPage;
     private UsersPage usersPage;
     private HeroesPage heroesPage;
-    private Utils utils;
 
     String timestamp = new SimpleDateFormat("HHmmss").format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
 
@@ -63,70 +65,32 @@ public class SamsaraUITests {
 
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
 
-    @BeforeClass(alwaysRun = true)
-    @Parameters({"browser"})
-    public void setUp(@Optional("CHROME") String browser) {
-        loginPage = Utils.setUpWebBrowser(browser); // Running this class only will default to chrome. When called via testng.xml, CHROME will be ignored and
-        // all tests will be treated respecting xml's config.
+    @Test(groups = {Constants.HIGH})
+    public void userCreateNewHeroTest() {
         Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName()); // Reading enclosing method name
-        utils = new Utils();
-    }
-
-
-    @Test//(description = "L1. Login module - Login to the web app using valid credentials", groups = {"P1"})
-    public void userLoginWithCorrectCredentialsTest() {
-        /* Test steps:
-         1. Navigate to Login page (in browsers address bar enter http://samsara.com/ or http://localhost:8080/)
-         2. On Login Page enter valid credentials in username and password text fields
-         3. On Login page, click Log in button
-         Expected result: Samsara greeting page (http://samsara.com/ or http://localhost:8080/) is displayed  */
-
-        Log.info("Entered userLoginWithCorrectCredentials test!");
-        loginSuccessful = false;
-        samsaraPage = loginPage.logIn("admin","password");
-        // Validation on Samsara page implemented within method login() itself
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
         loginSuccessful = true;
+        heroesPage = samsaraPage.navigateToHeroesPage();
+        heroesPage.addHero(hero1Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
+        hero1Created = heroesPage.isHeroDisplayed(hero1Name); // If hero is found in the list(s), this will set flag to true
+        Assert.assertTrue(hero1Created); // This is the goal of the test
     }
 
-//    @Test(description = "L2. Login module - Login to the web app using invalid credentials", groups = {"P2"})
-//    public void userLoginWithIncorrectCredentialsTest() {
-//        /* Test steps:
-//         1. Navigate to Login page (in browsers address bar enter http://www.samsara.com or http://localhost:8080/)
-//         2. On Login Page enter invalid credentials in username field
-//         3. On Login page, click Log in button
-//         Expected: Login denied. Error message "Invalid username and password." displayed   */
-//
-//        Log.info("Entered userLoginWithCorrectCredentials test!");
-//        loginSuccessful = false;
-//        // Validation on error message implemented in method loginWithInvalidCredentials() itself
-//    }
-//
-//    @Test(description = "H1. Hero module - Verify user can create new hero", groups = {"P1"})
-//    public void userCreateNewHeroTest() {
-//        Log.info("Entered userCreateNewHero test!");
-//        loginSuccessful = false;
-//        samsaraPage = loginPage.login(testConfiguration.getUsername2(), testConfiguration.getPassword());
-//        loginSuccessful = true;
-//        heroesPage = samsaraPage.navigateToHeroesPage();
-//        heroesPage.addHero(hero1Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
-//        hero1Created = heroesPage.isHeroDisplayed(hero1Name); // If hero is found in the list(s), this will set flag to true
-//        Assert.assertTrue(hero1Created); // This is the goal of the test
-//    }
-//
-//    @Test(description = "2. Verify user can edit existing own hero")
-//    public void editExistingOwnHeroTest() {
-//        Log.info("Entered editExistingOwnHero test!");
-//        loginSuccessful = false;
-//        samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-//        loginSuccessful = true;
-//        heroesPage = samsaraPage.navigateToHeroesPage();
-//        Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed());
-//        heroesPage.addHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
-//        heroesPage.editHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Revenant");
-//        Assert.assertTrue(heroesPage.isHeroDisplayed(hero2Name)); // This is the goal of the test
-//        hero2Created = heroesPage.isHeroDisplayed(hero2Name); // If hero is found in the list(s), this will set flag to true
-//    }
+    @Test(groups = {Constants.LOW})
+    public void editExistingOwnHeroTest() {
+        Log.info("Entered editExistingOwnHero test!");
+        loginPage.openSamsaraTrainingSite();
+        samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
+        loginSuccessful = true;
+        heroesPage = samsaraPage.navigateToHeroesPage();
+        Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed());
+        heroesPage.addHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
+        heroesPage.editHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Revenant");
+        Assert.assertTrue(heroesPage.isHeroDisplayed(hero2Name)); // This is the goal of the test
+        hero2Created = heroesPage.isHeroDisplayed(hero2Name); // If hero is found in the list(s), this will set flag to true
+    }
 
 //    @Test(description = "3. Verify user can delete own hero")
 //    public void deleteOwnHeroTest() {
@@ -149,7 +113,7 @@ public class SamsaraUITests {
 //
 ////    @Test(description = "4. Verify user can not delete heroes he does not own")
 ////    public void cantDeleteNotOwnHeroTest() {
-////        Log.debug("Entered cantDeleteNotOwnHero test!");
+////        Log.info("Entered cantDeleteNotOwnHero test!");
 ////
 ////        loginSuccessful = true;
 ////        loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
@@ -320,74 +284,62 @@ public class SamsaraUITests {
      * Assert.assertTrue(adminPage.verifyAdminPageIsDisplayed(),"Admin page is not displayed!");
      * }
      **/
+
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
+        // Cleaning after all test have been executed, regardless of outcome
         Log.endTest(new Object() {
         }.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
-
         if (result.getStatus() == ITestResult.FAILURE) {
             ScreenshotUtil.makeScreenshot(result);
         }
-
-        if (loginSuccessful)
+        if (loginPage != null)
             loginPage.logOut();
-
-        loginSuccessful = false;
-    }
-
-    @AfterClass(alwaysRun = true)
-    public void tearDown() {
-        // Cleaning after all test have been executed, regardless of outcome
-        Log.endTest(new Object() {
-        }.getClass().getEnclosingMethod().getName() + " in @AfterClass");
 
         if (hero1Created || hero2Created || hero3Created || user1Created || user2Created) {
             Log.info("=========== Reverting changes");
+            samsaraPage = loginPage.adminLogIn();
 
             if (hero1Created || hero2Created || hero3Created) {
                 Log.info("----- Deleting created hero(es)");
-                samsaraPage = loginPage.adminLogIn();
                 heroesPage = samsaraPage.navigateToHeroesPage();
                 if (hero1Created) {
-                    Log.debug("Deleting " + hero1Name + "...");
+                    Log.info("Deleting " + hero1Name + "...");
                     heroesPage.deleteHero(hero1Name);
-                    Log.debug("Hero " + hero1Name + " has been deleted!");
+                    Log.info("Hero " + hero1Name + " has been deleted!");
                 }
                 if (hero2Created) {
-                    Log.debug("Deleting " + hero2Name + "...");
+                    Log.info("Deleting " + hero2Name + "...");
                     heroesPage.deleteHero(hero2Name);
-                    Log.debug("Hero " + hero2Name + " has been deleted!");
+                    Log.info("Hero " + hero2Name + " has been deleted!");
                 }
                 if (hero3Created) {
-                    Log.debug("Deleting " + hero3Name + "...");
+                    Log.info("Deleting " + hero3Name + "...");
                     heroesPage.deleteHero(hero3Name);
-                    Log.debug("Hero " + hero3Name + " has been deleted!");
+                    Log.info("Hero " + hero3Name + " has been deleted!");
                 }
                 loginPage.logOut();
             }
 
             if (user1Created || user2Created) {
                 Log.info("----- Deleting created user(s)");
-                samsaraPage = loginPage.adminLogIn();
                 usersPage = samsaraPage.navigateToUsersPage();
                 if (user1Created) {
-                    Log.debug("Deleting " + username1 + "...");
+                    Log.info("Deleting " + username1 + "...");
                     usersPage.deleteUser(username1);
-                    Log.debug("User " + username1 + " has been deleted!");
+                    Log.info("User " + username1 + " has been deleted!");
                 }
                 if (user2Created) {
-                    Log.debug("Deleting " + username2 + "...");
+                    Log.info("Deleting " + username2 + "...");
                     usersPage.deleteUser(username2);
-                    Log.debug("User " + username2 + " has been deleted!");
+                    Log.info("User " + username2 + " has been deleted!");
                 }
                 loginPage.logOut();
                 Log.info("========================");
             }
         }
 
-        if (loginPage != null)
-            loginPage.quitWebDriver();
-
-        Log.endTest("That's all, folks! ");
+        if (loginSuccessful)
+            loginSuccessful = false;
     }
 }

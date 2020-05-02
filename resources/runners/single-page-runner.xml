@@ -16,7 +16,7 @@
 <suite name="Single Page runner">
     <test name="SPR">
         <classes>
-            <class name="com.red.testframework.tests.TestSamsaraPage"/>
+            <class name="com.red.testframework.tests.SamsaraUITests"/>
         </classes>
     </test>
 </suite>

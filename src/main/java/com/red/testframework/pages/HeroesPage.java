@@ -20,7 +20,7 @@ public class HeroesPage extends BasePage {
     private WebElement addNewHeroButton;
     @FindBy(id = "search")
     private WebElement searchInput;
-    @FindBy(xpath = "//a[contains(text(),'→')]")
+    @FindBy(xpath = "//li[8]//a[1]") // Unpopular strategy, but due to font formatting, using this relative path as a locator
     private WebElement nextPageSearchArrow;
     @FindBy(xpath = "//div[@class='panel-title text-center']")
     private WebElement panelTitle;
@@ -28,7 +28,7 @@ public class HeroesPage extends BasePage {
     //Popup locators
     @FindBy(id = "name")
     private WebElement nameInput;
-    @FindBy(name = "level")
+    @FindBy(id = "level")
     private WebElement levelInput;
     @FindBy(id = "type")
     private WebElement classDropdownMenu;
@@ -54,14 +54,13 @@ public class HeroesPage extends BasePage {
 
     public void addHero(String heroName, String level, String heroClass) {
 
-        Log.debug("Creating hero:\nName: " + heroName + "\nLevel: " + levelInput + "\nClass: " + heroClass);
+        Log.info("Creating hero:\nName: " + heroName + "\nLevel: " + level + "\nClass: " + heroClass);
         clickOnNewHeroButton();
         fillInInputField(nameInput, heroName);
-        System.out.println(level);
         fillInInputField(levelInput, level);
         selectHeroClass(heroClass);
         clickOnElement(addHeroSaveButton);
-        Log.debug("Created hero:\nName: " + heroName + "\nLevel: " + levelInput + "\nClass: " + heroClass);
+        Log.info("Created hero:\nName: " + heroName + "\nLevel: " + level + "\nClass: " + heroClass);
     }
 
     private void selectHeroClass(String heroClass) {
@@ -71,13 +70,13 @@ public class HeroesPage extends BasePage {
 
     public HeroesPage editHero(String heroName, String level, String heroClass) {
 
-        Log.debug("Editing hero:\nName: " + heroName);
+        Log.info("Editing hero:\nName: " + heroName);
         if (isHeroDisplayed(heroName)) {
             clickOnElement(driver.findElement(By.xpath("//td[@title='" + heroName + "']/following-sibling::td//span[contains(@class,'pencil')]")));
             fillInInputField(levelInput, level);
             selectHeroClass(heroClass);
             clickOnElement(editHeroSaveButton);
-            Log.debug("Edited hero:\nName: " + heroName + "\nLevel: " + levelInput + "\nClass: " + heroClass);
+            Log.info("Edited hero:\nName: " + heroName + "\nLevel: " + level + "\nClass: " + heroClass);
         } else
             Log.info("Hero not found!");
         return new HeroesPage(driver);
@@ -85,19 +84,19 @@ public class HeroesPage extends BasePage {
     }
 
     public HeroesPage deleteHero(String heroName) {
-        Log.debug("Deleting hero " + heroName + "...");
+        Log.info("Deleting hero " + heroName + "...");
         //fillInInputFieldAndPressEnter(searchInput, heroName); Commented out due to issue with search
         if (isHeroDisplayed(heroName)) {
             clickOnElement(driver.findElement(By.xpath("//td[@title='" + heroName + "']/following-sibling::td//span[contains(@class,'trash')]")));
             clickOnElement(deleteButton);
-            Log.debug("Hero " + heroName + " has been deleted!");
+            Log.info("Hero " + heroName + " has been deleted!");
         } else
             Log.info("Hero not found!");
         return new HeroesPage(driver);
     }
 
     public boolean isHeroDisplayed(String heroName) {
-        Log.debug("Checking if hero " + heroName + " is displayed...");
+        Log.info("Checking if hero " + heroName + " is displayed...");
         boolean isHeroDisplayed = false;
         List<WebElement> heroesList = driver.findElements(By.xpath("//td[@title='" + heroName + "']"));
 
@@ -117,9 +116,10 @@ public class HeroesPage extends BasePage {
 
 
     private boolean verifyNextPageButtonIsClickable() {
-        List<WebElement> elements = driver.findElements(By.xpath("//a[contains(text(),'→')]"));
-        List<WebElement> elements1 = driver.findElements(By.xpath("//li[@class='disabled']//a[contains(text(),'→')]"));
-
+        String visibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li:nth-child(8) > a.pageLink";
+        String notVisibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li.disabled:nth-child(8) > a.pageLink";
+        List<WebElement> elements = driver.findElements(By.cssSelector(visibleArrowCssSelector));
+        List<WebElement> elements1 = driver.findElements(By.cssSelector(notVisibleArrowCssSelector));
         boolean isNextPageButtonClickable = false;
         if (elements.size() != 0 && elements1.size()==0) {
                 isNextPageButtonClickable = true;
