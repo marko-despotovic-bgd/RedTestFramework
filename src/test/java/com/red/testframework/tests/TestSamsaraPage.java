@@ -19,7 +19,7 @@ public class TestSamsaraPage extends BaseTest {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
         samsaraPage = loginPage.adminLogIn();
-        samsaraPage.verifySamsaraPageTitleIsDisplayed();
+        samsaraPage.isSamsaraPageTitleDisplayed();
     }
 
     // Verify "Start Testing!" button is displayed
@@ -27,7 +27,7 @@ public class TestSamsaraPage extends BaseTest {
     public void verifyStartTestingButtonIsDisplayed() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        samsaraPage.verifyStartTestingButtonIsDisplayed();
+        samsaraPage.isStartTestingButtonDisplayed();
     }
 
     // Verify "Share with friends!" button is displayed
@@ -35,7 +35,7 @@ public class TestSamsaraPage extends BaseTest {
     public void verifyShareWithFriendsButtonIsDisplayed() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        samsaraPage.verifyShareWithFriendsButtonIsDisplayed();
+        samsaraPage.isShareWithFriendsButtonDisplayed();
     }
 
     @AfterMethod(alwaysRun = true)
