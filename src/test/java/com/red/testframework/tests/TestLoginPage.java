@@ -17,8 +17,8 @@ public class TestLoginPage extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert loginPage.verifyLoginPageTitleIsDisplayed() : "Login Page title is not displayed";
-        assert loginPage.verifyLogInButtonIsDisplayed() : "Log In button is not displayed";
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
+        assert loginPage.isLogInButtonDisplayed() : "Log In button is not displayed";
     }
 
     // Verify admin login

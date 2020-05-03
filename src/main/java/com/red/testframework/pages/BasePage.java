@@ -25,6 +25,7 @@ public class BasePage {
         this.driver = driver;
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
+        driver.manage().window().maximize();
     }
 
     public void fillInInputField(WebElement element, String value) {

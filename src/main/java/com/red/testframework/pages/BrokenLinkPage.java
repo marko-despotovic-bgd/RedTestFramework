@@ -1,26 +1,25 @@
 package com.red.testframework.pages;
 
-import com.red.testframework.utils.Log;
 import com.red.testframework.utils.Constants;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class BrokenLinkPage extends BasePage {
-
-    private static Logger log = LoggerFactory.getLogger(LoginPage.class);
 
     // Constructor
     public BrokenLinkPage(WebDriver driver) {
         super(driver);
-        log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
     }
 
-    public boolean verifyBrokenLinkPageIsDisplayed() {
-        return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.BROKEN_LINK_PAGE_PANEL_TITLE);
+    public boolean isBrokenLinkPageTitleDisplayed() {
+        log.info("Executing..... " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        boolean isDisplayed = verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.BROKEN_LINK_PAGE_PANEL_TITLE);
+        log.info("Broken link page title is displayed: " + isDisplayed);
+        log.info("Successfully executed " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        return /*! <- Testing purpose*/verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.BROKEN_LINK_PAGE_PANEL_TITLE);
     }
-
 }

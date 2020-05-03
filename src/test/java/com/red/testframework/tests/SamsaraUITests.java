@@ -22,15 +22,14 @@
 
 package com.red.testframework.tests;
 
-import com.red.testframework.pages.HeroesPage;
-import com.red.testframework.pages.SamsaraPage;
-import com.red.testframework.pages.UsersPage;
+import com.red.testframework.pages.*;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -40,8 +39,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SamsaraUITests extends BaseTest {
 
     private SamsaraPage samsaraPage;
+    private HomePage homePage;
     private UsersPage usersPage;
     private HeroesPage heroesPage;
+    private GalleryPage galleryPage;
+    private ApiPage apiPage;
+    private BrokenLinkPage brokenLinkPage;
+    private AdminPage adminPage;
 
     String timestamp = new SimpleDateFormat("HHmmss").format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
 
@@ -71,7 +75,7 @@ public class SamsaraUITests extends BaseTest {
             user1Created, user2Created, user3Created, user4Created = false;
 
     @Test(groups = {Constants.HIGH})
-    public void userCreateNewHeroTest() {
+    public void testCreateNewHeroAsUser() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
@@ -84,15 +88,15 @@ public class SamsaraUITests extends BaseTest {
         loginPage.logOut();
     }
 
-    @Test(groups = {Constants.MEDIUM})
-    public void editExistingOwnHeroTest() {
+    @Test(groups = {Constants.HIGH})
+    public void testEditExistingOwnHero() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
         samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
         loginSuccessful = true;
         heroesPage = samsaraPage.navigateToHeroesPage();
-        Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed());
+        assert heroesPage.isHeroesPageTitleDisplayed();
         heroesPage.addHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
         heroesPage.editHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Revenant");
         Assert.assertTrue(heroesPage.isHeroDisplayed(hero2Name)); // This is the goal of the test
@@ -101,7 +105,7 @@ public class SamsaraUITests extends BaseTest {
     }
 
     @Test(groups = {Constants.MEDIUM})
-    public void deleteOwnHeroTest() {
+    public void testDeleteOwnHero() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
@@ -119,7 +123,7 @@ public class SamsaraUITests extends BaseTest {
     }
 
 //    @Test(dependsOnMethods = "userCreateNewHeroTest")
-//    public void cantDeleteNotOwnHeroTest() {
+//    public void testUserCannotDeleteNotOwnHero() {
 //        Log.startTest(new Object() {
 //        }.getClass().getEnclosingMethod().getName());
 //        samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
@@ -128,8 +132,15 @@ public class SamsaraUITests extends BaseTest {
 //        hero1Created = true;
 //    }
 
+//   @Test(groups = {Constants.MEDIUM})
+//   public void testShowMyHeroesOnlyButton() {
+//}
+//   @Test(groups = {Constants.MEDIUM})
+//   public void testLastAddedHeroesButton() {
+//}
+
     @Test(groups = {Constants.HIGH})
-    public void createUserAsAdminTest() {
+    public void testCreateUserAsAdmin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
@@ -143,7 +154,7 @@ public class SamsaraUITests extends BaseTest {
     }
 
     @Test(groups = {Constants.HIGH})
-    public void editUserAsAdminTest() {
+    public void testEditUserAsAdmin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
@@ -161,7 +172,7 @@ public class SamsaraUITests extends BaseTest {
     }
 
     @Test(groups = {Constants.HIGH})
-    public void deleteUserAsAdmin() {
+    public void testDeleteUserAsAdmin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
@@ -179,120 +190,50 @@ public class SamsaraUITests extends BaseTest {
         loginPage.logOut();
     }
 
-////    @Test(description = "8. Verify \"Show my heroes only\" button is working as per design")
-////    public void showMyHeroesOnly() {
-////        loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-////        loginSuccessful = true;
-////        hero1Created = true;
-////
-////    }
-//
-////    @Test(description = "9. Verify newly added user is displayed on \"Last added users\" list")
-////    public void lastAddedUsers() {
-////        loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-////        loginSuccessful = true;
-////        user1Created = true;
-////
-////    }
-//
-////    @Test(description = "10. Verify newly added hero is displayed on \"Last added heroes\" list")
-////    public void lastAddedHeroes() {
-////        loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-////        loginSuccessful = true;
-////        hero1Created = true;
-////
-////    }
-//
-////    @Test(description = "11. Verify user does not have access to admin section")
-////    public void restrictedUserAccess() {
-////        loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-////        loginSuccessful = true;
-////        user1Created = true;
-////
-////    }
-//
-////    @Test(description = "12. Verify admin has access to admin section")
-////    public void permittedAdminAccess() {
-////        loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-////
-////        loginSuccessful = true;
-////        user1Created = true;
-////
-////    }
-//
-////    @Test(description = "13. Verify admin can recreate registration key")
-////    public void recreateRegistrationKey() {
-////        loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-////
-////        loginSuccessful = true;
-////        user1Created = true;
-////    }
+    //   @Test(groups = {Constants.MEDIUM})
+//   public void testLastAddedUsersButton() {
+//}
 
-    /**
-     * @Test(groups = {"P0"})
-     * public void samsaraPageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * Assert.assertTrue(samsaraPage.verifySamsaraPageIsDisplayed(),"Samsara page is not displayed!");
-     * }
-     * @Test(groups = {"P0"})
-     * public void homePageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * homePage = samsaraPage.navigateToHomePage();
-     * Assert.assertTrue(homePage.verifyHomePageIsDisplayed(),"Home page is not displayed!");
-     * }
-     * @Test(groups = {"P0"})
-     * public void UsersPageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * usersPage = samsaraPage.navigateToUsersPage();
-     * Assert.assertTrue(usersPage.verifyUsersPageIsDisplayed(),"Users page is not displayed!");
-     * }
-     * @Test(groups = {"P0"})
-     * public void HeroesPageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * heroesPage = samsaraPage.navigateToHeroesPage();
-     * Assert.assertTrue(heroesPage.verifyHeroesPageIsDisplayed(),"Heroes page is not displayed!");
-     * }
-     * @Test(groups = {"P0"})
-     * public void GalleryPageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * galleryPage = samsaraPage.navigateToGalleryPage();
-     * Assert.assertTrue(galleryPage.verifyGalleryPageIsDisplayed(),"Gallery page is not displayed!");
-     * }
-     * @Test(groups = {"P0"})
-     * public void ApiPageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * apiPage = samsaraPage.navigateToApiPage();
-     * Assert.assertTrue(apiPage.verifyApiPageIsDisplayed(),"Api page is not displayed!");
-     * }
-     * @Test(groups = {"P0"})
-     * public void BrokenLinkPageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * brokenLinkPage = samsaraPage.navigateToBrokenLinkPage();
-     * Assert.assertTrue(brokenLinkPage.verifyBrokenLinkPageIsDisplayed(),"Broken Link page is not displayed!");
-     * }
-     * @Test(groups = {"P0"})
-     * public void AdminPageCheck() {
-     * loginSuccessful = false;
-     * samsaraPage = loginPage.login(testConfiguration.getUsername(), testConfiguration.getPassword());
-     * loginSuccessful = true;
-     * adminPage = samsaraPage.navigateToAdminPage();
-     * Assert.assertTrue(adminPage.verifyAdminPageIsDisplayed(),"Admin page is not displayed!");
-     * }
-     **/
+    //   @Test(groups = {Constants.CRITICAL})
+//   public void testUserCannotAccessAdminSection() {
+//}
+
+    //   @Test(groups = {Constants.CRITICAL})
+//   public void testAdminCanAccessAdminSection() {
+//}
+
+    //   @Test(groups = {Constants.CRITICAL})
+//   public void testAdminCanRecreateRegistrationKey() {
+//}
+
+
+    @Test(groups = {Constants.SANITY})
+    public void samsaraPagesCheck() {
+        Log.startTest(new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        samsaraPage = loginPage.adminLogIn();
+        loginSuccessful = true;
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(samsaraPage.isSamsaraPageTitleDisplayed(), "Samsara page is not displayed!");
+        homePage = samsaraPage.navigateToHomePage();
+        softAssert.assertTrue(homePage.isHomePageTitleDisplayed(), "Home page is not displayed!");
+        usersPage = samsaraPage.navigateToUsersPage();
+        softAssert.assertTrue(usersPage.isUsersPageTitleDisplayed(), "Users page is not displayed!");
+        heroesPage = samsaraPage.navigateToHeroesPage();
+        softAssert.assertTrue(/*! <- Soft assert testing purpose*/heroesPage.isHeroesPageTitleDisplayed(), "Heroes page is not displayed!");
+        galleryPage = samsaraPage.navigateToGalleryPage();
+        softAssert.assertTrue(galleryPage.isGalleryPageTitleDisplayed(), "Gallery page is not displayed!");
+        apiPage = samsaraPage.navigateToApiPage();
+        softAssert.assertTrue(apiPage.isApiPageTitleDisplayed(), "Api page is not displayed!");
+        brokenLinkPage = samsaraPage.navigateToBrokenLinkPage();
+        softAssert.assertTrue(brokenLinkPage.isBrokenLinkPageTitleDisplayed(), "Broken link page is not displayed!");
+        samsaraPage.clickSamsaraBrandLink();
+        adminPage = samsaraPage.navigateToAdminPage();
+        softAssert.assertTrue(adminPage.isAdminPageTitleDisplayed(), "Admin page is not displayed!");
+        softAssert.assertAll();
+        loginPage.logOut();
+    }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
@@ -302,6 +243,8 @@ public class SamsaraUITests extends BaseTest {
         if (result.getStatus() == ITestResult.FAILURE) {
             ScreenshotUtil.makeScreenshot(result);
         }
+        if(!loginPage.isLoginPageTitleDisplayed())
+            loginPage.logOut();
 
         if (hero1Created || hero2Created || hero3Created || hero4Created || hero5Created || user1Created || user2Created || user3Created || user4Created) {
             Log.info("=========== Reverting changes");
@@ -335,6 +278,7 @@ public class SamsaraUITests extends BaseTest {
                     heroesPage.deleteHero(hero5Name);
                     Log.info("Hero " + hero5Name + " has been deleted!");
                 }
+                loginPage.logOut();
             }
 
             if (user1Created || user2Created || user3Created || user4Created) {
@@ -356,9 +300,9 @@ public class SamsaraUITests extends BaseTest {
                     Log.info("User " + username3 + " has been deleted!");
                 }
                 Log.info("========================");
+                loginPage.logOut();
             }
         }
-        loginPage.logOut();
 
         if (loginSuccessful)
             loginSuccessful = false;
