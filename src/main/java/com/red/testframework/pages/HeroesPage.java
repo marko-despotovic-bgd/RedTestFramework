@@ -67,7 +67,7 @@ public class HeroesPage extends BasePage {
     private void clickOnNewHeroButton() {
         log.info("Executing..... " + new Object() {
         }.getClass().getEnclosingMethod().getName());
-        assert isNewHeroButtonDisplayed(): "New Hero button is not displayed!";;
+        assert isNewHeroButtonDisplayed(): "New Hero button is not displayed!";
         clickOnElement(addNewHeroButton);
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -144,9 +144,8 @@ public class HeroesPage extends BasePage {
                 break;
             } else {
                 nextPageSearchArrow.click();
+                heroesList = driver.findElements(By.xpath("//td[@title='" + heroName + "']"));
             }
-            heroesList = driver.findElements(By.xpath("//td[@title='" + heroName + "']"));
-
         } while (isNextPageButtonClickable());
         log.info("Is hero displayed: " + isHeroDisplayed);
         log.info("Successfully executed " + new Object() {
@@ -161,15 +160,10 @@ public class HeroesPage extends BasePage {
         String notVisibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li.disabled:nth-child(8) > a.pageLink";
         List<WebElement> elements = driver.findElements(By.cssSelector(visibleArrowCssSelector));
         List<WebElement> elements1 = driver.findElements(By.cssSelector(notVisibleArrowCssSelector));
-        boolean isNextPageButtonClickable = false;
-        if (elements.size() != 0) {
-            isNextPageButtonClickable = true;
-        } else if (elements1.size() != 0)
-            return false;
-        log.info("Next page button is clickable ");
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
-        return isNextPageButtonClickable;
+        log.info("New page button is clickable: " + (elements.size() != 0  && elements1.size()==0));
+        return elements.size() != 0  && elements1.size()==0;
     }
 
 }

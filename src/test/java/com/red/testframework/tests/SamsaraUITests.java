@@ -26,6 +26,7 @@ import com.red.testframework.pages.*;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
+import org.jetbrains.annotations.NotNull;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -79,46 +80,59 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
-        loginSuccessful = true;
+        assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
+        loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         heroesPage = samsaraPage.navigateToHeroesPage();
+        assert heroesPage.isHeroesPageTitleDisplayed() : "Hero is not created";
         heroesPage.addHero(hero1Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
         hero1Created = heroesPage.isHeroDisplayed(hero1Name); // If hero is found in the list(s), this will set flag to true
-        Assert.assertTrue(hero1Created); // This is the goal of the test
+        assert hero1Created : "User was not able to create a hero!"; // This is the goal of the test
         loginPage.logOut();
     }
 
     @Test(groups = {Constants.HIGH})
-    public void testEditExistingOwnHero() {
+    public void testEditExistingOwnHeroAsUser() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed();
         samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
-        loginSuccessful = true;
+        assert samsaraPage.isSamsaraPageTitleDisplayed();
+        loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         heroesPage = samsaraPage.navigateToHeroesPage();
-        assert heroesPage.isHeroesPageTitleDisplayed();
+        assert heroesPage.isHeroesPageTitleDisplayed() : "Hero page is not displayed!";
         heroesPage.addHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
+        hero2Created = heroesPage.isHeroDisplayed(hero2Name);
+        assert hero2Created : "User was not able to create hero!";
+        ; // If hero is found in the list(s), this will set flag to true
         heroesPage.editHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Revenant");
-        Assert.assertTrue(heroesPage.isHeroDisplayed(hero2Name)); // This is the goal of the test
-        hero2Created = heroesPage.isHeroDisplayed(hero2Name); // If hero is found in the list(s), this will set flag to true
+        hero2Created = heroesPage.isHeroDisplayed(hero2Name); // This is the goal of the test
+        assert hero2Created : "User was not able to edit own hero!";
+        ; // If hero is found in the list(s), this will set flag to true
         loginPage.logOut();
     }
 
     @Test(groups = {Constants.MEDIUM})
-    public void testDeleteOwnHero() {
+    public void testDeleteOwnHeroAsUser() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed();
         samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
-        loginSuccessful = true;
+        assert samsaraPage.isSamsaraPageTitleDisplayed();
+        loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         heroesPage = samsaraPage.navigateToHeroesPage();
-        heroesPage.addHero(hero3Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Ranger"); // Creating hero
-        Assert.assertTrue(heroesPage.isHeroDisplayed(hero3Name)); // Verifying created hero is in the list
+        assert heroesPage.isHeroesPageTitleDisplayed() : "Hero page is not displayed!";
+        heroesPage.addHero(hero3Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
+        hero3Created = heroesPage.isHeroDisplayed(hero3Name);
+        assert hero3Created : "User was not able to create hero!";
+        ; // If hero is found in the list(s), this will set flag to true
         heroesPage.deleteHero(hero3Name); // Deleting hero
-        Assert.assertFalse(heroesPage.isHeroDisplayed(hero3Name)); // This is the goal of the test,
-        // verifying that previously created, then deleted hero is no longer in the list(s)
         hero3Created = heroesPage.isHeroDisplayed(hero3Name); // If hero is found in the list(s), this will set flag to false
-        loginSuccessful = true;
+        assert !hero3Created; // This is the goal of the test,
+        // verifying that previously created, then deleted hero is no longer in the list(s)
         loginPage.logOut();
     }
 
@@ -139,17 +153,20 @@ public class SamsaraUITests extends BaseTest {
 //   public void testLastAddedHeroesButton() {
 //}
 
-    @Test(groups = {Constants.HIGH})
+    @Test(groups = {Constants.CRITICAL})
     public void testCreateUserAsAdmin() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.adminLogIn();
-        loginSuccessful = true;
+        assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
+        loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         usersPage = samsaraPage.navigateToUsersPage();
+        assert usersPage.isUsersPageTitleDisplayed() : "Users page is not displayed!";
         usersPage.addUser(username1, firstName, lastName, about, secretQuestion, secretAnswer, password, conirfmPassword); // Creating user
-        Assert.assertTrue(usersPage.isUserDisplayed(username1)); // This is the goal of the test
-        user1Created = usersPage.isUserDisplayed(username1); // If user is found in the list(s), this will set flag to true
+        user1Created = usersPage.isUserDisplayed(username1);
+        assert user1Created : "Admin was not able to create user!"; // This is the goal of the test
         loginPage.logOut();
     }
 
@@ -158,16 +175,18 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.adminLogIn();
-        loginSuccessful = true;
+        assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
+        loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         usersPage = samsaraPage.navigateToUsersPage();
+        assert usersPage.isUsersPageTitleDisplayed() : "Users page is not displayed!";
         usersPage.addUser(username2, firstName, lastName, about, secretQuestion, secretAnswer, password, conirfmPassword); // Creating user
-        Assert.assertTrue(usersPage.isUserDisplayed(username2)); // This is the goal of the test
-        user2Created = usersPage.isUserDisplayed(username2); // If user is found in the list(s), this will set flag to true
+        user2Created = usersPage.isUserDisplayed(username2);
+        assert user2Created : "Admin was not able to create user!"; // This is the goal of the test
         usersPage.editUser(username2, firstName + firstName, lastName, about + firstName); // Editing user created in previous step
-        Assert.assertTrue(usersPage.isUserDisplayed(username2)); // This is the goal of the test,
-        // verifying that edited user is in the list
-        user2Created = usersPage.isUserDisplayed(username2); // If user is found in the list(s), this will set flag to true
+        user2Created = usersPage.isUserDisplayed(username2);
+        assert user2Created : "Admin was not able to edit user!"; // This is the goal of the test
         loginPage.logOut();
     }
 
@@ -176,17 +195,18 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.adminLogIn();
-        loginSuccessful = true;
+        assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
+        loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         usersPage = samsaraPage.navigateToUsersPage();
-        usersPage.addUser(username3, "markko", "desspot", "aboout", "secretquestion", "secretanswer", password, conirfmPassword);
-        Assert.assertTrue(usersPage.isUserDisplayed(username3)); // Verifying user is created and in the list(s)
-        user3Created = usersPage.isUserDisplayed(username3); // If user is found in the list(s), this will set flag to true
+        assert usersPage.isUsersPageTitleDisplayed() : "Users page is not displayed!";
+        usersPage.addUser(username3, firstName, lastName, about, secretQuestion, secretAnswer, password, conirfmPassword); // Creating user
+        user3Created = usersPage.isUserDisplayed(username3);
+        assert user3Created : "Admin was not able to create user!"; // This is the goal of the test
         usersPage.deleteUser(username3); // Deleting user
-        Assert.assertFalse(usersPage.isUserDisplayed(username3)); // This is the goal of the test,
-        // verifying that deleted user is no longer in the list(s)
-        user3Created = usersPage.isUserDisplayed(username3); // If hero is found in the list(s), this will set flag to false
-        loginSuccessful = true;
+        user3Created = usersPage.isUserDisplayed(username3);
+        assert !user3Created;
         loginPage.logOut();
     }
 
@@ -213,7 +233,7 @@ public class SamsaraUITests extends BaseTest {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
         samsaraPage = loginPage.adminLogIn();
-        loginSuccessful = true;
+        loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(samsaraPage.isSamsaraPageTitleDisplayed(), "Samsara page is not displayed!");
         homePage = samsaraPage.navigateToHomePage();
@@ -236,14 +256,14 @@ public class SamsaraUITests extends BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDown(ITestResult result) {
+    public void tearDown(@NotNull ITestResult result) {
         // Cleaning after all test have been executed, regardless of outcome
         Log.endTest(new Object() {
         }.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
         if (result.getStatus() == ITestResult.FAILURE) {
             ScreenshotUtil.makeScreenshot(result);
         }
-        if(!loginPage.isLoginPageTitleDisplayed())
+        if (!loginPage.isLoginPageTitleDisplayed())
             loginPage.logOut();
 
         if (hero1Created || hero2Created || hero3Created || hero4Created || hero5Created || user1Created || user2Created || user3Created || user4Created) {
@@ -251,58 +271,72 @@ public class SamsaraUITests extends BaseTest {
             samsaraPage = loginPage.adminLogIn();
 
             if (hero1Created || hero2Created || hero3Created || hero4Created || hero5Created) {
-                Log.info("----- Deleting created hero(es)");
+                Log.info("----- Deleting created hero(es) -----");
                 heroesPage = samsaraPage.navigateToHeroesPage();
                 if (hero1Created) {
                     Log.info("Deleting " + hero1Name + "...");
                     heroesPage.deleteHero(hero1Name);
+                    assert !heroesPage.isHeroDisplayed(hero1Name);
                     Log.info("Hero " + hero1Name + " has been deleted!");
                 }
                 if (hero2Created) {
                     Log.info("Deleting " + hero2Name + "...");
                     heroesPage.deleteHero(hero2Name);
+                    assert !heroesPage.isHeroDisplayed(hero2Name);
                     Log.info("Hero " + hero2Name + " has been deleted!");
                 }
                 if (hero3Created) {
                     Log.info("Deleting " + hero3Name + "...");
                     heroesPage.deleteHero(hero3Name);
+                    assert !heroesPage.isHeroDisplayed(hero3Name);
                     Log.info("Hero " + hero3Name + " has been deleted!");
                 }
                 if (hero4Created) {
                     Log.info("Deleting " + hero4Name + "...");
                     heroesPage.deleteHero(hero4Name);
+                    assert !heroesPage.isHeroDisplayed(hero4Name);
                     Log.info("Hero " + hero4Name + " has been deleted!");
                 }
                 if (hero5Created) {
                     Log.info("Deleting " + hero5Name + "...");
                     heroesPage.deleteHero(hero5Name);
+                    assert !heroesPage.isHeroDisplayed(hero5Name);
                     Log.info("Hero " + hero5Name + " has been deleted!");
                 }
-                loginPage.logOut();
             }
 
             if (user1Created || user2Created || user3Created || user4Created) {
-                Log.info("----- Deleting created user(s)");
+                Log.info("----- Deleting created user(s) -----");
                 usersPage = samsaraPage.navigateToUsersPage();
                 if (user1Created) {
                     Log.info("Deleting " + username1 + "...");
                     usersPage.deleteUser(username1);
+                    assert !usersPage.isUserDisplayed(username1);
                     Log.info("User " + username1 + " has been deleted!");
                 }
                 if (user2Created) {
                     Log.info("Deleting " + username2 + "...");
                     usersPage.deleteUser(username2);
+                    assert !usersPage.isUserDisplayed(username2);
                     Log.info("User " + username2 + " has been deleted!");
                 }
                 if (user3Created) {
                     Log.info("Deleting " + username3 + "...");
                     usersPage.deleteUser(username3);
+                    assert !usersPage.isUserDisplayed(username3);
                     Log.info("User " + username3 + " has been deleted!");
                 }
+                if (user4Created) {
+                    Log.info("Deleting " + username4 + "...");
+                    usersPage.deleteUser(username4);
+                    assert !usersPage.isUserDisplayed(username4);
+                    Log.info("User " + username4 + " has been deleted!");
+                }
                 Log.info("========================");
-                loginPage.logOut();
             }
         }
+        if (!loginPage.isLoginPageTitleDisplayed())
+            loginPage.logOut();
 
         if (loginSuccessful)
             loginSuccessful = false;

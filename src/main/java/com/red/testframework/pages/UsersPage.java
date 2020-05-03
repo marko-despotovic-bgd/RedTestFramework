@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 
 import java.util.List;
 
@@ -130,37 +129,31 @@ public class UsersPage extends BasePage {
         List<WebElement> usersList = driver.findElements(By.xpath("//td[@title='" + username + "']"));
 
         do {
-
             if (!usersList.isEmpty()) {
                 isUserDisplayed = true;
                 break;
             } else {
                 nextPageSearchArrow.click();
+                usersList = driver.findElements(By.xpath("//td[@title='" + username + "']"));
             }
-            usersList = driver.findElements(By.xpath("//td[@title='" + username + "']"));
-
-        } while (isNextPageButtonIsClickable());
+        } while (isNextPageButtonClickable());
         log.info("User is displayed: " + isUserDisplayed);
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
         return isUserDisplayed;
     }
 
-    private boolean isNextPageButtonIsClickable() {
+    private boolean isNextPageButtonClickable() {
         log.info("Executing..... " + new Object() {
         }.getClass().getEnclosingMethod().getName());
         String visibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li:nth-child(8) > a.pageLink";
         String notVisibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li.disabled:nth-child(8) > a.pageLink";
         List<WebElement> elements = driver.findElements(By.cssSelector(visibleArrowCssSelector));
         List<WebElement> elements1 = driver.findElements(By.cssSelector(notVisibleArrowCssSelector));
-        boolean isNextPageButtonClickable = false;
-        if (elements.isEmpty() && elements1.isEmpty()) {
-            return false;
-        } else if(!elements1.isEmpty())
-            return false;
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
-        return isNextPageButtonClickable;
+        log.info("New page button is clickable: " + (elements.size() != 0  && elements1.size()==0));
+        return elements.size() != 0  && elements1.size()==0;
     }
 
     public void deleteUser(String userName) {
