@@ -17,8 +17,8 @@ public class TestLoginPage extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        loginPage.verifyLoginPageTitleIsDisplayed();
-        loginPage.verifyLogInButtonIsDisplayed();
+        assert loginPage.verifyLoginPageTitleIsDisplayed() : "Login Page title is not displayed";
+        assert loginPage.verifyLogInButtonIsDisplayed() : "Log In button is not displayed";
     }
 
     // Verify admin login
@@ -36,7 +36,7 @@ public class TestLoginPage extends BaseTest {
     public void testSuccessfulUserLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.logIn(utils.getProperty("user.username"),utils.getProperty("password")); // This method itself is checking if Samsara page is opened
+        loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password")); // This method itself is checking if Samsara page is opened
         loginSuccessful = true;
     }
 
@@ -93,7 +93,7 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginIncorrectUsernameCorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username")+utils.getProperty("user.username"), "");
+        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username") + utils.getProperty("user.username"), "");
     }
 
     // Test Invalid Credentials with correct username and 256 characters long password
@@ -101,7 +101,7 @@ public class TestLoginPage extends BaseTest {
     public void testUnsuccessfulLoginCorrectUsernameLongPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        String randomString = RandomStringUtils.random(256,true,true);
+        String randomString = RandomStringUtils.random(256, true, true);
         loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username"), randomString);
     }
 
@@ -113,7 +113,7 @@ public class TestLoginPage extends BaseTest {
         loginPage = loginPage.logInWithInvalidCredentials(username, password);
     }
 
-    @DataProvider(name="UnsuccessfulLoginInputMatrix")
+    @DataProvider(name = "UnsuccessfulLoginInputMatrix")
     public Object[][] getDataFromDataProvider() {
         return new Object[][]
                 {
@@ -124,9 +124,10 @@ public class TestLoginPage extends BaseTest {
                         {"hacker", ""},
                         {"mr.robot", "drowssap"},
                         {"neo", utils.getProperty("password")},
-                        {utils.getProperty("user.username"), RandomStringUtils.random(256,true,true)},
+                        {utils.getProperty("user.username"), RandomStringUtils.random(256, true, true)},
                 };
     }
+
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
         Log.endTest(new Object() {

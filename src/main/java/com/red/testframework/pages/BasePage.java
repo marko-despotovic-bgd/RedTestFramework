@@ -76,38 +76,6 @@ public class BasePage {
         }
     }
 
-    public void wait(int timeoutInSeconds) {
-        try {
-            Thread.sleep(timeoutInSeconds * 1000);
-            Log.debug("Waiting for " + timeoutInSeconds + " seconds");
-        } catch (InterruptedException e) {
-            Log.error("Error" + e.getMessage() + ";\nStack trace: " + Arrays.toString(e.getStackTrace()));
-        }
-    }
-
-    public List<WebElement> findDisplayedElements(By locator) {
-        List<WebElement> allElements = driver.findElements(locator);
-        List<WebElement> displayedElements = new ArrayList<>();
-        for (WebElement element : allElements) {
-            if (element.isDisplayed()) {
-                displayedElements.add(element);
-            }
-        }
-        return displayedElements;
-    }
-
-    private List<WebElement> findDisplayedElements(WebElement rootElement, By locator) {
-        List<WebElement> allElements = rootElement.findElements(locator);
-        List<WebElement> displayedElements = new ArrayList<>();
-        for (WebElement element : allElements) {
-            if (element.isDisplayed()) {
-                displayedElements.add(element);
-            }
-        }
-        return displayedElements;
-    }
-
-
     public boolean isDisplayed(WebElement element) {
         waitUntilElementIsVisible(element);
         return element.isDisplayed();
@@ -116,7 +84,7 @@ public class BasePage {
     public boolean isDisplayed(String elementXpath) {
         try {
             List<WebElement> elements = driver.findElements(By.xpath(elementXpath));
-            return elements.size() != 0;
+            return elements != null && elements.size()>0;
         } catch (NoSuchElementException NSEex) {
             Log.error("Error" + NSEex.getMessage() + ";\nStack trace: " + Arrays.toString(NSEex.getStackTrace()));
             return false;
@@ -125,10 +93,10 @@ public class BasePage {
 
     public boolean verifyPageIsDisplayed(By by, String identifyingElementText) {
         List<WebElement> elements = driver.findElements(by);
-        if (elements.size() != 0)
+        if (elements != null && elements.size()>0)
             return getElementText(elements.get(0)).equals(identifyingElementText);
         else
-            Log.error("Page element not found, page is changed or not displayed!");
+            Log.error("Page element not found. Page has changed or is not displayed!");
         return false;
     }
 
@@ -140,32 +108,6 @@ public class BasePage {
         }
         Log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
-    }
-
-    private List<WebElement> findElementsWithMatchingText(String text) {
-        String xpathExpression = "//*[contains(text(), '" + text + "')]";
-        List<WebElement> allElements = findDisplayedElements(By.xpath(xpathExpression));
-        List<WebElement> matchingElements = new ArrayList<>();
-        for (WebElement element : allElements) {
-            String elementText = getElementText(element);
-            if (text.equalsIgnoreCase(elementText)) {
-                matchingElements.add(element);
-            }
-        }
-        return matchingElements;
-    }
-
-    private List<WebElement> findElementsWithMatchingText(WebElement rootElement, String text) {
-        String xpathExpression = "//*[contains(text(), '" + text + "')]";
-        List<WebElement> allElements = findDisplayedElements(rootElement, By.xpath(xpathExpression));
-        List<WebElement> matchingElements = new ArrayList<>();
-        for (WebElement element : allElements) {
-            String elementText = getElementText(element);
-            if (text.equalsIgnoreCase(elementText)) {
-                matchingElements.add(element);
-            }
-        }
-        return matchingElements;
     }
 
     public void closeWebDriver() {

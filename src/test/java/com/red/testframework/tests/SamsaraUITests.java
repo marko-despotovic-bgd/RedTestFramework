@@ -81,6 +81,7 @@ public class SamsaraUITests extends BaseTest {
         heroesPage.addHero(hero1Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), heroClass); // Creating hero
         hero1Created = heroesPage.isHeroDisplayed(hero1Name); // If hero is found in the list(s), this will set flag to true
         Assert.assertTrue(hero1Created); // This is the goal of the test
+        loginPage.logOut();
     }
 
     @Test(groups = {Constants.MEDIUM})
@@ -96,6 +97,7 @@ public class SamsaraUITests extends BaseTest {
         heroesPage.editHero(hero2Name, Integer.toString(ThreadLocalRandom.current().nextInt(1, 80)), "Revenant");
         Assert.assertTrue(heroesPage.isHeroDisplayed(hero2Name)); // This is the goal of the test
         hero2Created = heroesPage.isHeroDisplayed(hero2Name); // If hero is found in the list(s), this will set flag to true
+        loginPage.logOut();
     }
 
     @Test(groups = {Constants.MEDIUM})
@@ -113,6 +115,7 @@ public class SamsaraUITests extends BaseTest {
         // verifying that previously created, then deleted hero is no longer in the list(s)
         hero3Created = heroesPage.isHeroDisplayed(hero3Name); // If hero is found in the list(s), this will set flag to false
         loginSuccessful = true;
+        loginPage.logOut();
     }
 
 //    @Test(dependsOnMethods = "userCreateNewHeroTest")
@@ -136,6 +139,7 @@ public class SamsaraUITests extends BaseTest {
         usersPage.addUser(username1, firstName, lastName, about, secretQuestion, secretAnswer, password, conirfmPassword); // Creating user
         Assert.assertTrue(usersPage.isUserDisplayed(username1)); // This is the goal of the test
         user1Created = usersPage.isUserDisplayed(username1); // If user is found in the list(s), this will set flag to true
+        loginPage.logOut();
     }
 
     @Test(groups = {Constants.HIGH})
@@ -153,6 +157,7 @@ public class SamsaraUITests extends BaseTest {
         Assert.assertTrue(usersPage.isUserDisplayed(username2)); // This is the goal of the test,
         // verifying that edited user is in the list
         user2Created = usersPage.isUserDisplayed(username2); // If user is found in the list(s), this will set flag to true
+        loginPage.logOut();
     }
 
     @Test(groups = {Constants.HIGH})
@@ -171,6 +176,7 @@ public class SamsaraUITests extends BaseTest {
         // verifying that deleted user is no longer in the list(s)
         user3Created = usersPage.isUserDisplayed(username3); // If hero is found in the list(s), this will set flag to false
         loginSuccessful = true;
+        loginPage.logOut();
     }
 
 ////    @Test(description = "8. Verify \"Show my heroes only\" button is working as per design")
@@ -296,12 +302,7 @@ public class SamsaraUITests extends BaseTest {
         if (result.getStatus() == ITestResult.FAILURE) {
             ScreenshotUtil.makeScreenshot(result);
         }
-        assert loginPage != null;
-        if (loginSuccessful) {
-            loginPage.logOut();
-            loginSuccessful = false;
-        }
-        loginPage.openSamsaraTrainingSite();
+
         if (hero1Created || hero2Created || hero3Created || hero4Created || hero5Created || user1Created || user2Created || user3Created || user4Created) {
             Log.info("=========== Reverting changes");
             samsaraPage = loginPage.adminLogIn();
@@ -334,7 +335,6 @@ public class SamsaraUITests extends BaseTest {
                     heroesPage.deleteHero(hero5Name);
                     Log.info("Hero " + hero5Name + " has been deleted!");
                 }
-                loginPage.logOut();
             }
 
             if (user1Created || user2Created || user3Created || user4Created) {
@@ -355,10 +355,10 @@ public class SamsaraUITests extends BaseTest {
                     usersPage.deleteUser(username3);
                     Log.info("User " + username3 + " has been deleted!");
                 }
-                loginPage.logOut();
                 Log.info("========================");
             }
         }
+        loginPage.logOut();
 
         if (loginSuccessful)
             loginSuccessful = false;

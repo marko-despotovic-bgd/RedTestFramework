@@ -37,6 +37,15 @@ public class LoginPage extends BasePage {
         driver.manage().window().maximize();
     }
 
+    public void openSamsaraTrainingSite() { // Use loginPageIsDisplayed for opening Samsara page
+        log.info("Executing ..." + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+        driver.get(utils.getProperty("app.url"));
+//        driver.get("http://google.com"); //<-- Testing purpose
+        log.info("Successfully executed " + new Object() {
+        }.getClass().getEnclosingMethod().getName());
+    }
+
     public SamsaraPage logIn(String username, String password) {
         log.info("Executing ..." + new Object() {
         }.getClass().getEnclosingMethod().getName());
@@ -98,28 +107,21 @@ public class LoginPage extends BasePage {
         }.getClass().getEnclosingMethod().getName());
     }
 
-    public void verifyLoginPageTitleIsDisplayed() {
+    public boolean verifyLoginPageTitleIsDisplayed() {
         log.info("Executing ..." + new Object() {
         }.getClass().getEnclosingMethod().getName());
         Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE), "Login page is not displayed!");
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
+        return /*! <- Testing purpose*/verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.LOGIN_PAGE_PANEL_TITLE);
     }
 
-    public void openSamsaraTrainingSite() { // Use loginPageIsDisplayed for opening Samsara page
-        log.info("Executing ..." + new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        driver.get(utils.getProperty("app.url"));
-//        driver.get("http://google.com"); //<-- Testing purpose
-        log.info("Successfully executed " + new Object() {
-        }.getClass().getEnclosingMethod().getName());
-    }
-
-    public void verifyLogInButtonIsDisplayed() {
+    public boolean verifyLogInButtonIsDisplayed() {
         log.info("Executing ..." + new Object() {
         }.getClass().getEnclosingMethod().getName());
         Assert.assertTrue(isDisplayed("//input[@value='Log In']"), "Log In button is not displayed!");
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
+        return /*! <- Testing purpose*/isDisplayed("//input[@value='Log In']");
     }
 }
