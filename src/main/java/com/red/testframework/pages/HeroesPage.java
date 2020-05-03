@@ -114,7 +114,6 @@ public class HeroesPage extends BasePage {
         return isHeroDisplayed;
     }
 
-
     private boolean verifyNextPageButtonIsClickable() {
         String visibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li:nth-child(8) > a.pageLink";
         String notVisibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li.disabled:nth-child(8) > a.pageLink";
@@ -127,6 +126,7 @@ public class HeroesPage extends BasePage {
             return false;
         return isNextPageButtonClickable;
     }
+
     public boolean verifyHeroesPageIsDisplayed() {
         return verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.HEROES_PAGE_PANEL_TITLE);
     }

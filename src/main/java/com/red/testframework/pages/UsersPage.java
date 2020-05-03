@@ -98,26 +98,31 @@ public class UsersPage extends BasePage {
     }
 
     public boolean isUserDisplayed(String username) {
-        Log.debug("Checking if user " + username + " is displayed...");
+        Log.info("Checking if user " + username + " is displayed...");
         boolean isUserDisplayed = false;
-
         List<WebElement> usersList = driver.findElements(By.xpath("//td[@title='" + username + "']"));
+
         do {
-            if (usersList.size() > 0) {
+
+            if (!usersList.isEmpty()){
                 isUserDisplayed = true;
                 break;
-            } else
+            } else {
                 nextPageSearchArrow.click();
+            }
             usersList = driver.findElements(By.xpath("//td[@title='" + username + "']"));
+
         } while (verifyNextPageButtonIsClickable());
         return isUserDisplayed;
     }
 
     private boolean verifyNextPageButtonIsClickable() {
-        List<WebElement> elements = driver.findElements(By.xpath("//a[contains(text(),'→')]"));
-        List<WebElement> elements1 = driver.findElements(By.xpath("//li[@class='disabled']//a[contains(text(),'→')]")); // elements.isEnabled(); does not work here,
+        String visibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li:nth-child(8) > a.pageLink";
+        String notVisibleArrowCssSelector = "div.container:nth-child(2) div.mainbox.col-md-8.col-md-offset-2.col-sm-8.col-sm-offset-2 div.panel.panel-default div.panel-body:nth-child(2) div.row.text-right:nth-child(3) div.form-group.col-sm-10.pagination-center:nth-child(2) ul.pagination li.disabled:nth-child(8) > a.pageLink";
+        List<WebElement> elements = driver.findElements(By.cssSelector(visibleArrowCssSelector));
+        List<WebElement> elements1 = driver.findElements(By.cssSelector(notVisibleArrowCssSelector));
         boolean isNextPageButtonClickable = false;
-        if (elements.size() != 0 && elements1.size() == 0) {
+        if (elements.size() != 0 && elements1.size()==0) {
             isNextPageButtonClickable = true;
         } else if (elements1.size() != 0)
             return false;
