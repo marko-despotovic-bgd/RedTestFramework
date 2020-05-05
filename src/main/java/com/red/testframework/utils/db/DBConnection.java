@@ -98,13 +98,12 @@ public class DBConnection {
         }
     }
 
-    public static void printResultSet(ResultSet rs) throws SQLException {
+    public static void printResultSet(@NotNull ResultSet rs) throws SQLException {
 
-        // Prepare metadata object and get the number of columns.
         ResultSetMetaData rsmd = rs.getMetaData();
         int columnsNumber = rsmd.getColumnCount();
 
-        // Print column names (a header).
+        // Print column names
         for (int i = 1; i <= columnsNumber; i++) {
             if (i > 1) System.out.print("\t|\t ");
             System.out.print(rsmd.getColumnName(i));
@@ -129,5 +128,4 @@ public class DBConnection {
         }
         return metaData;
     }
-
 }
