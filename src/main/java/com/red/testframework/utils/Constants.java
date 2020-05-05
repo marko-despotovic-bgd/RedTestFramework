@@ -2,6 +2,8 @@ package com.red.testframework.utils;
 
 public class Constants {
 
+    private Utils utils;
+
     // Login messages
     public static final String SUCCESSFUL_LOGOUT_MESSAGE = "You have been logged out.";
     public static final String INVALID_CREDENTIALS_MESSAGE = "Invalid username and password.";
@@ -23,6 +25,18 @@ public class Constants {
     public static final String HIGH = "HIGH";
     public static final String MEDIUM = "MEDIUM";
     public static final String LOW = "LOW";
+    public static final String DB_SANITY = "DB_SANITY";
+    public static final String DB_CRITICAL = "DB_CRITICAL";
+    public static final String DB_HIGH = "DB_HIGH";
+    public static final String DB_MEDIUM = "DB_MEDIUM";
+    public static final String DB_LOW = "DB_LOW";
     // Time utils
     public static final int ELEMENT_VISIBLE_TIME = 15;
+    // Database
+    public static final String url = "jdbc:mysql://"; //<-- Testing purpose "jdbc:sql://"
+    public static final String databaseIP = "database.ip";
+    public static final String databasePort = "database.port";
+    public static final String databaseName = "database.name"; //<-- "Production" DB
+    public static final String testDatabaseName = "test.database.name"; //<-- Test DB
+
 }
