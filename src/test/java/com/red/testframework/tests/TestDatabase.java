@@ -15,6 +15,11 @@ public class TestDatabase {
     TestDatabase() {
         dbQueries = DBQueries.createDBQueries();
     }
+
+    /** Prerequisite for testing DB queries:
+     * pom.xml: update suiteXmlFile to point to single-page-runner.xml in stead of testng.xml
+     * start Samsara with red database **/
+
     // There is no much of a point testing DB with no data populated.
     // Testing -- DROP DATABASE IF EXISTS database_name -- has some side effects that I didn't manage to overcome through code
     // (while executing it on MySQL Workbench went without problem). Production-like environments certainly would have
