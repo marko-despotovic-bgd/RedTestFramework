@@ -5,14 +5,20 @@
     <parameter name="browser" value="CHROME"/>
     <test name="Chrome tests">
         <groups>
-            <run>
-                <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
-                <include name="CRITICAL"/>
-                <include name="CRITICAL"/>
-                <include name="HIGH"/>
-                <include name="MEDIUM"/>
-                <include name="LOW"/>
-            </run>
+                <run>
+                    <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
+                    <include name="SANITY"/>
+                    <include name="CRITICAL"/>
+                    <include name="HIGH"/>
+                    <include name="MEDIUM"/>
+                    <include name="LOW"/>
+
+                    <exclude name="DB_SANITY"/>
+                    <exclude name="DB_CRITICAL"/>
+                    <exclude name="DB_HIGH"/>
+                    <exclude name="DB_MEDIUM"/>
+                    <exclude name="DB_LOW"/>
+                </run>
             <dependencies>
                 <group name="CRITICAL" depends-on="SANITY"/>
                 <group name="HIGH" depends-on="SANITY"/>
@@ -22,11 +28,12 @@
         </groups>
         <!--    Execution based on test suites (classes)-->
         <classes>
-            <!--            <class name="com.red.testframework.tests.SamsaraAPITests"/>-->
-            <!--            <class name="com.red.testframework.tests.SamsaraUITests"/>-->
-            <class name="com.red.testframework.tests.TestDatabase"/>
             <class name="com.red.testframework.tests.TestLoginPage"/>
             <class name="com.red.testframework.tests.TestSamsaraPage"/>
+            <class name="com.red.testframework.tests.SamsaraUITests"/>
+            <!--            <class name="com.red.testframework.tests.SamsaraAPITests"/>-->
+
+<!--            <class name="com.red.testframework.tests.TestDatabase"/> Executing DB tests demanding different setup. These should be ran via single-class-runner.xml-->
 
         </classes>
     </test>
@@ -40,7 +47,13 @@
                 <include name="CRITICAL"/>
                 <include name="HIGH"/>
                 <include name="MEDIUM"/>
-                <!--include name="LOW"/-->
+                <include name="LOW"/>
+
+                <exclude name="DB_SANITY"/>
+                <exclude name="DB_CRITICAL"/>
+                <exclude name="DB_HIGH"/>
+                <exclude name="DB_MEDIUM"/>
+                <include name="DB_LOW"/>
             </run>
         </groups>
         <!--    Execution on package level-->

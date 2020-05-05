@@ -14,7 +14,8 @@
 		<maven.compiler.version>3.7.0</maven.compiler.version>
 		<maven.surefire.version>2.20</maven.surefire.version>
 		<maven.failsafe.version>2.20</maven.failsafe.version>
-		<suiteXmlFile.path>resources/runners/testng.xml</suiteXmlFile.path>
+<!--		<suiteXmlFile.path>resources/runners/testng.xml</suiteXmlFile.path>--> <!-- Testing DB -->
+		<suiteXmlFile.path>resources/runners/single-page-runner.xml</suiteXmlFile.path>
 
 	</properties>
 
