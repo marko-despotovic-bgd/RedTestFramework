@@ -3,6 +3,7 @@ package com.red.testframework.tests;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.ScreenshotUtil;
+import com.red.testframework.utils.Utils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -118,13 +119,13 @@ public class TestLoginPage extends BaseTest {
         return new Object[][]
                 {
                         {"", ""},
-                        {"", utils.getProperty("password")},
+                        {"", Utils.getProperty("password")},
                         {"", "incorrectPassword"},
-                        {utils.getProperty("user.username"), ""},
+                        {Utils.getProperty("user.username"), ""},
                         {"hacker", ""},
                         {"mr.robot", "drowssap"},
-                        {"neo", utils.getProperty("password")},
-                        {utils.getProperty("user.username"), RandomStringUtils.random(256, true, true)},
+                        {"neo", Utils.getProperty("password")},
+                        {Utils.getProperty("user.username"), RandomStringUtils.random(256, true, true)},
                 };
     }
 
@@ -132,9 +133,6 @@ public class TestLoginPage extends BaseTest {
     public void tearDown(ITestResult result) {
         Log.endTest(new Object() {
         }.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
-        if (result.getStatus() == ITestResult.FAILURE) {
-            ScreenshotUtil.makeScreenshot(result);
-        }
         if (loginSuccessful)
             loginPage.logOut();
         loginSuccessful = false;

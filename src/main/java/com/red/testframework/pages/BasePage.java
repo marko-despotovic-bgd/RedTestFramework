@@ -10,6 +10,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +18,12 @@ import org.slf4j.LoggerFactory;
 import com.red.testframework.utils.Log;
 
 public class BasePage {
-    public WebDriver driver;
+    public static WebDriver driver;
     public static Logger log = LoggerFactory.getLogger(BasePage.class);
     public Properties properties = new Properties();
 
     public BasePage(WebDriver driver) {
-        this.driver = driver;
+        BasePage.driver = driver;
         log = Log.getLog(this.getClass());
         PageFactory.initElements(driver, this);
         driver.manage().window().maximize();
@@ -121,6 +122,11 @@ public class BasePage {
         }
     }
 
+    public void selectFromDropDownMenu(WebElement dropDownMenu, String itemName) {
+        Select dropDown = new Select(dropDownMenu);
+        dropDown.selectByValue(itemName);
+
+    }
     public void dragAndDropItem(WebElement from, WebElement to) {
         Actions action = new Actions(driver);
         action.dragAndDrop(from, to).build().perform();

@@ -42,9 +42,6 @@ public class TestSamsaraPage extends BaseTest {
     public void tearDown(ITestResult result) {
         Log.endTest(new Object() {
         }.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
-        if (result.getStatus() == ITestResult.FAILURE) {
-            ScreenshotUtil.makeScreenshot(result);
-        }
         if (loginSuccessful)
             loginPage.logOut();
         loginSuccessful = false;

@@ -33,7 +33,7 @@
         </groups>
         <classes>
 
-            <class name="com.red.testframework.tests.SamsaraUITests"/>
+            <class name="com.red.testframework.tests.TestDatabase"/>
         </classes>
     </test>
 </suite>

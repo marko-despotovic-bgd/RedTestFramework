@@ -1,288 +1,302 @@
-package com.red.testframework.tests; /*******************************************************************
- Users API
- U1. GET /api/users - Get list of all users.
- U2. GET /api/users/{id} - Get list of a user with specific id.
- U3. GET /api/users/exists/{username} - Check if user exists.
- U4. GET /api/users/findByUsername/{username} - Find specific user by username.
- U5. POST /api/users/[JSON object] - Create new user.
- U6. PUT /api/users/[JSON object] - Update user.
- U7. DELETE /api/users/{id} - Delete user with specified id.
- Heroes API
+/*******************************************************************
+ Users APIs
+ UG1. GET /api/users - Get list of all users.
+ UG2. GET /api/users/{id} - Get list of a user with specific id.
+ UG3. GET /api/users/last5added - Get list of a 5 last added users.
+ UG4. GET /api/users/exists/{username} - Check if user exists.
+ UG5. GET /api/users/question/{username} - Get secret question for specific user.
+ UG6. GET /api/users/last/{n} - Get last n users added.
+ UG7. GET /api/users/first/{n} - Get first n users added.
+ UG8. GET /api/users/findByUsername/{username} - Find specific user by username.
+ UG9. GET /api/users/findByLastname/{lastName} - Find user by last name.
+ UG10. GET /api/users/findByFirstname/{firstName} - Find user by first name.
+ UG11. GET /api/users/enabled - Get all enabled users.
+ UPo1. POST /api/users/[JSON object] - Create new user.
+ UPu1. PUT /api/users/[JSON object] - Update user.
+ D1. DELETE /api/users/{id} - Delete user with specified id.
+ Heroes APIs
  H1. GET /api/heroes - Get list of all heroes.
  H2. GET /api/heroes/{id} - Get list of a hero with specific id.
  H3. GET /api/heroes/{type} - Get list of all user with specific type (class).
+ H4. GET /api/heroes/{level} - Get list of all user with specific level.
+ H5. GET /api/heroes/last10added - Get list of 10 last added heroes.
  ***********************************************************************/
+package com.red.testframework.tests;
 
+import static io.restassured.RestAssured.*;
+
+import com.red.testframework.utils.Utils;
 import org.json.JSONObject;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-//import org.json.simple.JSONValue;
+import io.restassured.response.Response;
+
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class SamsaraAPITests extends BaseApi {
+
+    public Response response;
+
+    @Test(description = "UG1. GET /api/users - Get list of all users.")
+    public void testGetUsersAPI() {
+
+        response = given().log().all().get("/users?size=200"); // Without size parameter, it would list only 20 users. So, practically, this number should be 20 * no_of_users
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        JSONObject jsonObjectBody = new JSONObject(response.getBody().asString());
+
+        System.out.println("List of users:");
+        String firstName;
+        for (int i = 0; i < jsonObjectBody.getJSONObject("_embedded").getJSONArray("users").length(); i++) {
+            firstName = jsonObjectBody.getJSONObject("_embedded").
+                    getJSONArray("users").getJSONObject(i).getString("firstName");
+            System.out.println(firstName);
+        }
+    }
+
+    @Test(description = "UG2. GET /api/users/{id} - Get list of a user with specific id.")
+    public void testGetSpecificUserAPI() {
+
+        int randomId = ThreadLocalRandom.current().nextInt(1, 7);
+
+        response = given().log().all().get("users/" + randomId);
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        System.out.println("User with id " + randomId + " is " + response.jsonPath().getString("username"));
+        response.getBody().prettyPrint();
+    }
+
+    @Test(description = "UG3. GET /api/users/last5added - Get list of a 5 last added users.")
+    public void testGetLast5AddedUsersAPI() {
+
+        response = given().log().all().get("/users/last5added");
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        String usernames = response.jsonPath().getString("username");
+        System.out.println("Last 5 added users are: " + usernames);
+
+        response.getBody().prettyPrint();
+    }
+
+    @Test(description = "UG4. GET /api/users/exists/{username} - Check if user exists.", dataProvider = "Users")
+    public void testGetDoesUserExistAPI(String username, String doesExist) {
+
+        response = given().log().all().given().pathParam("username",username).get("users/exists/{username}");
+
+        System.out.println("User with username '" + username + "' exists: " + response.asString());
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+        assert response.asString().equals(doesExist) : "User does not exist!";
+    }
+
+    @Test(description = "UG5. GET /api/users/question/{username} - Get secret question for specific user.", dataProvider = "Users")
+    public void testGetUsersSecretQuestionAPI(String username, String doesExist) {
+
+        response = given().pathParam("username",username).get("users/question/{username}");
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        if (response.asString().equals("Jedno od random fejk pitanja da zavaraju hakere... kao. Zato je bolje koristiti genericka pitanje a ne da sam klijent postavi.") && doesExist.equals("false"))
+            System.out.println("User does not exist!");
+        else
+            System.out.println("User '" + username + "' set secret question: '" + response.asString() + "'");
+    }
+
+    @Test(description = "UG6. GET /api/users/last/{n} - Get last n users added.")
+    public void testGetLastNUsersAddedAPI() {
+        int randomId = ThreadLocalRandom.current().nextInt(1, 200); // Bound is total number of users in DB
+
+        response = given().log().all().get("/users/last/" + randomId); // List is inverted, FIRST N users are shown
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        System.out.println("List of last " + randomId + " added users:");
+        String usernames = response.jsonPath().getString("username");
+        System.out.println(usernames);
+
+        response.getBody().prettyPrint();
+    }
+
+    @Test(description = "UG7. GET /api/users/first/{n} - Get first n users added.")
+    public void testGetFirstNUsersAddedAPI() {
+        int randomId = ThreadLocalRandom.current().nextInt(1, 200); // Bound is total number of users in DB
+
+        response = given().log().all().get("/users/first/" + randomId); // List is inverted, LAST N users are shown
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        System.out.println("List of first " + randomId + " added users:");
+        String usernames = response.jsonPath().getString("username");
+        System.out.println(usernames);
+
+        response.getBody().prettyPrint();
+    }
+
+    @Test(description = "UG8. GET /api/users/findByUsername/{username} - Find specific user by username.", dataProvider = "Users")
+    public void testGetFindByUsernameAPI(String username, String doesExist) {
+
+        if (doesExist.equals("true")) {
+            response = given().log().all().pathParam("username",username).get("users/findByUsername/{username}");
+            assert response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + response.getStatusCode();
+            System.out.println("User " + username + ": ");
+            response.getBody().prettyPrint();
+        } else
+            System.out.println("User does not exist");
+    }
+
+    @Test(description = "UG9. GET /api/users/findByLastname/{lastName} - Find user by last name.", dataProvider = "Users")
+    public void testGetFindByLastNameAPI(String username, String doesExist) { // doesExist is not used here, but need to be named due to DataProvider protocol
+
+        response = given().log().all().pathParam("username",username).get("users/findByLastname/{username}");
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        System.out.println("User(s) with last name " + username + ": ");
+        response.getBody().prettyPrint();
+    }
+
+    @Test(description = " UG10. GET /api/users/findByFirstname/{firstName} - Find user by first name.", dataProvider = "Users")
+    public void testGetFindByFirstNameAPI(String username, String doesExist) {  // doesExist is not used here, but need to be named due to DataProvider protocol
+
+        response = given().log().all().pathParam("username",username).get("users/findByFirstname/{username}");
+
+        System.out.println("User(s) with first name " + username + ": ");
+        response.getBody().prettyPrint();
+    }
 
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+    @Test(description = "UG11. GET /api/users/enabled - Get all enabled users.")
+    public void testGetAllEnabledUsersAPI() {
 
+        response = given().log().all().get("users/enabled");
 
-public class SamsaraAPITests {
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
 
-    //BaseApi baseApi = new BaseApi();
+        System.out.println("Users with 'enabled' flag set:");
+        response.getBody().prettyPrint();
+    }
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("HHmmss");
-    String timestamp = sdf.format(new Timestamp(new Date().getTime())); // To secure non-redundancy in user/hero creating
-    String username1 = "adespot" + timestamp, username2 = username1 + "2", username3 = username1 + "3", firstName = "Marko", lastName = "Despotovic", about = "despot",
-            secretQuestion = "marko", secretAnswer = "despotovic", password = "Password1", conirfmPassword = "Password1";
-    // All input data follow restriction of the original app
-    String hero1Name = "aMarko_" + timestamp, hero2Name = "A" + hero1Name + timestamp, hero3Name = "B" + hero1Name + timestamp,
-            level = "80", heroClass = "Guardian";
-
-    boolean hero1Created, hero2Created, hero3Created, user1Created, user2Created = false;
-
-//    public com.red.testframework.tests.SamsaraAPITests() throws IOException {
-//        baseUri = super.baseUri + "/api";
+//    @Test(description = "UPo1. POST /api/users/[JSON object] - Create new user.")
+//    public void postCreateNewUserAPITest() {
+    /**{
+     "timestamp": 1589623530948,
+     "status": 500,
+     "error": "Internal Server Error",
+     "exception": "org.springframework.http.converter.HttpMessageNotWritableException",
+     "message": "Could not write JSON: (was java.lang.NullPointerException); nested exception is com.fasterxml.jackson.databind.JsonMappingException: (was java.lang.NullPointerException) (through reference chain: org.springframework.data.rest.webmvc.json.PersistentEntityJackson2Module$PersistentEntityResourceSerializer$1[\"content\"]->org.spectres.samsara.model.User[\"heroCount\"])",
+     "path": "/api/users"
+     }**/
 //    }
 
-//
-//    @BeforeClass
-//    public void setBaseUri() {
-//
-//        Log.info("In Before Class");
+//    @Test(description = "UPu1. PUT /api/users/[JSON object] - Update user.")
+//    public void putUpdateUserAPITest() {
+    /**{
+     "timestamp": 1589623590600,
+     "status": 404,
+     "error": "Not Found",
+     "message": "No message available",
+     "path": "/api/users"
+     }**/
 //    }
 
-    @Test
-    public void testResult() {
+//    @Test(description = "D1. DELETE /api/users/{id} - Delete user with specified id.")
+//    public void deleteUserAPITest() {
 
+    /**
+     * {
+     * "cause": {
+     * "cause": {
+     * "cause": null,
+     * "message": "Cannot delete or update a parent row: a foreign key constraint fails (`samsara`.`user_role`, CONSTRAINT `fk_role_id` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`))"
+     * },
+     * "message": "could not execute statement"
+     * },
+     * "message": "could not execute statement; SQL [n/a]; constraint [null]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement"
+     * }
+     **/
+//    }
+    @Test(description = "H1. GET /api/heroes - Get list of all heroes.")
+    public void testGetListOfAllHeroesAPI() {
+        System.out.println("Testing API call to " + baseURI + basePath + "heroes");
 
-//        RestAssured.baseURI = "localhost:8080";
-//        RequestSpecification request = RestAssured.given();
-//
-//        JSONObject requestParams = new JSONObject();
-//        requestParams.put("FirstName", "Virender"); // Cast
-//        requestParams.put("LastName", "Singh");
-//        requestParams.put("UserName", "sdimpleuser2dd2011");
-//        requestParams.put("Password", "password1");
-//        requestParams.put("Email", "sample2ee26d9@gmail.com");
-//
-//        request.body(requestParams.toString());
-//        Response response = request.get("/register");
-//
-//        int statusCode = response.getStatusCode();
-//        System.out.println("The status code recieved: " + statusCode);
-//
-//        System.out.println("Response body: " + response.body().asString());
+        response = given().log().all().get("heroes");
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + response.getStatusCode();
+
+        JSONObject jsonObjectBody = new JSONObject(response.getBody().asString());
+
+        String heroName;
+        System.out.println("List of heroes: ");
+        for (int i = 0; i < jsonObjectBody.getJSONObject("_embedded").getJSONArray("heroes").length(); i++) {
+            heroName = jsonObjectBody.getJSONObject("_embedded").
+                    getJSONArray("heroes").getJSONObject(i).getString("name");
+            System.out.println(heroName);
+        }
+    }
+
+    @Test(description = "H2. GET /api/heroes/{id} - Get list of a hero with specific id.")
+    public void testGetSpecificHeroAPI() {
+        int randomId = ThreadLocalRandom.current().nextInt(1, 12); // Due to issue with id's and redundancy with heroes/level API, bound is only 12, but should be id of the last hero in samsara.heroes
+        System.out.println("Testing API call to " + baseURI + basePath + "heroes/" + randomId);
+
+        response = given().log().all().get("heroes/" + randomId);
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        System.out.println("Hero with id " + randomId + " is " + response.jsonPath().getString("name"));
+        response.getBody().prettyPrint();
+    }
+
+//    @Test(description = "H3. GET /api/heroes/{type} - Get list of all user with specific type (class).")
+//    public void testGetHeroesOfSpecificClassAPI() {
+//        /**
+//         * This localhost page can’t be found
+//         * No webpage was found for the web address: http://localhost:9010/api/heroes/Warrior
+//         * HTTP ERROR 404
+//         * **/
 //
 //    }
-//}
-        String message = null;
 
-        JSONObject user = new JSONObject();
-        user.put("firstName", "Finn");
-        user.put("lastName", "Mertens");
-        user.put("username", "finsasa");
-        user.put("email", "finn@mail.com");
-        user.put("password", "$2a$10$c4k24Pk4lNy/v9wEZRsuT.LrTsYRLK7Jj7.mLahhCZwCgoWwAY7IW");
-        user.put("about", "About Me Text");
-        user.put("secretQuestion", "pitanje");
-        user.put("secretAnswer", "odgovor");
-        message = user.toString();
-        System.out.println(message);
-        JSONObject json = new JSONObject(message);
-        System.out.println(json);
+//    @Test(description = "H4. GET /api/heroes/{level} - Get list of all user with specific level.")
+//    public void testGetHeroesOfSpecificLevelAPI() {
+//
+
+    /**
+     * This localhost page can’t be found
+     * No webpage was found for the web address: http://localhost:9010/api/heroes/80
+     * HTTP ERROR 404
+     **/
+//    }
+    @Test(description = "H5. GET /api/heroes/last10added - Get list of 10 last added heroes.")
+    public void testGetLast10AddedHeroesAPI() {
+
+        System.out.println("Testing API call to " + baseURI + basePath + "heroes/last10added");
+
+        response = given().log().all().get("/heroes/last10added");
+
+        assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
+
+        String heroNames = response.jsonPath().getString("name");
+        System.out.println("Last 10 added heroes are: " + heroNames);
+
+        response.getBody().prettyPrint();
+    }
+
+    @DataProvider(name = "Users")
+    public Object[][] getUsersFromDataProvider() {
+        return new Object[][]
+                {
+                        {"Finn", "true"},
+                        {Utils.getProperty("admin.username"), "true"},
+                        {"Marko", "true"},
+                        {"Pera", "false"},
+                        {"marceline", "true"},
+                        {"Mika", "false"},
+                        {"Despotovic", "false"},
+                        {"adminaa", "true"},
+                        {Utils.getProperty("user.username"), "true"},
+                };
     }
 }
-//        RestAssured
-//                .when().get(baseUri)
-//                .then().statusCode(200); // extract the response
-//        Response res  =given().param ("query", "Churchgate Station")
-//                .param ("key", "Xyz")
-//                .when()
-//                .get ("/maps/api/place/textsearch/json").then()
-//                .contentType(ContentType.JSON)
-//                .extract()
-//                .path ("results[0].formatted_address");
-//
-//        Assert.assertEquals (res, "Maharshi Karve Rd, Churchgate, Mumbai, Maharashtra 400020");
-
-//    }
-
-
-//    @BeforeClass
-//    public void beforeTests() {
-//        // First to be executed, pages' classes initialisation and login as an admin
-//        baseApi.baseUrlTest_StatusCode200();
-//
-//    }
-//
-//    @Test(description = "U1. GET /api/users - Get list of all users.")
-//    public void getUsersAPITest() {
-//        Log.debug("Entered getUsers API test!");
-//        /*{
-//  "_embedded" : {
-//    "users" : [ {
-//      "firstName" : "Finn",
-//      "lastName" : "Mertens",
-//      "username" : "finn",
-//      "email" : "finn@mail.com",
-//      "password" : "$2a$10$c4k24Pk4lNy/v9wEZRsuT.LrTsYRLK7Jj7.mLahhCZwCgoWwAY7IW",
-//      "about" : "About Me Text",
-//      "created" : "2018-12-17T10:55:03.000+0000",
-//      "secretQuestion" : "pitanje",
-//      "secretAnswer" : "odgovor",
-//      "enabled" : true,
-//      "heroCount" : 0,
-//      "_links" : {
-//        "self" : {
-//          "href" : "http://localhost:8080/api/users/1"
-//        },
-//        "user" : {
-//          "href" : "http://localhost:8080/api/users/1"
-//        },
-//        "roles" : {
-//          "href" : "http://localhost:8080/api/users/1/roles"
-//        },
-//        "heroes" : {
-//          "href" : "http://localhost:8080/api/users/1/heroes"
-//        },
-//        "events" : {
-//          "href" : "http://localhost:8080/api/users/1/events"
-//        }
-//      }
-//    },*/
-//
-//    }
-//
-//    @Test(description = "U2. GET /api/users/{id} - Get list of a user with specific id.")
-//    public void getSpecificUserAPITest() {
-//        Log.debug("Entered getSpecificUser API test!");
-//        /*{
-//  "firstName" : "Marceline",
-//  "lastName" : "Abadeer",
-//  "username" : "marceline",
-//  "email" : "marceline@mail.com",
-//  "password" : "$2a$10$c4k24Pk4lNy/v9wEZRsuT.LrTsYRLK7Jj7.mLahhCZwCgoWwAY7IW",
-//  "about" : "About Me Text",
-//  "created" : "2018-12-17T10:55:04.000+0000",
-//  "secretQuestion" : "pitanje",
-//  "secretAnswer" : "odgovor",
-//  "enabled" : true,
-//  "heroCount" : 0,
-//  "_links" : {
-//    "self" : {
-//      "href" : "http://localhost:8080/api/users/2"
-//    },
-//    "user" : {
-//      "href" : "http://localhost:8080/api/users/2"
-//    },
-//    "roles" : {
-//      "href" : "http://localhost:8080/api/users/2/roles"
-//    },
-//    "heroes" : {
-//      "href" : "http://localhost:8080/api/users/2/heroes"
-//    },
-//    "events" : {
-//      "href" : "http://localhost:8080/api/users/2/events"
-//    }
-//  }
-//}*/
-//
-//    }
-//
-//    @Test(description = "U3. GET /api/users/exists/{username} - Check if user exists.")
-//    public void getDoesUserExistAPITest() {
-//        Log.debug("Entered doesUserExist API test!");
-//        // true/false
-//
-//    }
-//
-//    @Test(description = "U4. GET /api/users/findByUsername/{username} - Find specific user by username.")
-//    public void getFindByUsernameAPITest() {
-//        Log.debug("Entered findByUsername API test!");
-////       {"userId":"402834817130871e01713b676e05005c","username":"admina","firstName":"Markoa","lastName":"Despotovic","email":null,"about":"about","heroes":[],"heroCount":0,"createdAt":1585839566000,"enabled":false,"displayName":"Markoa Despotovic"}
-//    }
-//
-//    @Test(description = "U5. POST /api/users/[JSON object] - Create new user.")
-//    public void postCreateNewUserAPITest() {
-//        Log.debug("Entered postCreateNewUser API Test!");
-///*
-//@Test
-//public void RegistrationSuccessful()
-//{
-// RestAssured.baseURI ="http://restapi.demoqa.com/customer";
-// RequestSpecification request = RestAssured.given();
-//
-// JSONObject requestParams = new JSONObject();
-// requestParams.put("FirstName", "Virender"); // Cast
-// requestParams.put("LastName", "Singh");
-// requestParams.put("UserName", "sdimpleuser2dd2011");
-// requestParams.put("Password", "password1");
-//
-// requestParams.put("Email",  "sample2ee26d9@gmail.com");
-// request.body(requestParams.toJSONString());
-// Response response = request.post("/register");
-//
-// int statusCode = response.getStatusCode();
-// Assert.assertEquals(statusCode, "201");
-// String successCode = response.jsonPath().get("SuccessCode");
-// Assert.assertEquals( "Correct Success code was returned", successCode, "OPERATION_SUCCESS");
-//}*/
-//    }
-//
-//    @Test(description = "U6. PUT /api/users/[JSON object] - Update user.")
-//    public void putUpdateUserAPITest() {
-//        Log.debug("Entered putUpdateUser API test!");
-//
-//
-//    }
-//
-//    @Test(description =  "U7. DELETE /api/users/{id} - Delete user with specified id.")
-//    public void deleteUserAPITest() {
-//        Log.debug("Entered deleteUser API test!");
-//
-//    }
-//
-//    @Test(description = "H1. GET /api/heroes - Get list of all heroes.")
-//    public void getListOfAllHeroesAPITest() {
-//        Log.debug("Entered getListOfAllHeroes API test!");
-//    }
-//
-//    @Test(description = "H2. GET /api/heroes/{id} - Get list of a hero with specific id.")
-//    public void getSpecificHeroAPITest() {
-//        Log.debug("Entered getSpecificHero API test!");
-//    }
-//
-//    @Test(description =  "H3. GET /api/heroes/{type} - Get list of all user with specific type (class).")
-//    public void getHeroesOfSpecificClassAPITest() {
-//        Log.debug("Entered getHeroesOfSpecificClass API test!");
-//    }
-//
-//    @AfterMethod
-//    public void tearDown(ITestResult result) {
-//        if (result.getStatus() == ITestResult.FAILURE) {
-//            ScreenshotUtil.makeScreenshot(result);
-//        }
-//        BrowserDriver.getCurrentDriver().navigate().to("localhost:8080");
-//    }
-//
-//    @AfterClass
-//    public void afterTest() {
-//        // Cleaning after all test have been executed, regardless of outcome
-//
-//        Log.debug("Reverting changes...");
-//
-//        if (hero1Created || hero2Created || hero3Created) {
-//            if (hero1Created) {
-//                Log.debug("Deleting " + hero1Name + "...");
-//            }
-//            if (hero2Created) {
-//                Log.debug("Deleting " + hero2Name + "...");
-//            }
-//        }
-//        if (user1Created || user2Created) {
-//            if (user1Created) {
-//                Log.debug("Deleting " + username1 + "...");
-//            }
-//            if (user2Created) {
-//                Log.debug("Deleting " + username2 + "...");
-//            }
-//        }
-//    }
-//}

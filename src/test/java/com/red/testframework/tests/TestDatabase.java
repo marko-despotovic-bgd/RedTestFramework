@@ -1,7 +1,7 @@
 package com.red.testframework.tests;
 
-import com.red.testframework.utils.db.DBConnection;
-import com.red.testframework.utils.db.DBQueries;
+import com.red.testframework.db.DBConnection;
+import com.red.testframework.db.DBQueries;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 
@@ -92,6 +92,7 @@ public class TestDatabase {
     public void testDBSelectTask1() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        Log.info("Task 1 : Get the last name of user with id 1");
         DBQueries.selectDBQuery("last_name", "users", "user_id=1");
     }
 
@@ -99,6 +100,7 @@ public class TestDatabase {
     public void testDBSelectTask2() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        Log.info("Task 2 : Get the first name, last name and username of user with id 1");
         DBQueries.selectDBQuery("first_name,last_name,username", "users", "user_id=1");
     }
 
@@ -107,6 +109,7 @@ public class TestDatabase {
     public void testDBSelectTask3() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        Log.info("Task 3 : Get the first name, last name and username of user with id less than 3 and sort them ascended");
         DBQueries.selectDBQuery("first_name,last_name,username", "users", "user_id<3 ORDER BY user_id ASC"); //DESC
     }
 
@@ -115,6 +118,7 @@ public class TestDatabase {
     public void testDBSelectTask4() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        Log.info("Task 4 : Get the hero names of all heroes that are Warrior Type");
         DBQueries.selectDBQuery("name", "heroes", "type='Warrior'");
     }
 
@@ -123,6 +127,7 @@ public class TestDatabase {
     public void testDBSelectTask5() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        Log.info("Task 5 : Get the hero names of all heroes from user with id 3");
         DBQueries.selectDBQuery("name", "heroes as h JOIN users u ON u.user_id=h.fk_user_id", "h.fk_user_id=3");//1
     }
 
@@ -131,6 +136,7 @@ public class TestDatabase {
     public void testDBSelectTask6() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        Log.info("Task 6 : Get the hero names of all heroes with hero username jake");
         DBQueries.selectDBQuery("name", "heroes as h JOIN users u ON u.user_id=h.fk_user_id", "u.username = 'Jake'");//1
     }
 
