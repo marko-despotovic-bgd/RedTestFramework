@@ -1,4 +1,4 @@
-package com.red.testframework.utils.db;
+package com.red.testframework.db;
 
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
@@ -14,21 +14,20 @@ public class DBConnection {
     private static Connection connection;
 
     private DBConnection() {
-        Utils utils = new Utils();
         // Step 1 - Load driver
         // Class.forName("com.mysql.cj.jdbc.Driver"); //Class.forName() is not needed since JDBC 4.0
         if (connection == null) {
             try {
                 connection = DriverManager.getConnection(Constants.url
-                                + utils.getProperty(Constants.databaseIP)
-                                + ":" + utils.getProperty(Constants.databasePort)
-                                + "/" + utils.getProperty(Constants.testDatabaseName)
+                                + Utils.getProperty(Constants.databaseIP)
+                                + ":" + Utils.getProperty(Constants.databasePort)
+                                + "/" + Utils.getProperty(Constants.testDatabaseName)
                                 + "?useSSL=false&"   // Do not use ssl
                                 + "useUnicode=true&"
                                 + "useJDBCCompliantTimezoneShift=true&"
                                 + "useLegacyDatetimeCode=false&"
                                 + "serverTimezone=UTC", // Due to java.lang.RuntimeException: java.sql.SQLException: The server time zone value 'Central Europe Summer Time' is unrecognized
-                        utils.getProperty("database.user"), utils.getProperty("database.password"));
+                        Utils.getProperty("database.user"), Utils.getProperty("database.password"));
             } catch (SQLException SQLEx) {
                 SQLEx.printStackTrace();
             }

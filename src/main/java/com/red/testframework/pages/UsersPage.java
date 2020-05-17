@@ -82,12 +82,13 @@ public class UsersPage extends BasePage {
         }.getClass().getEnclosingMethod().getName());
     }
 
-    public UsersPage addUser(String username, String firstName, String lastName, String about,
-                             String secretQuestion, String secretAnswer, String password, String confirmPassword) {
+    public UsersPage addNewUser(String username, String firstName, String lastName, String about,
+                                String secretQuestion, String secretAnswer, String password, String confirmPassword) {
         log.info("Executing..... " + new Object() {
         }.getClass().getEnclosingMethod().getName());
         log.info("Creating User:\nUsername: " + username + "\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nAbout: " + about
                 + "\nSecret Question: " + secretQuestion + "\nSecret Answer: " + secretAnswer + "\nPassword: " + password + "\nConfirm Password: " + confirmPassword);
+        // Printing out, so it can be easily detected if some field rules/restrictions change
         clickOnNewUserButton();
         fillInInputField(usernameInput, username);
         fillInInputField(firstNameInput, firstName);

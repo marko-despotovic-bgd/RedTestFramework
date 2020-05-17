@@ -1,4 +1,4 @@
-package com.red.testframework.utils.db;
+package com.red.testframework.db;
 
 import com.red.testframework.pages.LoginPage;
 import com.red.testframework.utils.Log;

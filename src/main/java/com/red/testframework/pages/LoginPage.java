@@ -28,11 +28,10 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//div[@class='panel-title text-center']")
     private WebElement panelTitle;
 
-    private final Utils utils;
+    private Utils utils;
 
     public LoginPage(WebDriver driver) {
         super(driver);
-        utils = new Utils();
         PageFactory.initElements(driver, this);
     }
 

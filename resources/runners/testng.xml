@@ -3,22 +3,25 @@
 <suite name="Suito de tutti suitti" verbose="3"> <!-- Using verbose 3 for more info in logs -->
     <!-- Suite-level parameters, always passed to test (can be overridden) -->
     <parameter name="browser" value="CHROME"/>
+    <!--    <listeners>-->
+    <!--        <listener class-name="com.red.testframework.utils.ScreenshotListener" />-->
+    <!--    </listeners>-->
     <test name="Chrome tests">
         <groups>
-                <run>
-                    <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
-                    <include name="SANITY"/>
-                    <include name="CRITICAL"/>
-                    <include name="HIGH"/>
-                    <include name="MEDIUM"/>
-                    <include name="LOW"/>
+            <run>
+                <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
+                <include name="SANITY"/>
+                <include name="CRITICAL"/>
+                <include name="HIGH"/>
+                <include name="MEDIUM"/>
+                <include name="LOW"/>
 
-                    <exclude name="DB_SANITY"/>
-                    <exclude name="DB_CRITICAL"/>
-                    <exclude name="DB_HIGH"/>
-                    <exclude name="DB_MEDIUM"/>
-                    <exclude name="DB_LOW"/>
-                </run>
+                <exclude name="DB_SANITY"/>
+                <exclude name="DB_CRITICAL"/>
+                <exclude name="DB_HIGH"/>
+                <exclude name="DB_MEDIUM"/>
+                <exclude name="DB_LOW"/>
+            </run>
             <dependencies>
                 <group name="CRITICAL" depends-on="SANITY"/>
                 <group name="HIGH" depends-on="SANITY"/>
@@ -26,14 +29,13 @@
                 <group name="LOW" depends-on="SANITY"/>
             </dependencies>
         </groups>
-        <!--    Execution based on test suites (classes)-->
+        <!--    Execution based on test classes -->
         <classes>
             <class name="com.red.testframework.tests.TestLoginPage"/>
             <class name="com.red.testframework.tests.TestSamsaraPage"/>
             <class name="com.red.testframework.tests.SamsaraUITests"/>
-            <!--            <class name="com.red.testframework.tests.SamsaraAPITests"/>-->
-
-<!--            <class name="com.red.testframework.tests.TestDatabase"/> Executing DB tests demanding different setup. These should be ran via single-class-runner.xml-->
+            <class name="com.red.testframework.tests.TestDatabase"/>
+            <class name="com.red.testframework.tests.SamsaraAPITests"/>
 
         </classes>
     </test>
@@ -53,7 +55,7 @@
                 <exclude name="DB_CRITICAL"/>
                 <exclude name="DB_HIGH"/>
                 <exclude name="DB_MEDIUM"/>
-                <include name="DB_LOW"/>
+                <exclude name="DB_LOW"/>
             </run>
         </groups>
         <!--    Execution on package level-->
@@ -96,11 +98,20 @@
     <!--            <package name="com.red.testframework.tests"/>-->
     <!--        </packages>-->
     <!--    </test>-->
-    <!--    <test name="Chrome headless tests">-->
-    <!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
-    <!--        <parameter name="browser" value="CHROME_HEADLESS"/>-->
-    <!--        <packages>-->
-    <!--            <package name="com.red.testframework.tests"/>-->
-    <!--        </packages>-->
-    <!--    </test>-->
+    <test name="Chrome headless tests">
+        <!-- Overriding suites' parameter -->
+        <parameter name="browser" value="CHROME_HEADLESS"/>
+        <groups>
+            <run>
+                <exclude name="DB_SANITY"/>
+                <exclude name="DB_CRITICAL"/>
+                <exclude name="DB_HIGH"/>
+                <exclude name="DB_MEDIUM"/>
+                <exclude name="DB_LOW"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.red.testframework.tests"/>
+        </packages>
+    </test>
 </suite>

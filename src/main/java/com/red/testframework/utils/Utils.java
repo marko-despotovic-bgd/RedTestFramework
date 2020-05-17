@@ -2,9 +2,9 @@ package com.red.testframework.utils;
 
 import java.util.*;
 import java.io.*;
+
 import com.red.testframework.enums.BrowserType;
 import com.red.testframework.pages.LoginPage;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,32 +20,31 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 
+
 public class Utils {
 
-    private static Properties properties = new Properties();
-    private String screenshotFileLocation;
-    private String saveScreenshots;
+    private static final Properties properties = new Properties();
 
     /**
-     * @param browser is read from testng.xml
-     * @return LoginPage
+     * @param browser type is read from testng.xml
+     * @return LoginPage(driver)
      */
     public static LoginPage setUpWebBrowser(@org.jetbrains.annotations.NotNull String browser) {
         LoginPage loginPage;
         if (browser.equalsIgnoreCase(BrowserType.CHROME.toString())) {
             WebDriverManager.chromedriver().setup();
             loginPage = new LoginPage(new ChromeDriver());
-            Log.info("Initialized " + BrowserType.CHROME.toString().toLowerCase() + " browser!");
+            Log.info("Initialized " + BrowserType.CHROME.toString().toLowerCase() + " session");
         } else if (browser.equalsIgnoreCase(BrowserType.FIREFOX.toString())) {
             WebDriverManager.firefoxdriver().setup();
             loginPage = new LoginPage(new FirefoxDriver());
-            Log.info("Initialized " + BrowserType.FIREFOX.toString().toLowerCase() + " browser!");
+            Log.info("Initialized " + BrowserType.FIREFOX.toString().toLowerCase() + " session");
         } else if (browser.equalsIgnoreCase(BrowserType.EDGE.toString())) {
             WebDriverManager.edgedriver().setup();
             EdgeOptions options = new EdgeOptions();
             options.setCapability("InPrivate", true);
             loginPage = new LoginPage(new EdgeDriver(options));
-            Log.info("Initialized " + BrowserType.EDGE.toString().toLowerCase() + " browser!");
+            Log.info("Initialized " + BrowserType.EDGE.toString().toLowerCase() + " session");
         } // Extremely slow execution in 64-bit mode, so calling 32-bit driver instead
         else if (browser.equalsIgnoreCase(BrowserType.IE.toString())) {
             WebDriverManager.iedriver().arch32().setup();
@@ -53,33 +52,24 @@ public class Utils {
             options.ignoreZoomSettings();
             options.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
             loginPage = new LoginPage(new InternetExplorerDriver(options));
-            Log.info("Initialized " + BrowserType.IE.toString().toLowerCase() + " browser!");
+            Log.info("Initialized " + BrowserType.IE.toString().toLowerCase() + " session");
         } else if (browser.equalsIgnoreCase(BrowserType.CHROME_HEADLESS.toString())) {
             WebDriverManager.chromedriver().setup();
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.addArguments("--headless");
             loginPage = new LoginPage(new ChromeDriver(chromeOptions));
-            Log.info("Initialized " + BrowserType.CHROME_HEADLESS.toString().toLowerCase() + " browser!");
+            Log.info("Initialized " + BrowserType.CHROME_HEADLESS.toString().toLowerCase() + " session");
         } else
             throw new RuntimeException();
 
         return loginPage;
     }
 
-    /**
-     * @param driver
-     * @param locator
-     */
-    public static void webDriverWait(WebDriver driver, By locator) {
-        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-
-    private void loadProperties() {
+    public static void loadProperties() {
         String defaultConfigPropertiesFile = "resources/config/config.properties";
         File configProperties = new File(defaultConfigPropertiesFile);
         if (!configProperties.exists() || !configProperties.isFile()) {
-            Log.error("config-file does not exist or is not a file!");
+            Log.error("Config file does not exist or is not a file!");
             System.exit(-1);
         }
         // load properties
@@ -90,20 +80,8 @@ public class Utils {
         }
     }
 
-    public String getProperty (String key){
+    public static String getProperty(String key) {
         loadProperties();
         return properties.getProperty(key);
     }
-
-    public String getScreenshotFileLocation() {
-        return this.screenshotFileLocation;
-    }
-
-    public boolean getSaveScreenshots() {
-        if (StringUtils.isBlank(this.saveScreenshots)) {
-            return false;
-        } else return this.saveScreenshots.equalsIgnoreCase("true");
-    }
-
-
 }

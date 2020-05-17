@@ -37,6 +37,8 @@ public class HeroesPage extends BasePage {
     private WebElement searchTextField;
     @FindBy(xpath = "//div[@class='modal-footer']//button[@type='submit']")
     private WebElement editHeroSaveButton, deleteButton;
+    @FindBy(xpath = "//div[@class='modal-header bg-primary']")
+    private WebElement modalHeader;
 
 
     public HeroesPage(WebDriver driver) {
@@ -73,7 +75,7 @@ public class HeroesPage extends BasePage {
         }.getClass().getEnclosingMethod().getName());
     }
 
-    public void addHero(String heroName, String level, String heroClass) {
+    public void addNewHero(String heroName, String level, String heroClass) {
         log.info("Executing..... " + new Object() {
         }.getClass().getEnclosingMethod().getName());
         log.info("Creating hero:\nName: " + heroName + "\nLevel: " + level + "\nClass: " + heroClass);
@@ -81,6 +83,7 @@ public class HeroesPage extends BasePage {
         fillInInputField(nameInput, heroName);
         fillInInputField(levelInput, level);
         selectHeroClass(heroClass);
+        clickOnElement(modalHeader); // Due firefox issues with querySelector()
         clickOnElement(addHeroSaveButton);
         log.info("Created hero:\nName: " + heroName + "\nLevel: " + level + "\nClass: " + heroClass);
         log.info("Successfully executed " + new Object() {
@@ -90,8 +93,7 @@ public class HeroesPage extends BasePage {
     private void selectHeroClass(String heroClass) {
         log.info("Executing..... " + new Object() {
         }.getClass().getEnclosingMethod().getName());
-        clickOnElement(classDropdownMenu);
-        clickOnElement(driver.findElement(By.xpath("//option[@value='" + heroClass + "']")));
+        selectFromDropDownMenu(classDropdownMenu, heroClass);
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
     }
@@ -104,6 +106,7 @@ public class HeroesPage extends BasePage {
             clickOnElement(driver.findElement(By.xpath("//td[@title='" + heroName + "']/following-sibling::td//span[contains(@class,'pencil')]")));
             fillInInputField(levelInput, level);
             selectHeroClass(heroClass);
+            clickOnElement(modalHeader); // Due firefox issues with querySelector()
             clickOnElement(editHeroSaveButton);
             log.info("Edited hero:\nName: " + heroName + "\nLevel: " + level + "\nClass: " + heroClass);
         } else
