@@ -69,7 +69,6 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.logIn(Utils.getProperty("user.username"), Utils.getProperty("password"));
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -86,7 +85,6 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert loginPage.isLoginPageTitleDisplayed();
         samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
         assert samsaraPage.isSamsaraPageTitleDisplayed();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -108,7 +106,6 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert loginPage.isLoginPageTitleDisplayed();
         samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
         assert samsaraPage.isSamsaraPageTitleDisplayed();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -147,7 +144,6 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert !loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.adminLogIn();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -164,7 +160,6 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.adminLogIn();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -184,7 +179,6 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert loginPage.isLoginPageTitleDisplayed() : "Login page is not displayed!";
         samsaraPage = loginPage.adminLogIn();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();

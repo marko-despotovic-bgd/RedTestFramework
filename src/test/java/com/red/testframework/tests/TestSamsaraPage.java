@@ -3,7 +3,6 @@ package com.red.testframework.tests;
 import com.red.testframework.pages.SamsaraPage;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.ScreenshotUtil;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 

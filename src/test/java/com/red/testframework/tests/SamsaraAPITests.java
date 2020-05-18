@@ -25,6 +25,7 @@ package com.red.testframework.tests;
 
 import static io.restassured.RestAssured.*;
 
+import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Utils;
 import org.json.JSONObject;
 import org.testng.annotations.DataProvider;
@@ -38,7 +39,7 @@ public class SamsaraAPITests extends BaseApi {
 
     public Response response;
 
-    @Test(description = "UG1. GET /api/users - Get list of all users.")
+    @Test(description = "UG1. GET /api/users - Get list of all users.", groups = {Constants.CRITICAL})
     public void testGetUsersAPI() {
 
         response = given().log().all().get("/users?size=200"); // Without size parameter, it would list only 20 users. So, practically, this number should be 20 * no_of_users
@@ -55,7 +56,7 @@ public class SamsaraAPITests extends BaseApi {
         }
     }
 
-    @Test(description = "UG2. GET /api/users/{id} - Get list of a user with specific id.")
+    @Test(description = "UG2. GET /api/users/{id} - Get list of a user with specific id.", groups = {Constants.CRITICAL})
     public void testGetSpecificUserAPI() {
 
         int randomId = ThreadLocalRandom.current().nextInt(1, 7);
@@ -68,7 +69,7 @@ public class SamsaraAPITests extends BaseApi {
         response.getBody().prettyPrint();
     }
 
-    @Test(description = "UG3. GET /api/users/last5added - Get list of a 5 last added users.")
+    @Test(description = "UG3. GET /api/users/last5added - Get list of a 5 last added users.", groups = {Constants.CRITICAL})
     public void testGetLast5AddedUsersAPI() {
 
         response = given().log().all().get("/users/last5added");
@@ -81,7 +82,7 @@ public class SamsaraAPITests extends BaseApi {
         response.getBody().prettyPrint();
     }
 
-    @Test(description = "UG4. GET /api/users/exists/{username} - Check if user exists.", dataProvider = "Users")
+    @Test(description = "UG4. GET /api/users/exists/{username} - Check if user exists.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetDoesUserExistAPI(String username, String doesExist) {
 
         response = given().log().all().given().pathParam("username",username).get("users/exists/{username}");
@@ -92,7 +93,7 @@ public class SamsaraAPITests extends BaseApi {
         assert response.asString().equals(doesExist) : "User does not exist!";
     }
 
-    @Test(description = "UG5. GET /api/users/question/{username} - Get secret question for specific user.", dataProvider = "Users")
+    @Test(description = "UG5. GET /api/users/question/{username} - Get secret question for specific user.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetUsersSecretQuestionAPI(String username, String doesExist) {
 
         response = given().pathParam("username",username).get("users/question/{username}");
@@ -105,7 +106,7 @@ public class SamsaraAPITests extends BaseApi {
             System.out.println("User '" + username + "' set secret question: '" + response.asString() + "'");
     }
 
-    @Test(description = "UG6. GET /api/users/last/{n} - Get last n users added.")
+    @Test(description = "UG6. GET /api/users/last/{n} - Get last n users added.", groups = {Constants.CRITICAL})
     public void testGetLastNUsersAddedAPI() {
         int randomId = ThreadLocalRandom.current().nextInt(1, 200); // Bound is total number of users in DB
 
@@ -120,7 +121,7 @@ public class SamsaraAPITests extends BaseApi {
         response.getBody().prettyPrint();
     }
 
-    @Test(description = "UG7. GET /api/users/first/{n} - Get first n users added.")
+    @Test(description = "UG7. GET /api/users/first/{n} - Get first n users added.", groups = {Constants.CRITICAL})
     public void testGetFirstNUsersAddedAPI() {
         int randomId = ThreadLocalRandom.current().nextInt(1, 200); // Bound is total number of users in DB
 
@@ -135,7 +136,7 @@ public class SamsaraAPITests extends BaseApi {
         response.getBody().prettyPrint();
     }
 
-    @Test(description = "UG8. GET /api/users/findByUsername/{username} - Find specific user by username.", dataProvider = "Users")
+    @Test(description = "UG8. GET /api/users/findByUsername/{username} - Find specific user by username.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetFindByUsernameAPI(String username, String doesExist) {
 
         if (doesExist.equals("true")) {
@@ -147,7 +148,7 @@ public class SamsaraAPITests extends BaseApi {
             System.out.println("User does not exist");
     }
 
-    @Test(description = "UG9. GET /api/users/findByLastname/{lastName} - Find user by last name.", dataProvider = "Users")
+    @Test(description = "UG9. GET /api/users/findByLastname/{lastName} - Find user by last name.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetFindByLastNameAPI(String username, String doesExist) { // doesExist is not used here, but need to be named due to DataProvider protocol
 
         response = given().log().all().pathParam("username",username).get("users/findByLastname/{username}");
@@ -158,7 +159,7 @@ public class SamsaraAPITests extends BaseApi {
         response.getBody().prettyPrint();
     }
 
-    @Test(description = " UG10. GET /api/users/findByFirstname/{firstName} - Find user by first name.", dataProvider = "Users")
+    @Test(description = " UG10. GET /api/users/findByFirstname/{firstName} - Find user by first name.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetFindByFirstNameAPI(String username, String doesExist) {  // doesExist is not used here, but need to be named due to DataProvider protocol
 
         response = given().log().all().pathParam("username",username).get("users/findByFirstname/{username}");
@@ -168,7 +169,7 @@ public class SamsaraAPITests extends BaseApi {
     }
 
 
-    @Test(description = "UG11. GET /api/users/enabled - Get all enabled users.")
+    @Test(description = "UG11. GET /api/users/enabled - Get all enabled users.", groups = {Constants.CRITICAL})
     public void testGetAllEnabledUsersAPI() {
 
         response = given().log().all().get("users/enabled");
@@ -218,7 +219,7 @@ public class SamsaraAPITests extends BaseApi {
      * }
      **/
 //    }
-    @Test(description = "H1. GET /api/heroes - Get list of all heroes.")
+    @Test(description = "H1. GET /api/heroes - Get list of all heroes.", groups = {Constants.CRITICAL})
     public void testGetListOfAllHeroesAPI() {
         System.out.println("Testing API call to " + baseURI + basePath + "heroes");
 
@@ -237,7 +238,7 @@ public class SamsaraAPITests extends BaseApi {
         }
     }
 
-    @Test(description = "H2. GET /api/heroes/{id} - Get list of a hero with specific id.")
+    @Test(description = "H2. GET /api/heroes/{id} - Get list of a hero with specific id.", groups = {Constants.CRITICAL})
     public void testGetSpecificHeroAPI() {
         int randomId = ThreadLocalRandom.current().nextInt(1, 12); // Due to issue with id's and redundancy with heroes/level API, bound is only 12, but should be id of the last hero in samsara.heroes
         System.out.println("Testing API call to " + baseURI + basePath + "heroes/" + randomId);
@@ -269,7 +270,7 @@ public class SamsaraAPITests extends BaseApi {
      * HTTP ERROR 404
      **/
 //    }
-    @Test(description = "H5. GET /api/heroes/last10added - Get list of 10 last added heroes.")
+    @Test(description = "H5. GET /api/heroes/last10added - Get list of 10 last added heroes.", groups = {Constants.CRITICAL})
     public void testGetLast10AddedHeroesAPI() {
 
         System.out.println("Testing API call to " + baseURI + basePath + "heroes/last10added");
