@@ -19,7 +19,7 @@ public class BaseApi {
             alwaysRun = true)
     @Test
     public void testBaseUrlStatusCode200Api() {
-        RestAssured.proxy("localhost", 8888); // Using Fiddler for network scanning
+        //RestAssured.proxy("localhost", 8888); // Using Fiddler for network scanning
         RestAssured.baseURI = Utils.getProperty("app.url"); // RA uses baseURI + port mechanism, so Utils.getProperty("app.url") works here
         RestAssured.basePath = "/api/";
         RestAssured.port = 9010;
