@@ -13,9 +13,9 @@ import org.testng.Assert;
 public class LoginPage extends BasePage {
 
     // Locators
-    @FindBy(id = "username")
+    @FindBy(css = "#username")
     private WebElement usernameInput;
-    @FindBy(id = "password")
+    @FindBy(css = "#password")
     private WebElement passwordInput;
     @FindBy(xpath = "//input[@value='Log In']")
     public WebElement loginButton;
@@ -83,8 +83,8 @@ public class LoginPage extends BasePage {
         assert isLoginPageTitleDisplayed();
         assert isLogInButtonDisplayed();
         log.debug("\nLogin with credentials:\nUsername: " + properties.getProperty("admin") + "\nPassword: " + properties.getProperty("admin"));
-        fillInInputField(usernameInput, utils.getProperty("admin.username"));
-        fillInInputField(passwordInput, utils.getProperty("password"));
+        fillInInputField(usernameInput, Utils.getProperty("admin.username"));
+        fillInInputField(passwordInput, Utils.getProperty("password"));
         clickOnElement(loginButton);
         Assert.assertTrue(verifyPageIsDisplayed(By.xpath(Constants.PANEL_TITLE_XPATH), Constants.SAMSARA_PAGE_PANEL_TITLE), "Samsara page is not displayed!");
         log.info("Welcome message on Samsara page is displayed");

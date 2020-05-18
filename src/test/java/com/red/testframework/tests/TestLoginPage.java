@@ -1,8 +1,8 @@
 package com.red.testframework.tests;
 
+import com.red.testframework.pages.SamsaraPage;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.utils.Utils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.ITestResult;
@@ -23,94 +23,115 @@ public class TestLoginPage extends BaseTest {
     }
 
     // Verify admin login
-    @Test(groups = {Constants.CRITICAL}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.CRITICAL})
     public void testSuccessfulAdminLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        //loginPage.loginPageIsDisplayed();
-        loginPage.adminLogIn(); // This method itself is checking if Samsara page is opened
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
+        SamsaraPage samsaraPage = loginPage.adminLogIn(); // This method itself is checking if Samsara page is opened
+        assert samsaraPage.isSamsaraPageTitleDisplayed();
         loginSuccessful = true;
     }
 
     // Verify user login
-    @Test(groups = {Constants.HIGH}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.HIGH})
     public void testSuccessfulUserLogIn() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password")); // This method itself is checking if Samsara page is opened
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
+        loginPage.logIn(Utils.getProperty("user.username"), Utils.getProperty("password")); // This method itself is checking if Samsara page is opened
         loginSuccessful = true;
     }
 
     // Test Invalid Credentials with empty username and empty password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginEmptyUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         loginPage = loginPage.logInWithInvalidCredentials("", "");
     }
 
     // Test Invalid Credentials with empty username and correct password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginEmptyUsernameCorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage = loginPage.logInWithInvalidCredentials("", utils.getProperty("password"));
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
+        loginPage = loginPage.logInWithInvalidCredentials("", Utils.getProperty("password"));
     }
 
     // Test Invalid Credentials with empty username and incorrect password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginEmptyUsernameIncorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         loginPage = loginPage.logInWithInvalidCredentials("", "incorrectPassword");
     }
 
     // Test Invalid Credentials with correct username and empty password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginCorrectUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username"), "");
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
+        loginPage = loginPage.logInWithInvalidCredentials(Utils.getProperty("user.username"), "");
     }
 
     // Test Invalid Credentials with incorrect username and empty password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginIncorrectUsernameEmptyPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         loginPage = loginPage.logInWithInvalidCredentials("hacker", "");
     }
 
     // Test Invalid Credentials with incorrect username and incorrect password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginIncorrectUsernameIncorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         loginPage = loginPage.logInWithInvalidCredentials("mr.robot", "letMeIn");
     }
 
     // Test Invalid Credentials with incorrect username and correct password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginIncorrectUsernameCorrectPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
-        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username") + utils.getProperty("user.username"), "");
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
+        loginPage = loginPage.logInWithInvalidCredentials(Utils.getProperty("user.username") + Utils.getProperty("user.username"), "");
     }
 
     // Test Invalid Credentials with correct username and 256 characters long password
-    @Test(groups = {Constants.LOW}, dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.LOW})
     public void testUnsuccessfulLoginCorrectUsernameLongPassword() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         String randomString = RandomStringUtils.random(256, true, true);
-        loginPage = loginPage.logInWithInvalidCredentials(utils.getProperty("user.username"), randomString);
+        loginPage = loginPage.logInWithInvalidCredentials(Utils.getProperty("user.username"), randomString);
     }
 
     // Test Invalid Credentials with correct username and 256 characters long password
-    @Test(groups = {Constants.MEDIUM}, dataProvider = "UnsuccessfulLoginInputMatrix", dependsOnMethods = "testLoginPageIsOpened")
+    @Test(groups = {Constants.MEDIUM}, dataProvider = "UnsuccessfulLoginInputMatrix")
     public void testUnsuccessfulLoginWithDataProvider(String username, String password) {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
+        loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         loginPage = loginPage.logInWithInvalidCredentials(username, password);
     }
 
