@@ -3,9 +3,9 @@
 <suite name="Suito de tutti suitti" verbose="3"> <!-- Using verbose 3 for more info in logs -->
     <!-- Suite-level parameters, always passed to test (can be overridden) -->
     <parameter name="browser" value="CHROME"/>
-    <!--    <listeners>-->
-    <!--        <listener class-name="com.red.testframework.utils.ScreenshotListener" />-->
-    <!--    </listeners>-->
+    <!--        <listeners>-->
+    <!--            <listener class-name="com.red.testframework.utils.ScreenshotListener" />-->
+    <!--        </listeners>-->
     <test name="Chrome tests">
         <groups>
             <run>
@@ -16,18 +16,18 @@
                 <include name="MEDIUM"/>
                 <include name="LOW"/>
 
-<!--                <exclude name="DB_SANITY"/>-->
-<!--                <exclude name="DB_CRITICAL"/>-->
-<!--                <exclude name="DB_HIGH"/>-->
-<!--                <exclude name="DB_MEDIUM"/>-->
-<!--                <exclude name="DB_LOW"/>-->
+                <!--                <exclude name="DB_SANITY"/>-->
+                <!--                <exclude name="DB_CRITICAL"/>-->
+                <!--                <exclude name="DB_HIGH"/>-->
+                <!--                <exclude name="DB_MEDIUM"/>-->
+                <!--                <exclude name="DB_LOW"/>-->
             </run>
-<!--            <dependencies>-->
-<!--                <group name="CRITICAL" depends-on="SANITY"/>-->
-<!--                <group name="HIGH" depends-on="SANITY"/>-->
-<!--                <group name="MEDIUM" depends-on="SANITY"/>-->
-<!--                <group name="LOW" depends-on="SANITY"/>-->
-<!--            </dependencies>-->
+            <!--            <dependencies>-->
+            <!--                <group name="CRITICAL" depends-on="SANITY"/>-->
+            <!--                <group name="HIGH" depends-on="SANITY"/>-->
+            <!--                <group name="MEDIUM" depends-on="SANITY"/>-->
+            <!--                <group name="LOW" depends-on="SANITY"/>-->
+            <!--            </dependencies>-->
         </groups>
         <!--    Execution based on test classes -->
         <classes>
@@ -50,11 +50,11 @@
                 <include name="MEDIUM"/>
                 <include name="LOW"/>
 
-<!--                <exclude name="DB_SANITY"/>-->
-<!--                <exclude name="DB_CRITICAL"/>-->
-<!--                <exclude name="DB_HIGH"/>-->
-<!--                <exclude name="DB_MEDIUM"/>-->
-<!--                <exclude name="DB_LOW"/>-->
+                <!--                <exclude name="DB_SANITY"/>-->
+                <!--                <exclude name="DB_CRITICAL"/>-->
+                <!--                <exclude name="DB_HIGH"/>-->
+                <!--                <exclude name="DB_MEDIUM"/>-->
+                <!--                <exclude name="DB_LOW"/>-->
             </run>
         </groups>
         <!--    Execution on package level-->
@@ -102,11 +102,11 @@
         <parameter name="browser" value="CHROME_HEADLESS"/>
         <groups>
             <run>
-<!--                <exclude name="DB_SANITY"/>-->
-<!--                <exclude name="DB_CRITICAL"/>-->
-<!--                <exclude name="DB_HIGH"/>-->
-<!--                <exclude name="DB_MEDIUM"/>-->
-<!--                <exclude name="DB_LOW"/>-->
+                <!--                <exclude name="DB_SANITY"/>-->
+                <!--                <exclude name="DB_CRITICAL"/>-->
+                <!--                <exclude name="DB_HIGH"/>-->
+                <!--                <exclude name="DB_MEDIUM"/>-->
+                <!--                <exclude name="DB_LOW"/>-->
             </run>
         </groups>
         <packages>

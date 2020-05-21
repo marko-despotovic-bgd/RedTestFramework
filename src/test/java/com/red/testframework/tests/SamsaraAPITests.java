@@ -85,7 +85,7 @@ public class SamsaraAPITests extends BaseApi {
     @Test(description = "UG4. GET /api/users/exists/{username} - Check if user exists.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetDoesUserExistAPI(String username, String doesExist) {
 
-        response = given().log().all().given().pathParam("username",username).get("users/exists/{username}");
+        response = given().log().all().given().pathParam("username", username).get("users/exists/{username}");
 
         System.out.println("User with username '" + username + "' exists: " + response.asString());
 
@@ -96,7 +96,7 @@ public class SamsaraAPITests extends BaseApi {
     @Test(description = "UG5. GET /api/users/question/{username} - Get secret question for specific user.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetUsersSecretQuestionAPI(String username, String doesExist) {
 
-        response = given().pathParam("username",username).get("users/question/{username}");
+        response = given().pathParam("username", username).get("users/question/{username}");
 
         assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
 
@@ -140,7 +140,7 @@ public class SamsaraAPITests extends BaseApi {
     public void testGetFindByUsernameAPI(String username, String doesExist) {
 
         if (doesExist.equals("true")) {
-            response = given().log().all().pathParam("username",username).get("users/findByUsername/{username}");
+            response = given().log().all().pathParam("username", username).get("users/findByUsername/{username}");
             assert response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + response.getStatusCode();
             System.out.println("User " + username + ": ");
             response.getBody().prettyPrint();
@@ -151,7 +151,7 @@ public class SamsaraAPITests extends BaseApi {
     @Test(description = "UG9. GET /api/users/findByLastname/{lastName} - Find user by last name.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetFindByLastNameAPI(String username, String doesExist) { // doesExist is not used here, but need to be named due to DataProvider protocol
 
-        response = given().log().all().pathParam("username",username).get("users/findByLastname/{username}");
+        response = given().log().all().pathParam("username", username).get("users/findByLastname/{username}");
 
         assert response != null && response.getStatusCode() == 200 : "Error in status code! Expected 200, but received " + Objects.requireNonNull(response).getStatusCode();
 
@@ -162,7 +162,7 @@ public class SamsaraAPITests extends BaseApi {
     @Test(description = " UG10. GET /api/users/findByFirstname/{firstName} - Find user by first name.", dataProvider = "Users", groups = {Constants.CRITICAL})
     public void testGetFindByFirstNameAPI(String username, String doesExist) {  // doesExist is not used here, but need to be named due to DataProvider protocol
 
-        response = given().log().all().pathParam("username",username).get("users/findByFirstname/{username}");
+        response = given().log().all().pathParam("username", username).get("users/findByFirstname/{username}");
 
         System.out.println("User(s) with first name " + username + ": ");
         response.getBody().prettyPrint();

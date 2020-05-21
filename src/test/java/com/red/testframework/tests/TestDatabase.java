@@ -26,21 +26,21 @@ public class TestDatabase {
     // safety triggers that would deny any DROP DATABASE requests, so moved on. Left dropAndRecreateDatabase method in DBQuery for new inputs.
 
     @Test(groups = {Constants.DB_SANITY})
-    public void testCheckDBConnection() {
+    public void testDBConnectionCheck() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         dbQueries.connectionInfoDBQuery();
     }
 
     @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testCheckDBConnection")
-    public void testShowDatabase() {
+    public void testDBShowDatabase() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         assert DBQueries.isResultSetEmpty(DBQueries.showDatabaseDBQuery()) : "No databases were found!";
     }
 
     @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testShowDatabase")
-    public void testShowTables() {
+    public void testDBShowTables() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         assert DBQueries.isResultSetEmpty(DBQueries.showTablesDBQuery()) : "No tables were found!";
