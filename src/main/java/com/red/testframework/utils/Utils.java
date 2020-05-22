@@ -59,7 +59,13 @@ public class Utils {
             chromeOptions.addArguments("--headless");
             loginPage = new LoginPage(new ChromeDriver(chromeOptions));
             Log.info("Initialized " + BrowserType.CHROME_HEADLESS.toString().toLowerCase() + " session");
-        } else
+        }
+//        else if (browser.equalsIgnoreCase(BrowserType.SAFARI.toString())) {
+//            WebDriverManager.safaridriver().setup();
+//            loginPage = new LoginPage(new SafariDriver());
+//            Log.info("Initialized " + BrowserType.SAFARI.toString().toLowerCase() + " session");
+//        }
+        else
             throw new RuntimeException();
 
         return loginPage;
