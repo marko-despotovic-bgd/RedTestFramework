@@ -17,7 +17,7 @@ public class LoginPageDataProvider {
                         {"hacker", ""},
                         {"mr.robot", "drowssap"},
                         {"neo", Utils.getProperty("user.password")},
-                        {Utils.getProperty("user.username"), RandomStringUtils.random(256, true, true)},
+                        {Utils.getProperty("user.username"), RandomStringUtils.random(10, true, true)},
                 };
     }
 }

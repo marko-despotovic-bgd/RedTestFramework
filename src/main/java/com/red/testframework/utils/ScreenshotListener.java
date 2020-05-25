@@ -1,76 +1,90 @@
 package com.red.testframework.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.testng.ITestContext;
-import org.testng.ITestListener;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.testng.ITestResult;
+import org.testng.TestListenerAdapter;
 
-import com.red.testframework.pages.BasePage;
-import org.testng.Reporter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
-public class ScreenshotListener implements ITestListener {
-    WebDriver driver;
+public class ScreenshotListener extends TestListenerAdapter {
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
     @Override
-    public void onTestFailure(@NotNull ITestResult result) {
-        System.out.println("***** Error " + result.getName() + " test has failed *****");
-        String methodName = result.getName().trim();
-        ITestContext context = result.getTestContext();
-        WebDriver driver = (WebDriver) context.getAttribute("driver");
-        takeScreenShot(methodName, driver);
-    }
-
-    public void takeScreenShot(String methodName, WebDriver driver) {
+    public void onTestFailure(ITestResult result) {
+        String driverName = null;
+        WebDriver driver = (WebDriver) result.getTestContext().getAttribute("driver");
         try {
-            //The below method will save the screen shot in d drive with test method name
-            String screenshotFileLocation = Utils.getProperty("screenshotFileLocation");
 
+            if (driver instanceof ChromeDriver)
+                driverName = "chrome";
+            else if (driver instanceof FirefoxDriver)
+                driverName = "firefox";
+            else if (driver instanceof InternetExplorerDriver)
+                driverName = "IE";
+            else if (driver instanceof EdgeDriver)
+                driverName = "edge";
 
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss");
-            File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            String reportDirectory = new File(System.getProperty("user.dir")).getAbsolutePath() + screenshotFileLocation;
-            File destinationFile = null;
-            destinationFile = new File((String) reportDirectory + "failure_screenshots/Screenshot_" + methodName + formatter.format(calendar.getTime()) + ".png");
-
-
-            Log.info("Screenshot is saved as " + destinationFile.getAbsolutePath());
-
-            FileUtils.copyFile(scrFile, destinationFile);
-            Reporter.log("<a href='" + destinationFile.getAbsolutePath() + "'> <img src='" + destinationFile.getAbsolutePath() + "' height='100' width='100'/> </a>");
-        } catch (
-                IOException e) {
-            Log.error("Something went wrong while taking screenshot!");
-            e.printStackTrace();
+            String screenshotDirectory = Utils.getProperty("screenshotFileLocation") + File.separator + sdf.format(timestamp);
+            boolean isDirectoryCreated = (new File(screenshotDirectory)).mkdir();
+            if (isDirectoryCreated)
+                Log.info("Directory: " + screenshotDirectory + " created");
+            String screenshotAbsolutePath = screenshotDirectory + File.separator + driverName + "_" + System.currentTimeMillis() + "_" + result.getName() + ".png";
+            File screenshot = new File(screenshotAbsolutePath);
+            if (createFile(screenshot)) {
+                try {
+                    writeScreenshotToFile(driver, screenshot);
+                } catch (ClassCastException weNeedToAugmentOurDriverObject) {
+                    writeScreenshotToFile(new Augmenter().augment(driver), screenshot);
+                }
+                Log.info("Written screenshot to " + screenshotAbsolutePath);
+            } else {
+                Log.error("Unable to create " + screenshotAbsolutePath);
+            }
+        } catch (Exception ex) {
+            Log.error("Unable to capture screenshot...");
+            ex.printStackTrace();
         }
-
     }
 
-    public void onFinish(ITestContext context) {
+    private boolean createFile(File screenshot) {
+        boolean fileCreated = false;
+
+        if (screenshot.exists()) {
+            fileCreated = true;
+        } else {
+            File parentDirectory = new File(screenshot.getParent());
+            if (parentDirectory.exists() || parentDirectory.mkdirs()) {
+                try {
+                    fileCreated = screenshot.createNewFile();
+                } catch (IOException errorCreatingScreenshot) {
+                    errorCreatingScreenshot.printStackTrace();
+                }
+            }
+        }
+        return fileCreated;
     }
 
-    public void onTestStart(ITestResult result) {
-    }
-
-    public void onTestSuccess(ITestResult result) {
-    }
-
-    public void onTestSkipped(ITestResult result) {
-    }
-
-    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-    }
-
-    public void onStart(ITestContext context) {
+    private void writeScreenshotToFile(WebDriver driver, File screenshot) {
+        try {
+            FileOutputStream screenshotStream = new FileOutputStream(screenshot);
+            screenshotStream.write(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
+            screenshotStream.close();
+        } catch (IOException unableToWriteScreenshot) {
+            Log.error("Unable to write " + screenshot.getAbsolutePath());
+            unableToWriteScreenshot.printStackTrace();
+        }
     }
 }
