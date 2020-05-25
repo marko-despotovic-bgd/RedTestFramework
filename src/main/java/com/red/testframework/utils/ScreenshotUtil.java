@@ -1,93 +1,74 @@
 package com.red.testframework.utils;
 
 import com.red.testframework.pages.BasePage;
-import org.openqa.selenium.WebDriver;
-
-import java.util.Properties;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.red.testframework.pages.LoginPage;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.testng.ITestResult;
-import org.testng.Reporter;
+import org.testng.TestListenerAdapter;
 
-public class ScreenshotUtil extends BasePage {
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-    private static Properties properties = new Properties();
 
-    public ScreenshotUtil(WebDriver driver) {
-        super(driver);
+public class ScreenshotUtil extends TestListenerAdapter {
+
+    LoginPage loginPage;
+    WebDriver driver;
+    private boolean createFile(File screenshot) {
+        boolean fileCreated = false;
+
+        if (screenshot.exists()) {
+            fileCreated = true;
+        } else {
+            File parentDirectory = new File(screenshot.getParent());
+            if (parentDirectory.exists() || parentDirectory.mkdirs()) {
+                try {
+                    fileCreated = screenshot.createNewFile();
+                } catch (IOException errorCreatingScreenshot) {
+                    errorCreatingScreenshot.printStackTrace();
+                }
+            }
+        }
+
+        return fileCreated;
     }
 
-    private static void makeScreenshot(WebDriver driver, String imageNamePrefix, String folderName) {
+    private void writeScreenshotToFile(WebDriver driver, File screenshot) {
         try {
-            String screenshotFileLocation = Utils.getProperty("screenshotFileLocation");
+            FileOutputStream screenshotStream = new FileOutputStream(screenshot);
+            screenshotStream.write(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
+            screenshotStream.close();
+        } catch (IOException unableToWriteScreenshot) {
+            System.err.println("Unable to write " + screenshot.getAbsolutePath());
+            unableToWriteScreenshot.printStackTrace();
+        }
+    }
 
-
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss");
-            File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            String reportDirectory = new File(System.getProperty("user.dir")).getAbsolutePath() + screenshotFileLocation;
-            File destinationFile = null;
-            if (StringUtils.isBlank(imageNamePrefix)) {
-                destinationFile = new File((String) reportDirectory + folderName + "/Screenshot_" + formatter.format(calendar.getTime()) + ".png");
+    @Override
+    public void onTestFailure(ITestResult failingTest) {
+        try {
+            driver = WebDriver.class.newInstance();
+            String screenshotDirectory = System.getProperty("screenshotDirectory", "target/screenshots");
+            String screenshotAbsolutePath = screenshotDirectory + File.separator + System.currentTimeMillis() + "_" + failingTest.getName() + ".png";
+            File screenshot = new File(screenshotAbsolutePath);
+            if (createFile(screenshot)) {
+                try {
+                    writeScreenshotToFile(driver, screenshot);
+                } catch (ClassCastException weNeedToAugmentOurDriverObject) {
+                    writeScreenshotToFile(new Augmenter().augment(driver), screenshot);
+                }
+                System.out.println("Written screenshot to " + screenshotAbsolutePath);
             } else {
-                destinationFile = new File((String) reportDirectory + folderName + "/" + imageNamePrefix + "_" + formatter.format(calendar.getTime()) + ".png");
+                System.err.println("Unable to create " + screenshotAbsolutePath);
             }
-
-            Log.info("Screenshot is saved as " + destinationFile.getAbsolutePath());
-
-            FileUtils.copyFile(scrFile, destinationFile);
-            Reporter.log("<a href='" + destinationFile.getAbsolutePath() + "'> <img src='" + destinationFile.getAbsolutePath() + "' height='100' width='100'/> </a>");
-        } catch (IOException e) {
-            Log.error("Something went wrong while taking screenshot!");
-            e.printStackTrace();
+        } catch (Exception ex) {
+            System.err.println("Unable to capture screenshot...");
+            ex.printStackTrace();
         }
     }
-
-    public static void makeScreenshot(WebDriver driver, ITestResult result, String imageNamePrefix) {
-
-        imageNamePrefix = verifyImageNamePrefix(imageNamePrefix);
-
-        boolean saveScreenshot = getSaveScreenshots();
-        if (saveScreenshot) {
-            if (result != null && !result.isSuccess()) {
-                Log.info("Creating snapshot for failed method.");
-                String failedLocation = "/failure_screenshots";
-                makeScreenshot(driver, imageNamePrefix, failedLocation);
-            } else {
-                Log.info("Creating snapshot.");
-                String screenshotLocation = "/screenshots";
-                makeScreenshot(driver, imageNamePrefix, screenshotLocation);
-            }
-        }
-    }
-
-    public static boolean getSaveScreenshots() {
-        return Utils.getProperty("saveScreenshots").equalsIgnoreCase("true") && StringUtils.isBlank(Utils.getProperty("saveScreenshots"));
-    }
-
-    public static void makeScreenshot(ITestResult result, WebDriver driver) {
-        ScreenshotUtil.makeScreenshot(result, "");
-    }
-
-    public static void makeScreenshot(ITestResult result, String imageNamePrefix) {
-        ScreenshotUtil.makeScreenshot(BasePage.driver, result, imageNamePrefix);
-    }
-
-    private static String verifyImageNamePrefix(String imageNamePrefix) {
-        if (StringUtils.isNotBlank(imageNamePrefix) && !imageNamePrefix.matches("[a-zA-Z0-9-_]+")) {
-            Log.error("Image name must contain only alphanumerics, - or _");
-            Log.error("Using default name instead");
-            imageNamePrefix = "";
-        }
-        return imageNamePrefix;
-    }
-
 }
-

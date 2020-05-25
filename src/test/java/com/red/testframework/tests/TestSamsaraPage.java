@@ -14,33 +14,29 @@ public class TestSamsaraPage extends BaseTest {
     // Verify Samsara page is opened after login
     @Test(groups = {Constants.CRITICAL})
     public void loginAndSamsaraPageDisplayed() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.adminLogIn();
+        samsaraPage = loginPage.adminLogin();
         samsaraPage.isSamsaraPageTitleDisplayed();
     }
 
     // Verify "Start Testing!" button is displayed
     @Test(groups = {Constants.HIGH},  dependsOnMethods = "loginAndSamsaraPageDisplayed")
     public void verifyStartTestingButtonIsDisplayed() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         samsaraPage.isStartTestingButtonDisplayed();
     }
 
     // Verify "Share with friends!" button is displayed
     @Test(groups = {Constants.MEDIUM},  dependsOnMethods = "loginAndSamsaraPageDisplayed")
     public void verifyShareWithFriendsButtonIsDisplayed() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         samsaraPage.isShareWithFriendsButtonDisplayed();
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
-        Log.endTest(new Object() {
-        }.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
+        Log.endTest(new Object(){}.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
         if (loginSuccessful)
             loginPage.logOut();
         loginSuccessful = false;

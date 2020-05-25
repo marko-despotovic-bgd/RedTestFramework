@@ -31,11 +31,16 @@
         </groups>
         <!--    Execution based on test classes -->
         <classes>
-            <class name="com.red.testframework.tests.TestDatabase"/>
+            <class name="com.red.testframework.tests.TestDatabase">
+            <methods>
+                <exclude name="testUnsuccessfulLoginCorrectUsernameLongPassword"/> <!--exclusion particular method-->
+            </methods>
+            </class>
             <class name="com.red.testframework.tests.SamsaraAPITests"/>
             <class name="com.red.testframework.tests.TestLoginPage"/>
             <class name="com.red.testframework.tests.TestSamsaraPage"/>
             <class name="com.red.testframework.tests.SamsaraUITests"/>
+
         </classes>
     </test>
     <test name="Firefox tests">
