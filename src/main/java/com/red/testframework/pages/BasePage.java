@@ -20,7 +20,6 @@ public class BasePage {
     public WebDriver driver;
     public WebDriverWait wait;
     public Logger log;
-    public Properties properties = new Properties();
 
     public BasePage(WebDriver driver) {
         this.driver = driver;

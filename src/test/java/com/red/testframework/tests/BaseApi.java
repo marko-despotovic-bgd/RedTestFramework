@@ -27,11 +27,11 @@ public class BaseApi {
         RestAssured.requestSpecification = new RequestSpecBuilder().
         addHeader("Content-Type", "application/json").
         addHeader("Accept", "application/json").
-        setAuth(RestAssured.basic(Utils.getProperty("admin.username"), Utils.getProperty("password"))).
+        setAuth(RestAssured.basic(Utils.getProperty("admin.username"), Utils.getProperty("admin.password"))).
         build();
         // When working with authentication token that has to be processed through flow involving more than one API call,
         // Use String authenticationToken = given.when.then.extract();
-        RestAssured.given()
+        RestAssured.given().log().all()
                 .when().get()
                 .then().statusCode(200);
     }

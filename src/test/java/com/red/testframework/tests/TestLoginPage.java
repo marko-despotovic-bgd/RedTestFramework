@@ -5,6 +5,7 @@ import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
 import com.red.testframework.utils.Utils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -17,7 +18,6 @@ public class TestLoginPage extends BaseTest {
         Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
         assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
-        assert loginPage.isLogInButtonDisplayed() : "\"Log In\" button is not displayed";
     }
 
     @Test(description = "Test login with admin's credentials.", groups = {Constants.CRITICAL}, dependsOnMethods = "test_loginPage_checkIfLoginPageTitleAndLoginButtonArePresent_loginPageIsOpened")
@@ -101,10 +101,10 @@ public class TestLoginPage extends BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDown(ITestResult result) {
+    public void tearDown(@NotNull ITestResult result) {
         Log.endTest(new Object(){}.getClass().getEnclosingMethod().getName() + " in @AfterMethod");
         if (loginSuccessful)
             loginPage.logOut();
         loginSuccessful = false;
+        }
     }
-}

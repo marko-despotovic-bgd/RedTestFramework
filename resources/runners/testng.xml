@@ -3,9 +3,9 @@
 <suite name="Suito de tutti suitti" verbose="3"> <!-- Using verbose 3 for more info in logs -->
     <!-- Suite-level parameters, always passed to test (can be overridden) -->
     <parameter name="browser" value="CHROME"/>
-    <!--        <listeners>-->
-    <!--            <listener class-name="com.red.testframework.utils.ScreenshotListener" />-->
-    <!--        </listeners>-->
+    <listeners>
+        <listener class-name="com.red.testframework.utils.ScreenshotListener"/>
+    </listeners>
     <test name="Chrome tests">
         <groups>
             <run>
@@ -32,9 +32,9 @@
         <!--    Execution based on test classes -->
         <classes>
             <class name="com.red.testframework.tests.TestDatabase">
-            <methods>
-                <exclude name="testUnsuccessfulLoginCorrectUsernameLongPassword"/> <!--exclusion particular method-->
-            </methods>
+                <!--                        <methods>-->
+                <!--                            <exclude name="testUnsuccessfulLoginCorrectUsernameLongPassword"/> &lt;!&ndash;exclusion particular method&ndash;&gt;-->
+                <!--                        </methods>-->
             </class>
             <class name="com.red.testframework.tests.SamsaraAPITests"/>
             <class name="com.red.testframework.tests.TestLoginPage"/>
@@ -55,6 +55,7 @@
                 <include name="MEDIUM"/>
                 <include name="LOW"/>
 
+                <!-- Exclusion on group level -->
                 <!--                <exclude name="DB_SANITY"/>-->
                 <!--                <exclude name="DB_CRITICAL"/>-->
                 <!--                <exclude name="DB_HIGH"/>-->
@@ -63,10 +64,22 @@
             </run>
         </groups>
         <!--    Execution on package level-->
-
         <packages>
             <package name="com.red.testframework.tests"/>
         </packages>
+        <classes>
+            <class name="com.red.testframework.tests.TestDatabase">
+                <methods>
+                    <exclude
+                            name="testUnsuccessfulLoginCorrectUsernameLongPassword"/> <!--exclusion particular method-->
+                </methods>
+            </class>
+            <class name="com.red.testframework.tests.SamsaraAPITests"/>
+            <class name="com.red.testframework.tests.TestLoginPage"/>
+            <class name="com.red.testframework.tests.TestSamsaraPage"/>
+            <class name="com.red.testframework.tests.SamsaraUITests"/>
+
+        </classes>
     </test>
     <!--    <test name="Edge tests">-->
     <!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
@@ -105,15 +118,6 @@
     <test name="Chrome headless tests">
         <!-- Overriding suites' parameter -->
         <parameter name="browser" value="CHROME_HEADLESS"/>
-        <groups>
-            <run>
-                <!--                <exclude name="DB_SANITY"/>-->
-                <!--                <exclude name="DB_CRITICAL"/>-->
-                <!--                <exclude name="DB_HIGH"/>-->
-                <!--                <exclude name="DB_MEDIUM"/>-->
-                <!--                <exclude name="DB_LOW"/>-->
-            </run>
-        </groups>
         <packages>
             <package name="com.red.testframework.tests"/>
         </packages>
