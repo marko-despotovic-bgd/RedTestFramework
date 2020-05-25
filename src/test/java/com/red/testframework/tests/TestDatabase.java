@@ -32,21 +32,21 @@ public class TestDatabase {
         dbQueries.connectionInfoDBQuery();
     }
 
-    @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testCheckDBConnection")
+    @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testDBConnectionCheck")
     public void testDBShowDatabase() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         assert DBQueries.isResultSetEmpty(DBQueries.showDatabaseDBQuery()) : "No databases were found!";
     }
 
-    @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testShowDatabase")
+    @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testDBShowDatabase")
     public void testDBShowTables() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         assert DBQueries.isResultSetEmpty(DBQueries.showTablesDBQuery()) : "No tables were found!";
     }
 
-    @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testShowTables")
+    @Test(groups = {Constants.DB_CRITICAL}, dependsOnMethods = "testDBShowTables")
     public void testDBTruncateTables() {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());

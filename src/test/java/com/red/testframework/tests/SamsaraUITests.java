@@ -22,14 +22,11 @@
 
 package com.red.testframework.tests;
 
-
 import com.red.testframework.pages.*;
 import com.red.testframework.utils.Constants;
 import com.red.testframework.utils.Log;
-import com.red.testframework.utils.ScreenshotUtil;
 import com.red.testframework.utils.Utils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
@@ -69,7 +66,7 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.logIn(Utils.getProperty("user.username"), Utils.getProperty("password"));
+        samsaraPage = loginPage.customLogin(Utils.getProperty("user.username"), Utils.getProperty("user.password"));
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         heroesPage = samsaraPage.navigateToHeroesPage();
@@ -85,7 +82,7 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
+        samsaraPage = loginPage.userLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         heroesPage = samsaraPage.navigateToHeroesPage();
@@ -106,7 +103,7 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
+        samsaraPage = loginPage.userLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         heroesPage = samsaraPage.navigateToHeroesPage();
@@ -144,7 +141,7 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.adminLogIn();
+        samsaraPage = loginPage.adminLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         usersPage = samsaraPage.navigateToUsersPage();
@@ -160,7 +157,7 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.adminLogIn();
+        samsaraPage = loginPage.adminLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         usersPage = samsaraPage.navigateToUsersPage();
@@ -176,10 +173,9 @@ public class SamsaraUITests extends BaseTest {
 
     @Test(groups = {Constants.HIGH})
     public void testDeleteUserAsAdmin() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+        Log.startTest(new Object() {}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.adminLogIn();
+        samsaraPage = loginPage.adminLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         usersPage = samsaraPage.navigateToUsersPage();
@@ -215,7 +211,7 @@ public class SamsaraUITests extends BaseTest {
         Log.startTest(new Object() {
         }.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        samsaraPage = loginPage.adminLogIn();
+        samsaraPage = loginPage.adminLogin();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(samsaraPage.isSamsaraPageTitleDisplayed(), "Samsara page is not displayed!");
@@ -248,7 +244,7 @@ public class SamsaraUITests extends BaseTest {
 
         if (hero1Created || hero2Created || hero3Created || hero4Created || hero5Created || user1Created || user2Created || user3Created || user4Created) {
             Log.info("=========== Reverting changes =========");
-            samsaraPage = loginPage.adminLogIn();
+            samsaraPage = loginPage.adminLogin();
 
             if (hero1Created || hero2Created || hero3Created || hero4Created || hero5Created) {
                 Log.info("----- Deleting created hero(es) -----");

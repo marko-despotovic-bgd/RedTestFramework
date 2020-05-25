@@ -13,20 +13,21 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.red.testframework.utils.Log;
 
 public class BasePage {
-    public static WebDriver driver;
-    public static Logger log = LoggerFactory.getLogger(BasePage.class);
+    public WebDriver driver;
+    public WebDriverWait wait;
+    public Logger log;
     public Properties properties = new Properties();
 
     public BasePage(WebDriver driver) {
-        BasePage.driver = driver;
+        this.driver = driver;
+        wait = new WebDriverWait(driver,5); // Third argument can be "pulse", defaults to 500ms
         log = Log.getLog(this.getClass());
-        PageFactory.initElements(driver, this);
         driver.manage().window().maximize();
+        PageFactory.initElements(driver, this);
     }
 
     public void fillInInputField(WebElement element, String value) {
