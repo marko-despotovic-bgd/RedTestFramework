@@ -17,8 +17,12 @@ public class LoginPage extends BasePage {
     @FindBy(css = ".center-block") public WebElement loginButton;
     @FindBy(css = ".alert-success") private WebElement alertSuccessMessage;
     @FindBy(css = ".alert-danger") private WebElement alertFailMessage;
-    @FindBy(css = ".glyphicon-log-out") private WebElement logoutButton;
     @FindBy(css = ".panel-title") private WebElement panelTitle;
+    @FindBy(xpath = "//span[@class='glyphicon glyphicon-log-out']") private WebElement logoutButton;
+//    @FindBy(css = ".glyphicon-log-out") private WebElement logoutButton;
+//    Issue on Firefox: Element <span class="glyphicon glyphicon-log-out"> is not clickable at point (1842,25)
+//    because another element <div id="addUserModal" class="modal fade in"> obscures it
+
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -41,11 +45,11 @@ public class LoginPage extends BasePage {
     public SamsaraPage adminLogin() {
         log.info("Executing ==> " + new Object(){}.getClass().getEnclosingMethod().getName() + " <== method");
         log.debug("\nLogin with credentials:\nUsername: " + Utils.getProperty("admin.username") + "\nPassword: " + Utils.getProperty("admin.password"));
-        assert isDisplayed(usernameInput);
+        assert isDisplayed(usernameInput) : "Username input field is not displayed!";
         usernameInput.clear();
         usernameInput.sendKeys(Utils.getProperty("admin.username"));
         assert usernameInput.getAttribute("value").equals(Utils.getProperty("admin.username")) : "Inserted text does not match username!"; // <-- Testing purpose Utils.getProperty("user.username")
-        assert isDisplayed(passwordInput);
+        assert isDisplayed(passwordInput) : "Password input field is not displayed!";
         passwordInput.clear();
         passwordInput.sendKeys(Utils.getProperty("admin.password"));
         assert passwordInput.getAttribute("value").equals(Utils.getProperty("admin.password")) : "Inserted text does not match password!";
@@ -60,11 +64,11 @@ public class LoginPage extends BasePage {
     public SamsaraPage userLogin() {
         log.info("Executing ==> " + new Object(){}.getClass().getEnclosingMethod().getName() + " <== method");
         log.info("\nLogin with credentials:\nUsername: " + Utils.getProperty("user.username") + "\nPassword: " + Utils.getProperty("user.password"));
-        assert isDisplayed(usernameInput);
+        assert isDisplayed(usernameInput) : "Username input field is not displayed!";
         usernameInput.clear();
         usernameInput.sendKeys(Utils.getProperty("user.username"));
         assert usernameInput.getAttribute("value").equals(Utils.getProperty("user.username")) : "Inserted text does not match username!";
-        assert isDisplayed(passwordInput);
+        assert isDisplayed(passwordInput) : "Password input field is not displayed!";
         passwordInput.clear();
         passwordInput.sendKeys(Utils.getProperty("user.password"));
         assert passwordInput.getAttribute("value").equals(Utils.getProperty("user.password")) : "Inserted text does not match password!";
@@ -79,11 +83,11 @@ public class LoginPage extends BasePage {
     public SamsaraPage customLogin(String username, String password) {
         log.info("Executing ==> " + new Object(){}.getClass().getEnclosingMethod().getName() + " <== method");
         log.debug("Login with credentials:\nUsername: " + username + "\nPassword: " + password);
-        assert isDisplayed(usernameInput);
+        assert isDisplayed(usernameInput) : "Username input field is not displayed!";
         usernameInput.clear();
         usernameInput.sendKeys(username);
         assert usernameInput.getAttribute("value").equals(username) : "Inserted text does not match username!";
-        assert isDisplayed(passwordInput);
+        assert isDisplayed(passwordInput) : "Password input field is not displayed!";
         passwordInput.clear();
         passwordInput.sendKeys(password);
         assert passwordInput.getAttribute("value").equals(password) : "Inserted text does not match password!";
@@ -98,11 +102,11 @@ public class LoginPage extends BasePage {
     public void loginWithInvalidCredentials(String username, String password) {
         log.info("Executing ==> " + new Object(){}.getClass().getEnclosingMethod().getName() + " <== method");
         log.debug("\nLogin with credentials:\nUsername: " + username + "\nPassword: " + password);
-        assert isDisplayed(usernameInput);
+        assert isDisplayed(usernameInput) : "Username input field is not displayed!";
         usernameInput.clear();
         usernameInput.sendKeys(username);
         assert usernameInput.getAttribute("value").equals(username) : "Inserted text does not match username!";
-        assert isDisplayed(passwordInput);
+        assert isDisplayed(passwordInput) : "Password input field is not displayed!";
         passwordInput.clear();
         passwordInput.sendKeys(password);
         assert passwordInput.getAttribute("value").equals(password) : "Inserted text does not match password!";
