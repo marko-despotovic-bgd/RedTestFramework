@@ -28,8 +28,8 @@
         <maven.surefire.version>2.22.2</maven.surefire.version>
         <maven.failsafe.version>2.22.2</maven.failsafe.version>
         <suiteXmlFile.path>resources/runners/testng.xml</suiteXmlFile.path>
-        <!--		<suiteXmlFile.path>resources/runners/single-class-runner.xml</suiteXmlFile.path>-->
-        <!--		<suiteXmlFile.path>resources/runners/single-page-runner.xml</suiteXmlFile.path>-->
+        <!--		<suiteXmlFile.path>resources/runners/test-login-page.xml</suiteXmlFile.path>-->
+        <!--		<suiteXmlFile.path>resources/runners/test-samsara-page.xml</suiteXmlFile.path>-->
 
     </properties>
 

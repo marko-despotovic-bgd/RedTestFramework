@@ -14,12 +14,6 @@
  A2. Admin module - Verify admin has access to admin section                                *
  A3. Admin module - Verify admin can recreate registration key                              *
  ********************************************************************************************/
-
-//        Verify search by hero name displays correct table
-//        Verify search by user name displays correct table
-//        Verify user actions - rename hero is saved in audit table
-//        Verify admin actions - rename hero is saved in audit table
-
 package com.red.testframework.tests;
 
 import com.red.testframework.pages.*;
@@ -34,6 +28,8 @@ import org.testng.asserts.SoftAssert;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SamsaraUITests extends BaseTest {
+
+    /**  TC naming: test_state(page)_actions_expectedResult()  **/
 
     private SamsaraPage samsaraPage;
     private UsersPage usersPage;
@@ -61,11 +57,11 @@ public class SamsaraUITests extends BaseTest {
     boolean loginSuccessful, hero1Created, hero2Created, hero3Created, hero4Created, hero5Created,
             user1Created, user2Created, user3Created, user4Created = false;
 
-    @Test(groups = {Constants.HIGH})
-    public void testCreateNewHeroAsUser() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+    @Test(description = "H1. Hero module - Verify user can create new hero.", groups = {Constants.HIGH})
+    public void test_heroPage_createNewHeroAsUser_heroCreatedSuccessfully() {
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         samsaraPage = loginPage.customLogin(Utils.getProperty("user.username"), Utils.getProperty("user.password"));
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -77,11 +73,11 @@ public class SamsaraUITests extends BaseTest {
         loginPage.logOut();
     }
 
-    @Test(groups = {Constants.HIGH})
-    public void testEditExistingOwnHeroAsUser() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+    @Test(description = "H2. Hero module - Verify user can edit existing own hero.", groups = {Constants.HIGH})
+    public void test_heroPage_editExistingOwnHeroAsUser_heroEditedSuccessfully() {
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         samsaraPage = loginPage.userLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -98,11 +94,11 @@ public class SamsaraUITests extends BaseTest {
         loginPage.logOut();
     }
 
-    @Test(groups = {Constants.MEDIUM})
-    public void testDeleteOwnHeroAsUser() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+    @Test(description = "H3. Hero module - Verify user can delete own hero.", groups = {Constants.MEDIUM})
+    public void test_heroPage_deleteExistingOwnHeroAsUser_heroDeletedSuccessfully() {
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         samsaraPage = loginPage.userLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -119,28 +115,21 @@ public class SamsaraUITests extends BaseTest {
         loginPage.logOut();
     }
 
-//    @Test(dependsOnMethods = "userCreateNewHeroTest")
-//    public void testUserCannotDeleteNotOwnHero() {
-//        Log.startTest(new Object() {
-//        }.getClass().getEnclosingMethod().getName());
-//        samsaraPage = loginPage.logIn(utils.getProperty("user.username"), utils.getProperty("password"));
-//        loginSuccessful = true;
-//        heroesPage.deleteHero(hero1Name); // Deleting hero
-//        hero1Created = true;
-//    }
-
-//   @Test(groups = {Constants.MEDIUM})
-//   public void testShowMyHeroesOnlyButton() {
+//    @Test(description = "H4. Hero module - Verify user can not delete heroes he does not own", dependsOnMethods = "userCreateNewHeroTest")
+//    public void test_heroPage_deleteNotOwnHeroAsUser_heroCouldNotBeDeleted() {
 //}
-//   @Test(groups = {Constants.MEDIUM})
-//   public void testLastAddedHeroesButton() {
+//    @Test(groups = {Constants.MEDIUM})
+//    public void test_heroPage_verifyShowMyHeroesOnlyButtonBehavior_showMyHeroesOnlyButtonWorksAsExpected() {
+//}
+//    @Test(groups = {Constants.MEDIUM})
+//    public void test_heroPage_verifyLastAddedHeroesButtonBehavior_lastAddedHeroesButtonWorksAsExpected() {
 //}
 
     @Test(groups = {Constants.CRITICAL})
-    public void testCreateUserAsAdmin() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+    public void test_usersPage_createUserAsAdmin_userCreatedSuccessfully() {
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         samsaraPage = loginPage.adminLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -153,10 +142,10 @@ public class SamsaraUITests extends BaseTest {
     }
 
     @Test(groups = {Constants.HIGH})
-    public void testEditUserAsAdmin() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+    public void test_usersPage_editUserAsAdmin_userEditedSuccessfully() {
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         samsaraPage = loginPage.adminLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -172,9 +161,10 @@ public class SamsaraUITests extends BaseTest {
     }
 
     @Test(groups = {Constants.HIGH})
-    public void testDeleteUserAsAdmin() {
+    public void test_usersPage_deleteUserAsAdmin_userDeletedSuccessfully() {
         Log.startTest(new Object() {}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         samsaraPage = loginPage.adminLogin();
         assert samsaraPage.isSamsaraPageTitleDisplayed() : "Samsara page is not displayed";
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
@@ -185,32 +175,31 @@ public class SamsaraUITests extends BaseTest {
         assert user3Created : "Admin was not able to create user!"; // This is the goal of the test
         usersPage.deleteUser(username3); // Deleting user
         user3Created = usersPage.isUserDisplayed(username3);
-        assert !user3Created;
+        assert !user3Created : "User found in the list, although it should be deleted!";
         loginPage.logOut();
     }
 
     //   @Test(groups = {Constants.MEDIUM})
-//   public void testLastAddedUsersButton() {
+//   public void test_usersPage_verifyLastAddedUsersButtonBehavior_lastAddedUsersButtonWorksAsExpected() {
 //}
 
     //   @Test(groups = {Constants.CRITICAL})
-//   public void testUserCannotAccessAdminSection() {
+//   public void test_adminPage_verifyUserCannotAccessAdminSection_adminSectionNotAccessible() {
 //}
 
     //   @Test(groups = {Constants.CRITICAL})
-//   public void testAdminCanAccessAdminSection() {
+//   public void test_adminPage_verifyAdminCanAccessAdminSection_adminSectionAccessible() {
 //}
 
     //   @Test(groups = {Constants.CRITICAL})
-//   public void testAdminCanRecreateRegistrationKey() {
+//   public void test_adminPage_verifyAdminCanRecreateRegistrationKey_RegistrationKeyRecreatedSuccessfully() {
 //}
-
 
     @Test(groups = {Constants.SANITY})
-    public void testSamsaraPagesCheck() {
-        Log.startTest(new Object() {
-        }.getClass().getEnclosingMethod().getName());
+    public void test_allPages_checkIfAllPagesAreDisplayed_pagesOpenSuccessfully() {
+        Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
+        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
         samsaraPage = loginPage.adminLogin();
         loginSuccessful = samsaraPage.isSamsaraPageTitleDisplayed();
         SoftAssert softAssert = new SoftAssert();

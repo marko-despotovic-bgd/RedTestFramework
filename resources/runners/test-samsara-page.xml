@@ -18,7 +18,7 @@
             <class name="com.red.testframework.tests.TestSamsaraPage">
 <!--            <methods>-->
 <!--                <exclude-->
-<!--                        name="test_loginPage_loginWithCorrectUsernameLongPassword_invalidCredentialsErrorMessagePresent"/>-->
+<!--                        name="test_samsaraPage_verifyShareWithFriendsButtonIsDisplayed_shareWithFriendsButtonIsDisplayed"/>-->
 <!--            </methods>-->
             </class>
         </classes>
