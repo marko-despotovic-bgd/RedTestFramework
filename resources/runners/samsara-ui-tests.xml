@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Single Page runner">
+    <parameter name="browser" value="CHROME"/>
+    <listeners>
+        <listener class-name="com.red.testframework.utils.ScreenshotListener" />
+    </listeners>
+    <test name="SPR">
+        <classes>
+            <class name="com.red.testframework.tests.SamsaraUITests">
+<!--            <methods>-->
+<!--                <exclude-->
+<!--                        name="test_heroPage_createNewHeroAsUser_heroCreatedSuccessfully"/>-->
+<!--            </methods>-->
+            </class>
+        </classes>
+    </test>
+</suite>

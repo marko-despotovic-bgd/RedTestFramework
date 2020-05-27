@@ -1,5 +1,6 @@
 package com.red.testframework.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -23,7 +24,7 @@ public class ScreenshotListener extends TestListenerAdapter {
     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
     @Override
-    public void onTestFailure(ITestResult result) {
+    public void onTestFailure(@NotNull ITestResult result) {
         String driverName = null;
         WebDriver driver = (WebDriver) result.getTestContext().getAttribute("driver");
         try {
@@ -41,7 +42,7 @@ public class ScreenshotListener extends TestListenerAdapter {
             boolean isDirectoryCreated = (new File(screenshotDirectory)).mkdir();
             if (isDirectoryCreated)
                 Log.info("Directory: " + screenshotDirectory + " created");
-            String screenshotAbsolutePath = screenshotDirectory + File.separator + driverName + "_" + System.currentTimeMillis() + "_" + result.getName() + ".png";
+            String screenshotAbsolutePath = screenshotDirectory + File.separator + driverName + "_" + result.getName() + "_" + System.currentTimeMillis() + ".png";
             File screenshot = new File(screenshotAbsolutePath);
             if (createFile(screenshot)) {
                 try {
@@ -59,7 +60,7 @@ public class ScreenshotListener extends TestListenerAdapter {
         }
     }
 
-    private boolean createFile(File screenshot) {
+    private boolean createFile(@NotNull File screenshot) {
         boolean fileCreated = false;
 
         if (screenshot.exists()) {
