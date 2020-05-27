@@ -37,7 +37,7 @@ public class SamsaraUITests extends BaseTest {
 
     String username1 = "despot" + RandomStringUtils.random(6, true, true).toLowerCase(),
             username2 = "a" + username1 + RandomStringUtils.random(5, true, true).toLowerCase(),
-            username3 = "z" + username1 + RandomStringUtils.random(4, true, true).toLowerCase(),
+            username3 = "zz" + username1 + RandomStringUtils.random(4, true, true).toLowerCase(),
             username4 = RandomStringUtils.random(3, true, true).toLowerCase() + username1 + "3",
             firstName = "John",
             lastName = "Doe",
