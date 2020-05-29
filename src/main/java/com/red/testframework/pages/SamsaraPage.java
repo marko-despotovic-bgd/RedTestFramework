@@ -12,17 +12,17 @@ import org.testng.Assert;
 public class SamsaraPage extends BasePage {
 
     //Page locators
-    @FindBy(xpath = "//a[@href='/home']") private WebElement homePageNavigator;
-    @FindBy(xpath = "//a[@href='/users']") private WebElement usersPageNavigator;
-    @FindBy(xpath = "//a[@href='/heroes']") private WebElement heroesPageNavigator;
-    @FindBy(xpath = "//a[@href='/gallery']") private WebElement galleryPageNavigator;
-    @FindBy(xpath = "//a[@href='/api']") private WebElement apiPageNavigator;
-    @FindBy(xpath = "//a[@href='/broken']") private WebElement brokenPageNavigator;
-    @FindBy(xpath = "//a[@href='/admin']") private WebElement adminPageNavigator;
-    @FindBy(xpath = "//div[@class='panel-title text-center']") private WebElement panelTitle;
-    @FindBy(xpath = "//a[@class='navbar-brand']") private WebElement samsaraBrandLink;
-    @FindBy(xpath = "//a[@class='btn btn-primary btn-lg'][text()='Start Testing!']") private WebElement startTestingButton;
-    @FindBy(xpath = "//a[@class='btn btn-primary btn-lg'][text()='Share with friends!']") private WebElement shareWithFriendsButton;
+    @FindBy(css = ".navbar-brand") private WebElement samsaraBrandLink;
+    @FindBy(css = ".nav a[href=\"/home\"]") private WebElement homePageNavigator;
+    @FindBy(css = "a[href=\"/users\"]") private WebElement usersPageNavigator;
+    @FindBy(css = "a[href=\"/heroes\"]") private WebElement heroesPageNavigator;
+    @FindBy(css = "a[href=\"/gallery\"]") private WebElement galleryPageNavigator;
+    @FindBy(css = "a[href=\"/api\"]") private WebElement apiPageNavigator;
+    @FindBy(css = "a[href=\"/broken\"]") private WebElement brokenPageNavigator;
+    @FindBy(css = "a[href=\"/admin\"]") private WebElement adminPageNavigator;
+    @FindBy(css = "//div[@class='panel-title text-center']") private WebElement panelTitle;
+    @FindBy(css = ".lead [href=\"/home\"]") private WebElement startTestingButton;
+    @FindBy(css = ".lead [href=\"/\"]") private WebElement shareWithFriendsButton;
 
     public SamsaraPage(WebDriver driver) {
         super(driver);

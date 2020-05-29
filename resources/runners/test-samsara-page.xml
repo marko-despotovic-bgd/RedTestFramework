@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Single Page runner">
-    <parameter name="browser" value="FIREFOX"/>
+    <parameter name="browser" value="CHROME"/>
     <listeners>
-        <listener class-name="com.red.testframework.utils.ScreenshotListener" />
+        <listener class-name="com.red.testframework.utils.ScreenshotListener"/>
     </listeners>
-    <test name="SPR">
-        <groups>
-            <run>
-                <!-- Based on the need, here you can include/exclude test from certain suites (groups) -->
-                <exclude name="SANITY"/>       <!-- Although SANITY group is excluded, dependencyOnMethods will override-->
-                <include name="CRITICAL"/>
-                <include name="HIGH"/>
-            </run>
-        </groups>
+    <test name="TestSamsaraPage execution on Chrome">
         <classes>
             <class name="com.red.testframework.tests.TestSamsaraPage">
-<!--            <methods>-->
-<!--                <exclude-->
-<!--                        name="test_samsaraPage_verifyShareWithFriendsButtonIsDisplayed_shareWithFriendsButtonIsDisplayed"/>-->
-<!--            </methods>-->
+            </class>
+        </classes>
+    </test>
+    <test name="TestSamsaraPage execution on Firefox">
+        <parameter name="browser" value="FIREFOX"/>
+        <classes>
+            <class name="com.red.testframework.tests.TestSamsaraPage">
+            </class>
+        </classes>
+    </test>
+    <test name="TestSamsaraPage execution on headless Chrome">
+        <parameter name="browser" value="CHROME_HEADLESS"/>
+        <classes>
+            <class name="com.red.testframework.tests.TestSamsaraPage">
             </class>
         </classes>
     </test>

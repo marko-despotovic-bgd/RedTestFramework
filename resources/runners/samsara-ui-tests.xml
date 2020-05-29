@@ -3,15 +3,25 @@
 <suite name="Single Page runner">
     <parameter name="browser" value="CHROME"/>
     <listeners>
-        <listener class-name="com.red.testframework.utils.ScreenshotListener" />
+        <listener class-name="com.red.testframework.utils.ScreenshotListener"/>
     </listeners>
-    <test name="SPR">
+    <test name="SamsaraUITest execution on Chrome">
         <classes>
             <class name="com.red.testframework.tests.SamsaraUITests">
-<!--            <methods>-->
-<!--                <exclude-->
-<!--                        name="test_heroPage_createNewHeroAsUser_heroCreatedSuccessfully"/>-->
-<!--            </methods>-->
+            </class>
+        </classes>
+    </test>
+    <test name="SamsaraUITest execution on Firefox">
+        <parameter name="browser" value="FIREFOX"/>
+        <classes>
+            <class name="com.red.testframework.tests.SamsaraUITests">
+            </class>
+        </classes>
+    </test>
+    <test name="SamsaraUITest execution on headless Chrome">
+        <parameter name="browser" value="CHROME_HEADLESS"/>
+        <classes>
+            <class name="com.red.testframework.tests.SamsaraUITests">
             </class>
         </classes>
     </test>
