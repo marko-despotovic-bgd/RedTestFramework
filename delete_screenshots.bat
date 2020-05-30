@@ -7,3 +7,5 @@ TIMEOUT /T 10 /NOBREAK
 # /f parameter ignores any read-only setting.
 
 # /q “quiet mode,” meaning you won’t be prompted Yes/No
+
+# Use Windows Task Scheduler to make this job occurring every day, or several days to keep disk clean

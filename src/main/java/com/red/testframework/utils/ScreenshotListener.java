@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 
 public class ScreenshotListener extends TestListenerAdapter {
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH.mm.ss");
     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
     @Override
@@ -34,14 +34,14 @@ public class ScreenshotListener extends TestListenerAdapter {
             else if (driver instanceof FirefoxDriver)
                 driverName = "firefox";
             else if (driver instanceof InternetExplorerDriver)
-                driverName = "IE";
+                driverName = "internet explorer";
             else if (driver instanceof EdgeDriver)
                 driverName = "edge";
 
             String screenshotDirectory = Utils.getProperty("screenshotFileLocation") + File.separator + sdf.format(timestamp);
             boolean isDirectoryCreated = (new File(screenshotDirectory)).mkdir();
             if (isDirectoryCreated)
-                Log.info("Directory: " + screenshotDirectory + " created");
+                Log.debug("Directory: " + screenshotDirectory + " created");
             String screenshotAbsolutePath = screenshotDirectory + File.separator + driverName + "_" + result.getName() + "_" + System.currentTimeMillis() + ".png";
             File screenshot = new File(screenshotAbsolutePath);
             if (createFile(screenshot)) {
@@ -50,7 +50,7 @@ public class ScreenshotListener extends TestListenerAdapter {
                 } catch (ClassCastException weNeedToAugmentOurDriverObject) {
                     writeScreenshotToFile(new Augmenter().augment(driver), screenshot);
                 }
-                Log.info("Written screenshot to " + screenshotAbsolutePath);
+                Log.debug("Written screenshot to " + screenshotAbsolutePath);
             } else {
                 Log.error("Unable to create " + screenshotAbsolutePath);
             }
