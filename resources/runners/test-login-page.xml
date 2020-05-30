@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Single Page runner">
-    <parameter name="browser" value="FIREFOX"/>
+    <parameter name="browser" value="CHROME"/>
     <listeners>
-        <listener class-name="com.red.testframework.utils.ScreenshotListener" />
+        <listener class-name="com.red.testframework.utils.ScreenshotListener"/>
     </listeners>
-    <test name="SPR">
-
+    <test name="TestLoginPage execution on Chrome">
         <classes>
             <class name="com.red.testframework.tests.TestLoginPage">
-<!--            <methods>-->
-<!--                <exclude-->
-<!--                        name="test_loginPage_loginWithCorrectUsernameLongPassword_invalidCredentialsErrorMessagePresent"/>-->
-<!--            </methods>-->
+            </class>
+        </classes>
+    </test>
+    <test name="TestLoginPage execution on Firefox">
+        <parameter name="browser" value="FIREFOX"/>
+        <classes>
+            <class name="com.red.testframework.tests.TestLoginPage">
+            </class>
+        </classes>
+    </test>
+    <test name="TestLoginPage execution on headless Chrome">
+        <parameter name="browser" value="CHROME_HEADLESS"/>
+        <classes>
+            <class name="com.red.testframework.tests.TestLoginPage">
             </class>
         </classes>
     </test>

@@ -137,7 +137,10 @@ public class UsersPage extends BasePage {
                 nextPageSearchArrow.click();
                 usersList = driver.findElements(By.xpath("//td[@title='" + username + "']"));
             }
-        } while (isNextPageButtonClickable());
+        } while (usersList.size() ==0 && isNextPageButtonClickable());
+        if(!driver.findElements(By.xpath("//td[@title='" + username + "']")).isEmpty()) { // Adding this as test would fail if user is listed on the last page
+            isUserDisplayed = true;
+        }
         log.info("User is displayed: " + isUserDisplayed);
         log.info("Successfully executed " + new Object() {
         }.getClass().getEnclosingMethod().getName());
