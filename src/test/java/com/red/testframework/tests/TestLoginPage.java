@@ -11,7 +11,7 @@ import org.testng.annotations.*;
 
 public class TestLoginPage extends BaseTest {
 
-    /**  TC naming: test_state_actions_expectedResult()  **/
+    /**  TC naming: test_state(page)_actions_expectedResult()  **/
 
     @Test(description = "Verify Login page is displayed, and Log In button is shown.", groups = {Constants.SANITY})
     public void test_loginPage_checkIfLoginPageTitleAndLoginButtonArePresent_loginPageIsOpened() {
