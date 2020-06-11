@@ -1,4 +1,4 @@
-# Selenium Grid set-up:
+## Selenium Grid set-up:
 
 1. Download and install JDK on both hub and node(s) from https://www.oracle.com/java/technologies/javase-downloads.html
 2. Pick up a machine to serve as a Selenium hub and download a Selenium server from https://www.selenium.dev/downloads/
@@ -14,7 +14,7 @@
 12. Go back to the hub machine and refresh the http://localhost:4444/grid/console address
 
 
-## Make sure you take care of below point while implementing Grid
+### Make sure you take care of below point while implementing Grid
 
 1. While running browser instances on node machine – Thumb rule is 1GB for each browser instance .
 Otherwise you will get error like
