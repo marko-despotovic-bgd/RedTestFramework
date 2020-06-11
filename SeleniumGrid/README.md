@@ -16,11 +16,11 @@
 
 ### Make sure you take care of below point while implementing Grid
 
-1. While running browser instances on node machine – Thumb rule is 1GB for each browser instance .
+1. While running browser instances on node machine – Thumb rule is *1GB for each browser instance* .
 Otherwise you will get error like
 Unable to connect to host 127.0.0.1 on port 7055 after 45000 ms
 As Firefox locks this port. Browser need to be started in 45 second otherwise driver will not be able to initiate new browser.
 
-2.Make sure driver instance always QUIT . If it keeps running on node ,node will go out of memory.
+2.*Make sure driver instance always QUIT* . If it keeps running on node ,node will go out of memory.
 
-3.Standalone server used for node & hub should be same .Its common mistake while upgrading to new version.
+3.*Standalone server used for node & hub should be same* .Its common mistake while upgrading to new version.
