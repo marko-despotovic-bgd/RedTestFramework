@@ -1,0 +1,1 @@
+call mvn clean install -f C:\Users\Marko\Documents\Automation\RED\RedTestFramework

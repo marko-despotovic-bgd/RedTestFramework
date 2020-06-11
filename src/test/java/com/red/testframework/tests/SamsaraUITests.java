@@ -42,7 +42,7 @@ public class SamsaraUITests extends BaseTest {
             firstName = "John",
             lastName = "Doe",
             about = "anonymous",
-            secretQuestion = "who are you",
+            secretQuestion = "why so serious",
             secretAnswer = "anon",
             password = "Password1";
 

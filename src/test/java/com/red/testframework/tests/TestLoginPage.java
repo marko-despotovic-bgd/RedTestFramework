@@ -17,7 +17,6 @@ public class TestLoginPage extends BaseTest {
     public void test_loginPage_checkIfLoginPageTitleAndLoginButtonArePresent_loginPageIsOpened() {
         Log.startTest(new Object(){}.getClass().getEnclosingMethod().getName());
         loginPage.openSamsaraTrainingSite();
-        assert loginPage.isLoginPageTitleDisplayed() : "Login Page title is not displayed";
     }
 
     @Test(description = "Test login with admin's credentials.", groups = {Constants.CRITICAL}, dependsOnMethods = "test_loginPage_checkIfLoginPageTitleAndLoginButtonArePresent_loginPageIsOpened")
