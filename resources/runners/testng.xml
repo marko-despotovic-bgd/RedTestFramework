@@ -33,8 +33,8 @@
         <classes>
             <class name="com.red.testframework.tests.TestDatabase">
                 <!--                        <methods>-->
-                <!--                            <exclude name="testUnsuccessfulLoginCorrectUsernameLongPassword"/> &lt;!&ndash;exclusion particular method&ndash;&gt;-->
-                <!--                        </methods>-->
+                <!--                            <exclude name="testUnsuccessfulLoginCorrectUsernameLongPassword"/> <!- Exclusion of particular method ->
+                <!-                        </methods>-->
             </class>
             <class name="com.red.testframework.tests.SamsaraAPITests"/>
             <class name="com.red.testframework.tests.TestLoginPage"/>
@@ -82,16 +82,16 @@
         </classes>
     </test>
     <!--    <test name="Edge tests">-->
-    <!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
+    <!--        <!- Overriding suites' parameter -->
     <!--        <parameter name="browser" value="EDGE"/>-->
     <!--        <groups>-->
     <!--            <run>-->
-    <!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
+    <!--                <!- Based on the need, here you can include/exclude test from certain suites (groups) -->
     <!--                <include name="SANITY"/>-->
     <!--                <include name="CRITICAL"/>-->
     <!--                <include name="HIGH"/>-->
-    <!--                &lt;!&ndash;include name="MEDIUM"/>-->
-    <!--                <include name="LOW"/&ndash;&gt;-->
+    <!--                <!- include name="MEDIUM"/>-->
+    <!--                <include name="LOW"/-->
     <!--            </run>-->
     <!--        </groups>-->
     <!--        <packages>-->
@@ -99,16 +99,16 @@
     <!--        </packages>-->
     <!--    </test>-->
     <!--    <test name="IE tests">-->
-    <!--        &lt;!&ndash; Overriding suites' parameter &ndash;&gt;-->
+    <!--        <!- Overriding suites' parameter -->
     <!--        <parameter name="browser" value="IE"/>-->
     <!--        <groups>-->
     <!--            <run>-->
-    <!--                &lt;!&ndash; Based on the need, here you can include/exclude test from certain suites (groups) &ndash;&gt;-->
+    <!--                <!- Based on the need, here you can include/exclude test from certain suites (groups) -->
     <!--                <include name="SANITY"/>-->
     <!--                <include name="CRITICAL"/>-->
-    <!--                &lt;!&ndash;include name="HIGH"/>-->
+    <!--                <!-include name="HIGH"/>-->
     <!--                <include name="MEDIUM"/>-->
-    <!--                <include name="LOW"/&ndash;&gt;-->
+    <!--                <include name="LOW"/-->
     <!--            </run>-->
     <!--        </groups>-->
     <!--        <packages>-->

@@ -8,7 +8,6 @@ import java.io.*;
 import com.red.testframework.enums.BrowserType;
 import com.red.testframework.pages.LoginPage;
 import org.openqa.grid.selenium.GridLauncherV3;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -19,7 +18,6 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class Utils {
@@ -32,7 +30,9 @@ public class Utils {
      */
     public static LoginPage setUpWebBrowser(@org.jetbrains.annotations.NotNull String browser) {
         LoginPage loginPage = null;
-        // GridLauncherV3.main(new String[] { "-role", "hub", "-port","4444"}); <-- Creating Grid through code. Use this only if you know whole hub-grid setup
+         // <-- Launching Grid through code. Use this only if you know whole hub-grid setup
+        // GridLauncherV3.main(new String[] { "-role", "hub", "-port","4444"});
+        // GridLauncherV3.main(new String[] { "-role", "node", "-hub", "http://localhost:4444/grid/register", "-browser", "browserName=chrome", "-port", "5555" });
         if (browser.equalsIgnoreCase(BrowserType.CHROME.toString())) {
             if (getProperty("use.grid").equals("true")) {
                 try {
@@ -122,4 +122,5 @@ public class Utils {
         loadProperties();
         return properties.getProperty(key);
     }
+
 }

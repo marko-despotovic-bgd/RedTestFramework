@@ -1,5 +1,6 @@
 package com.red.testframework.utils;
 
+import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -9,6 +10,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.Augmenter;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
@@ -37,6 +39,8 @@ public class ScreenshotListener extends TestListenerAdapter {
                 driverName = "internet explorer";
             else if (driver instanceof EdgeDriver)
                 driverName = "edge";
+            else if (driver!=null)
+                driverName = "remote";
 
             String screenshotDirectory = Utils.getProperty("screenshotFileLocation") + File.separator + sdf.format(timestamp);
             boolean isDirectoryCreated = (new File(screenshotDirectory)).mkdir();
