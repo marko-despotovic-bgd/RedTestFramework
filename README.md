@@ -7,7 +7,7 @@ This test framework contains tests written for [Samsara](http://localhost:8080) 
 
 Suites can be ran through sutes-runner.xml on suites level, while testng.xml enables cross-browser execution.
 
-Visual scheme: https://whimsical.com/9FGwyUBJBhQ4kTcePQERt
+Visual scheme: https://github.com/marko-despotovic-bgd/RedTestFramework/blob/master/RED.png
 
 ### Pre-requisites
 
