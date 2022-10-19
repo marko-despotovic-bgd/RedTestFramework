@@ -22,7 +22,7 @@
         <rest.assured.all.version>4.3.0</rest.assured.all.version>
         <rest.assured.json.path.version>4.3.0</rest.assured.json.path.version>
         <json.schema.validator.version>4.3.0</json.schema.validator.version>
-        <jackson.databind.version>2.10.3</jackson.databind.version>
+        <jackson.databind.version>2.13.4.1</jackson.databind.version>
         <jackson.annotations.version>2.10.3</jackson.annotations.version>
         <org.slf4j.version>1.7.30</org.slf4j.version>
         <maven.surefire.version>2.22.2</maven.surefire.version>
