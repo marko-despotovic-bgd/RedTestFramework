@@ -17,7 +17,7 @@
         <webdrivermanager.version>4.0.0</webdrivermanager.version>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <org.jetbrains.version>19.0.0</org.jetbrains.version>
-        <org.json.version>20230227</org.json.version>
+        <org.json.version>20231013</org.json.version>
         <rest.assured.version>4.3.0</rest.assured.version>
         <rest.assured.all.version>4.3.0</rest.assured.all.version>
         <rest.assured.json.path.version>4.3.0</rest.assured.json.path.version>
